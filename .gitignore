@@ -1,0 +1,55 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+*.egg-info/
+
+.env
+.env.*
+!.env.example
+.claude/settings.local.json
+
+node_modules/
+frontend/dist/
+
+# raw / large processed data (manifests and small fixtures stay tracked)
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+data/**/*.feather
+data/**/*.parquet
+runs/*
+!runs/.gitkeep
+results/*/checkpoints/
+checkpoints/
+mlruns/
+mlartifacts/
+mlflow.db
+*.pt
+*.pth
+*.partial
+external/**/.git/
+
+# third-party clones / isolated environments under external/ (commits + licenses recorded in external/README.md)
+external/Drosophila_brain_model/
+external/brian_env/.venv/
+external/flygym_pilot/.venv/
+external/**/.venv/
+external/**/__pycache__/
+data/processed/flywire/783/ref_shiu_presyn_sign.parquet
+results/flygym_pilot/demo_output/
+results/**/*.npz
+results/logs/
+results/learning/log_*.txt
+frontend/node_modules/
+mlflow.db-journal
+
+# local copy of third-party/owner reference PDF (do not redistribute accidentally)
+docs/research-blueprint.pdf
+
+# rootless browser libs for headless UI checks
+external/browser_libs/
+results/viewer_screens/

@@ -1,0 +1,18 @@
+SELFTEST PASS: baseline sign == base.sign; policy changes only zero entries (-> +1); protocol deep-copied
+unknown-sign nodes: 91 of 1500
+connectome|W76 11 s
+null0|W76 18 s
+null1|W76 26 s
+null2|W76 33 s
+null3|W76 40 s
+null4|W76 47 s
+random_reach|W76 53 s
+connectome|W25 61 s
+null0|W25 68 s
+null1|W25 74 s
+null2|W25 80 s
+null3|W25 86 s
+null4|W25 94 s
+random_reach|W25 99 s
+kc_static|native1385 106 s
+done 106 s

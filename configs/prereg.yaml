@@ -1,0 +1,151 @@
+# Preregistration. Status: DRAFT until `frozen: true` is set (see learning_confirmatory.freeze).
+# Freeze BEFORE viewing confirmatory results. After freezing, never rewrite entries:
+# append to `amendments` instead. Sections for causal screens / navigation are added by their owners.
+status: frozen
+frozen: true
+frozen_date: "2026-10-15"
+frozen_git_revision: null
+primary_endpoints:
+  - id: associative_learning_accuracy
+    section: learning_confirmatory
+  - id: forgetting_improvement
+    section: learning_confirmatory
+comparators:
+  matched_conventional_baseline: >-
+    learning_confirmatory.comparators.primary (parameter-matched GRU trained with the identical
+    BPTT policy-gradient learner, trial budget, replay budget and search budget)
+sample_size_policy:
+  pilot_training_seeds: 2
+  confirmatory_training_seeds: 5
+  null_graphs_per_condition: 5
+seed_list: see learning_confirmatory.seeds
+evaluation_protocol: configs/experiments/learning_protocol.yaml (hash recorded at freeze)
+exclusions: see learning_confirmatory.exclusions
+search_budget:
+  hyperparameter_trials_per_condition: 3 learning rates x 2 pilot seeds per (learner, condition kind)
+multiplicity_plan: see learning_confirmatory.multiplicity
+
+learning_confirmatory:
+  written: "2026-10-15"
+  written_before_any_confirmatory_run: true
+  scope: >-
+    SYNTHETIC cue-valence association / reversal / 3-context continual task on the FlyWire v783
+    right-hemisphere mushroom-body PILOT subset (named subset; not the full MB circuit). Sensory
+    encoder (fixed random sparse projection into Kenyon cells), readout z-scoring, 2-action decoder,
+    scalar reward and TD critic are ENGINEERED interfaces. Results are model-relative.
+  primary_learner: bptt   # fixed in advance; plasticity learners are secondary / exploratory
+  endpoints:
+    associative_learning_accuracy:
+      definition: >-
+        greedy (argmax) accuracy on the held-out TEST cue set (64 cues, 32/32 class balanced) of
+        context 0, measured right after 800 acquisition trials (B=1 trial/update), reward = 1 if
+        action == rewarded action else 0, delivered after the trial; action read from the mean
+        readout over the last 3 of 8 steps; no learning, no exploration noise during evaluation.
+      unit: fraction correct
+      target_for_status_table: ">= 0.82 (connectome model, primary learner)"
+    forgetting_improvement:
+      definition: >-
+        avg_forgetting(baseline) - avg_forgetting(connectome) where avg_forgetting is the mean over
+        tasks j < T-1 of max_{l in [j,T-2]} R[l,j] - R[T-1,j] on the TEST matrix (T = 3 contexts,
+        800 trials per phase, final task excluded because it has no later exposure).
+      negative_forgetting_policy: keep   # signed; clip reported as secondary only
+      relative_change: improvement / baseline_forgetting; undefined (None) if baseline forgetting == 0
+      unit: absolute fraction (0.07 = 7 percentage points)
+      target_for_status_table: ">= 0.07 absolute"
+  comparators:
+    primary: gru_param_matched_bptt   # smallest GRU hidden size with >= the connectome-BPTT trainable parameter count
+    secondary_not_for_headline:
+      - degree_preserving_null_graphs (5, plain directed double-edge swap) under the SAME learner
+      - random_sparse (same N and E)
+      - encoder_decoder_only (parameter matched)
+    never_chosen_post_hoc: true
+  learners:
+    - bptt
+    - decoder_only
+    - plastic_fixed_dec
+    - plastic_plus_dec
+    - plastic_mod_off
+  seeds:
+    pilot_and_search: [1, 2]
+    confirmatory_training_seeds: [101, 102, 103, 104, 105]
+    null_graph_base_seed: 0     # graph_i seed = 1000*i + 1
+    pairing: seed s identical task (teachers, cue sets), trial order and input noise across conditions
+  sample_size_policy: >-
+    5 training seeds per condition; null graphs: 5, trained at all 5 seeds for learners bptt and
+    plastic_plus_dec (nested design), and paired null_i<->seed_i for other learners. 5-seed intervals
+    are exploratory and potentially unstable.
+  evaluation_protocol_file: configs/experiments/learning_protocol.yaml
+  evaluation_protocol_hash: "093f183f3e98743f"
+  exclusions: >-
+    None for performance. A run that crashes (OOM / NaN) is recorded as failed and reported; it is
+    not replaced by a different seed. Runs are never dropped for low accuracy.
+  search_budget:
+    per_condition_kind: 3 learning rates (identical grid across conditions of the same learner) x 2 seeds
+    selection_data: VALIDATION cue sets only; TEST sets are not evaluated in the search stage
+    criterion: mean over seeds of mean final-phase validation accuracy over the 3 contexts
+    null_graphs_use_null0_selection: true
+    conditions_searched: [connectome, null0, random, gru, encdec]
+  statistics:
+    interval: percentile bootstrap over independent trained models (seeds); paired by seed for
+      connectome vs GRU; nested graph-then-seed cluster bootstrap for connectome vs nulls
+    independence_unit: trained-model replicate (never trials/frames)
+  multiplicity:
+    confirmatory_family: [accuracy contrast, forgetting-improvement contrast]   # connectome-bptt vs GRU-bptt
+    method: Holm over the family of 2 (applied to p-values only, not to CIs or effect sizes)
+    note: with n=5 paired seeds the minimum attainable exact sign-test p is 0.0625, so corrected
+      significance may be unattainable; effect sizes and intervals are the primary report.
+    all_other_contrasts: exploratory, unadjusted, labelled as such
+  status_rules: >-
+    A target is 'evaluated/met' only when the point estimate of the primary-learner connectome
+    condition reaches the threshold under the frozen protocol with >= 5 seeds; otherwise
+    'evaluated/missed'; fewer than 5 seeds => 'exploratory'.
+  freeze:
+    frozen: true
+    frozen_date: "2026-10-15"
+    protocol_hash: "093f183f3e98743f"
+    frozen_git_revision: null   # repository has no commits at writing time; protocol hash is recorded instead
+
+amendments:
+  - date: "2026-10-15"
+    git_revision: "none (no commits yet)"
+    field: top-level TODO fields
+    old: TODO placeholders
+    new: concrete learning-benchmark values / pointers into learning_confirmatory
+    reason: skeleton completed by the learning-benchmark owner BEFORE any confirmatory run; not frozen yet
+  - date: "2026-10-15"
+    git_revision: "none (no commits yet)"
+    field: learning_confirmatory.search_budget / configs/experiments/learning_protocol.yaml search.lr_grid
+    old: "3 learning rates per learner (bptt/decoder_only 1e-3..1e-2; plastic 3e-3..3e-2 -> 1e-5..1e-4)"
+    new: "bptt & decoder_only: 5 rates 3e-4..3e-2; plastic_fixed_dec/plus_dec: 4 rates 1e-5..3e-4; mod_off 3e-5"
+    reason: >-
+      first validation-only search put optima at grid edges for several conditions (connectome, GRU
+      and enc-dec alike); grid widened IDENTICALLY for all conditions of a learner before any pilot
+      or confirmatory run. Task size also changed pre-pilot after an oracle check showed the first
+      task (n_cue 32) exceeded what 12-25 readout nodes can express: n_cue 32->16, k 8->5, trials
+      400->800 per phase; readout z-scoring, logit cap 2.0 (needed for reversal exploration) and
+      gain scale (init 0.005, hi 0.02) added to the shared protocol. None of these used TEST data.
+  - date: "2026-10-15"
+    git_revision: "none (no commits yet)"
+    field: learning_confirmatory.search_budget.per_condition_kind
+    old: "3 learning rates x 2 seeds"
+    new: "3-5 learning rates x 2 seeds (grid size per learner as in learning_protocol.yaml)"
+    reason: consequence of the grid change above
+  - date: "2026-10-15"
+    git_revision: "none (no commits yet)"
+    field: learning_confirmatory.learners[bptt] trainable set; comparator parameter matching
+    old: "sparse BPTT trains recurrent gains + decoder + per-node bias (N=1500); GRU matched to that count"
+    new: "sparse BPTT trains recurrent gains + decoder only (bias fixed at 0); GRU / enc-dec matched to the new count"
+    reason: >-
+      the exploratory pilot (2 seeds, seen on TEST) showed sparse-BPTT collapsing to a constant
+      output (association accuracy exactly 0.500 for connectome AND all nulls) because Adam
+      random-walks ~1500 irrelevant bias parameters; this is an optimisation artefact, not topology.
+      Change applies to every sparse BPTT condition (connectome, nulls, random) and to the parameter
+      matching of GRU/enc-dec. Search (val only) and pilot rows for bptt and for dense decoder_only
+      conditions were discarded and re-run. Made before any confirmatory run.
+# amendment format:
+# - date: YYYY-MM-DD
+#   git_revision: <sha>
+#   field: <path>
+#   old: <value>
+#   new: <value>
+#   reason: <text>

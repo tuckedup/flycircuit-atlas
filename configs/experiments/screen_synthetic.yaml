@@ -1,0 +1,16 @@
+# SYNTHETIC intervention screen: random sparse graph, NOT a connectome. Engineering validation only.
+source: synthetic
+n_nodes: 400
+degree: 12
+graph_seed: 0
+seed: 0
+n_runs: 6
+n_interventions: 120
+min_distinct_targets: 100
+steps: 60
+level: neuron
+t_start: 10
+n_controls: 1
+closed_loop: false
+unknown_sign: excitatory
+model: {init_gain: 0.1, tau: 5.0, dt: 1.0, n_out: 2}

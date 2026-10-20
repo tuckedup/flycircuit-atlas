@@ -1,0 +1,11 @@
+SELFTEST PASS: baseline bit-identical; E8 superset, 8 nonzeros of 0.7071, col L2 norm 2
+connectome|W76 27 s
+null0|W76 38 s
+null1|W76 47 s
+null2|W76 56 s
+null3|W76 66 s
+null4|W76 75 s
+random_reach|W76 83 s
+kc_static|native1385 90 s
+kc_static_sub|K76 95 s
+done 95 s

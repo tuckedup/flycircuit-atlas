@@ -1,0 +1,78 @@
+# Learning study v3 (protocol learning-v3.0). PROSPECTIVE follow-up to v1 and v2 (both preserved unchanged).
+# SYNTHETIC cue-valence task on the real pilot circuit with ENGINEERED interfaces; same task spec as v1/v2.
+# Changes vs v2 (all motivated by v2 findings, none by v3 outcomes): see configs/prereg_v3.yaml.
+task:
+  n_cue: 16
+  k_active: 5
+  n_ctx: 3
+  T: 8
+  cue_steps: 6
+  resp_steps: 3
+  input_noise: 0.05
+  context_corr: 0.7
+  n_train: 200
+  n_val: 64         # model selection ONLY
+  n_test: 64        # final evaluation ONLY (class balanced 32/32)
+training:
+  trials_per_phase: 800
+  reversal_trials: 800
+  perseveration_window: 50
+  acquisition_window: 20
+  acquisition_criterion: 0.8
+  delay_trials: 400
+  replay_budget: 16
+  explore_noise: 0.5
+  decoder_lr: 0.003          # fallback only; plast_dec searches its own decoder lr (v3: no borrowed rates)
+  policy_logit_cap: 2.0
+model:
+  tau: 5.0
+  dt: 1.0
+  prior: log1p
+  init_gain: 0.005
+  nonneg_gain: true
+  unknown_sign_policy: zero
+  encoder_fan_in: 4
+plasticity:
+  decay: 0.9
+  gain_lo: 0.0
+  gain_hi: 0.02
+  gamma: 0.9
+  lr_value: 0.05
+  homeostasis: 0.002
+  optimizer: sgd             # overridden per run by the searched optimizer option (sgd | rmsprop); recorded per record
+sign_policy:
+  name: known_then_predicted
+  min_conf: 0.5
+  glutamate: inhibitory
+  histamine: inhibitory
+  monoamine_mode: separate_channel
+  unknown_fill: zero
+  kc_literature_prior: false
+search:
+  budget_total_lr_evals: 12  # EQUAL for every (arm, family-kind): exactly 12 evaluations x 2 seeds, validation only
+  seeds: [13, 14]            # validation-only search seeds (disjoint from v1/v2/pilot/final seeds)
+  initial_grid:
+    gradient: [0.0003, 0.001, 0.003, 0.01, 0.03]
+    plastic_sgd: [0.000003, 0.00001, 0.00003, 0.0001]
+    plastic_rmsprop: [0.000001, 0.000003, 0.00001, 0.00003]
+  plastic_optimizer_options: [sgd, rmsprop]   # fixed-decoder plastic arms: 6 evals per option (12 total)
+  plast_dec_split: {plastic_lr_evals: 6, decoder_lr_evals: 6}   # coordinate search; optimizer taken from plast_fixed
+  criterion: mean over tasks of final-phase VALIDATION accuracy (continual protocol)
+  note: >
+    Gradient learners (bptt incl. GRU/encdec, decoder_only) use Adam with ONE lr for all trained parameters;
+    their search is 12 lr evaluations. Plastic fixed-decoder arms split 12 evaluations over their two
+    optimizer options (6 + 6). plast_dec: 6 plastic-lr + 6 decoder-lr evaluations (decoder lr starts from the
+    decoder_only|connectome value as a STARTING POINT only and is then searched). plast_modoff borrows the
+    plast_fixed setting (isolated factor, not separately tuned) -- unchanged from v2.
+seeds:
+  pilot: [23, 24]                                         # validation-only engineering sanity, changes nothing
+  confirmatory: [100401, 100402, 100403, 100404, 100405, 100406, 100407, 100408]
+  confirmatory_min_units: 8
+  null_graphs: 5
+targets:
+  accuracy: 0.82
+  forgetting_improvement_abs: 0.07
+negative_forgetting_policy: keep
+circuit:
+  name: mushroom_body_right_pilot
+  min_contacts: 5

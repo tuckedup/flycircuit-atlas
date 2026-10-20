@@ -1,0 +1,65 @@
+# FlyGym body-in-the-loop protocol  flygym_nav_v1  (owner: Atul Pandey)
+# Frozen BEFORE any M5/M6 evaluation on the test split (hash in flygym_protocol.sha256, written by
+# `python -m flycircuit.bodies.stages freeze`). Train/val/test target seeds are disjoint.
+# Relationship to earlier work: independent of nav_tier1_v1 (2-D arena). This is a BODY-in-the-loop
+# pilot on the official FlyGym v2.1.0 NeuroMechFly + official HybridTurningController.
+protocol_id: flygym_nav_v1
+status_vocabulary: [not run, exploratory, evaluated/met, evaluated/missed, blocked]
+
+body:
+  package: flygym==2.1.0 (Apache-2.0), isolated env external/flygym_pilot/.venv (Python 3.12, MuJoCo CPU)
+  controller: flygym_demo.complex_terrain.HybridTurningController (official, tutorial 4d), unmodified
+  physics_dt_s: 0.0001
+  control_tick_steps: 100          # 10 ms
+  terrain: flat ground
+interface:   # ENGINEERED; the FlyWire brain has no ventral nerve cord / motor system
+  obs_channels: [odorL, odorR, odorMean, odorL_prev, odorR_prev, visSin, visCos, speed, yawrate, efference]
+  odor: exp(-distance/10mm) at two antennae offset +-1.0 mm laterally (exaggerated), noise sd 0.02
+  vision: sin/cos of target bearing inside a 150 deg half-FOV, else 0 (engineered azimuth code)
+  action: a in [-1,1]^2 -> descending_signal = 0.8 + 0.4*a  (left,right) feeding the CPG drive
+  circuit_interface_note: >
+    The 10 channels drive the 10 highest-out-degree Kenyon cells, 2 actions are decoded from the
+    MBONs (same engineered mapping as nav_tier1_v1). Not a descending/motor pathway.
+task:
+  goal: reach a point source within 1.5 mm in <= 180 control ticks (1.8 s)
+  target: distance U(6,9) mm, bearing U(-90,90) deg in the start-heading frame
+  splits: {train: idx 0.., val: 1000000.., test: 2000000.., test_ood: 3000000..}
+  test_ood: bearings 95-140 deg either side (never in training) -- exploratory generalization probe
+  conditions_evaluated: [nominal (dropout 0), channel dropout 25% per episode (mask seed per episode, shared by all models)]
+  no_mask_indicator_given: true
+training:
+  algorithm: offline behavioural cloning of a privileged proportional-steering teacher with action-noise injection (no DAgger)
+  teacher: a = clip(0.6 -/+ 2.0*bearing); constants tuned on TRAIN targets only
+  data: {n_train_episodes: 300, action_noise_levels: [0.0, 0.3, 0.6], n_val_episodes: 48}
+  dropout_levels_in_training: [0.0, 0.1, 0.25, 0.5]
+  optimizer: adam
+  epochs: 40
+  batch_sequences: 16
+  tbptt_steps: 32
+  grad_clip: 1.0
+  loss: masked MSE between tanh(y) and teacher action
+  stopping_rule: fixed epochs, no checkpoint selection
+  lr_search: {grid: [0.0001, 0.0003, 0.001, 0.003, 0.01, 0.03, 0.1], seed: 0, epochs: 12, criterion: validation BC loss at 25% dropout, identical for every condition}
+conditions: [connectome_pilot_mb, null_double_edge_swap, random_sparse, gru_param_matched, encdec_param_matched]
+reference_controllers: [teacher (privileged upper bound), scripted bilateral-odor (non-learned), straight (no steering)]
+untrained_controls: [connectome_pilot_mb, gru_param_matched]   # initial weights, no training (isolates "learning occurs")
+seeds: {search: [0], train: [301, 302, 303, 304, 305]}
+evaluation:
+  n_test_episodes: 24
+  n_test_ood_episodes: 12
+  unit_of_replication: trained model (seed)
+  ci: percentile bootstrap over seeds, exploratory at n=5
+primary_endpoint:
+  id: flygym_success_25pct_dropout
+  metric: mean success over test episodes per trained model; summary = mean over trained models
+  comparators: [gru_param_matched, null_double_edge_swap, random_sparse, encdec_param_matched, untrained]
+  note: threshold-free; anatomical advantage is judged only by paired differences vs null/GRU, not by absolute success
+caveats:
+  - Sign map and null graphs follow nav_tier1_v1 (excitatory unknown-sign policy); the transmitter-sign audit and improved null mixing of the follow-up study are NOT applied here.
+  - Pilot subset of the mushroom body (1,500 neurons), not the whole brain.
+amendments:
+  - date: "2026-10-16"
+    before_any_test_evaluation: true
+    change: "lr grid [3e-4..1e-2] -> [1e-4..1e-1] (7 values), search epochs 8 -> 12, final epochs 25 -> 40, identical for all 5 conditions"
+    reason: "first search (results/flygym/search_v0_superseded.json, validation data only) put the optimum of 4 of 5 conditions on the grid edge and left sparse models under-trained; no test-split episode of any learned model had been run"
+    old_protocol_sha256: a55bf8d13b923c100e6787b4802371ec3ee1e06c132ff67c907a02476af0806b

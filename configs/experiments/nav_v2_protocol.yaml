@@ -1,0 +1,143 @@
+# Navigation v2 protocol (nav_tier1_v2). v1 (nav_protocol.yaml, results/navigation) is HISTORICAL and untouched.
+# FROZEN (hash in nav_v2_protocol.sha256) before the validation-only lr search and before any test-split
+# evaluation. Changes after freezing go to `amendments` with a reason; the code refuses to run otherwise.
+protocol_id: nav_tier1_v2
+owner: Atul Pandey
+relationship_to_v1: >
+  Addresses v1 limitations (odor-only scripted controller solved 100% of nominal episodes; conflict cues
+  absent from training; no memory demand; degree-preserving nulls only partly mixed; unknown-sign coverage
+  ~1.3%). v1 numbers are never reused or overwritten. New run ids, new seeds, fresh layouts.
+status_vocabulary: [not run, exploratory, evaluated, blocked]
+
+interface:
+  n_obs: 11              # v1's 10 channels + ctx (task instruction; never dropped)
+  n_act: 2
+  ctx_pulse_steps: 10    # control steps (1.0 s) the pulse is visible; 'persistent' = whole episode
+  max_steps: 250
+  circuit_interface_note: >
+    ENGINEERED interface: the 11 observation channels drive the 11 Kenyon cells with highest out-degree
+    (ascending index order); the 2 actions are decoded linearly from the MBONs. Identical node sets for the
+    connectome and its degree-preserving nulls (degrees are preserved). Not a motor pathway of the fly.
+
+task:
+  observable: >
+    conflict_pulse / conflict_persistent / noconflict: the trusted cue is determined by the observation history
+    (ctx pulse). Learnable: scripted oracle-from-observation `ctx_memory` is the upper bound.
+  intrinsically_ambiguous: >
+    conflict_hidden: ctx never shown, odor and beacon disagree, nothing in the observation identifies the goal.
+    Reported separately with its own ceiling (scripted policy on the same observations); NEVER scored as failure
+    and never used for selection.
+  success: reaching the true goal G within 0.5 units (reaching the decoy D is a failure).
+
+# --- endpoints. Two SEPARATE questions (an absolute success level is not evidence of anatomical advantage) ---
+question_1_task_success:
+  endpoint: conflict_pulse success_rate (test, in-distribution layouts)
+  report: mean over trained models with 95% bootstrap CI over models; fraction of the scripted oracle
+  threshold: none (no absolute target is set for v2; the v1 0.68 target is not applied here)
+question_2_anatomical_advantage:
+  primary_contrast: connectome_pilot_mb minus null_v2_swap, paired by seed, on conflict_pulse success
+  secondary_contrasts: [random_sparse_reachable, gru_param_matched, gru_compute_matched, encdec_param_matched, null_v2_group]
+  decision_rule: >
+    "advantage supported" only if the 95% bootstrap CI (over trained models) of the primary contrast excludes 0
+    in the positive direction. One primary contrast; all other contrasts/conditions are exploratory and
+    uncorrected, reported with intervals only. A connectome that does not beat its nulls is reported as such even
+    if its absolute success is high.
+
+conditions:                  # model conditions
+  - connectome_pilot_mb
+  - null_v2_swap             # nulls_v2 plain ensemble; trained model i uses null graph i (nested: 1 model per null)
+  - null_v2_group            # nulls_v2 group-constrained ensemble (exploratory secondary)
+  - random_sparse_reachable  # uniform random simple digraph; resampled until sensory->readout reachability >= connectome's
+  - gru_param_matched
+  - gru_compute_matched
+  - encdec_param_matched
+
+model_interface:
+  init_gain: 0.3
+  prior: log1p
+  tau: 5.0
+  dt: 1.0
+  trainable_encoder: true
+  trainable_decoder: true
+  sign_policy: "annotation_v2 default SignPolicy (docs/SIGN_AUDIT.md)"
+  unknown_sign_policy: zero   # monoamine neurons: separate modulatory channel, fast edge weight 0 (no plasticity here)
+  graph: "mushroom_body_right_pilot (1,500 neurons, contacts >= 5); cached nulls in results/nulls_v2/mushroom_body_right_pilot"
+
+training:
+  algorithm: DAgger-style imitation of a privileged scripted teacher (BC at beta=1)
+  teacher: privileged_potential_field  # sees goal (the TRUE goal), obstacles; students never do
+  dagger_betas: [1.0, 0.5, 0.25, 0.1, 0.0]
+  dropout_levels: [0.0, 0.1, 0.25, 0.5]     # channel kind, one mask per episode
+  per_dropout_level_recipe:                 # 12 episodes per level -> 48 per round
+    - {n: 3, kind: conflict_pulse,      odor_noise_mult: 1, vision_noise_mult: 1, contrast: 1.0}
+    - {n: 3, kind: conflict_pulse,      odor_noise_mult: 2, vision_noise_mult: 2, contrast: 0.75}
+    - {n: 3, kind: conflict_persistent, odor_noise_mult: 1, vision_noise_mult: 1, contrast: 1.0}
+    - {n: 3, kind: noconflict,          odor_noise_mult: 1, vision_noise_mult: 1, contrast: 1.0}
+  epochs_per_round: 20
+  batch_sequences: 8
+  tbptt_steps: 64
+  optimizer: adam
+  grad_clip: 1.0
+  loss: masked MSE between tanh(y) and teacher action
+  budget_note: "epochs_per_round=20 chosen from a VAL-only GRU learnability probe (6 epochs: conflict_pulse val 0.58; 20 epochs: 0.56-0.72); applied identically to all conditions"
+  stopping_rule: fixed schedule (no early stopping, no checkpoint selection)
+  device: cpu              # measured: CPU wins for <=44k-edge graphs (configs/hardware/adaptive_profile.yaml)
+  cpu_threads: 4
+  never_in_training: [conflict_hidden, noisy_odor_x8, noisy_vision_x6, contrast_0.5, plume_radius_6, obstacles_6_8]
+  identical_across_conditions: [layouts, noise/mask seeds, teacher labels schedule, optimizer, epochs, rounds,
+                                tbptt, observation interface, teacher access, selection rule, lr grid]
+
+selection:                 # equal documented budget for EVERY model condition; validation split only
+  hyperparameter: lr
+  grid: [0.001, 0.003, 0.01, 0.03]
+  search_seeds: [900, 901]
+  metric: mean validation success_rate on conflict_pulse (val layouts 0..100, in-distribution)
+  tie_break: smaller lr
+  edge_rule: >
+    If the selected lr is at a grid edge it is accepted and flagged `grid_edge` (no extension, to keep the
+    budget equal); a flagged baseline may be under-tuned and the report says so.
+  budget_per_condition: 8 trainings (4 lr x 2 seeds), identical for all conditions
+  test_split_use: none
+
+evaluation:
+  eval_noise_seed: 1000
+  eval_mask_seed: 2000
+  episodes_per_condition: 200
+  val_layouts: {split: val, indices: [0, 100]}
+  test_layouts: {split: test, indices: [1000, 1200]}         # fresh (v1 used test 0..200)
+  test_layouts_ood_obstacles: {split: test, indices: [5000, 5200], n_obstacles: [6, 8]}
+  conditions:
+    - {name: conflict_pulse, conflict: true, ctx: pulse}                                   # Q1/Q2 primary
+    - {name: conflict_pulse_dropout25, conflict: true, ctx: pulse, dropout: 0.25}          # v1-style 25% protocol
+    - {name: conflict_persistent, conflict: true, ctx: persistent}                         # cue-use without memory
+    - {name: noconflict, conflict: false, ctx: pulse}
+    - {name: noisy_odor_x8, conflict: true, ctx: pulse, odor_noise_mult: 8}                # held-out reliability
+    - {name: noisy_vision_x6, conflict: true, ctx: pulse, vision_noise_mult: 6}            # held-out reliability
+    - {name: contrast_0.5, conflict: true, ctx: pulse, contrast: 0.5}                      # held-out
+    - {name: plume_radius_6, conflict: true, ctx: pulse, plume_r: 6.0}                     # held-out perturbation
+    - {name: obstacles_6_8, conflict: true, ctx: pulse, layouts: ood_obstacles}            # held-out layouts
+    - {name: conflict_hidden, conflict: true, ctx: hidden, ambiguous: true}                # AMBIGUOUS, not scored
+  scripted_references: [odor_only, vision_only, ctx_nomemory, ctx_memory, privileged_teacher, random_action]
+
+seeds:
+  dev_pilot: [0, 1]                  # VAL split only; engineering smoke, never reported as a result
+  search: [900, 901]
+  final: [300, 301, 302, 303, 304]   # fresh, never used for anything before the frozen final run
+sample_size_policy: >
+  200 held-out episodes per (model, condition); episodes of one model are not independent replicates; intervals
+  are bootstrap over trained models (n=5, exploratory-grade and potentially unstable). Null graphs: one trained
+  model per cached null, so (graph, init) pairs are the independent units.
+exclusions: >
+  A trained model is excluded only for non-finite loss and is then reported as diverged, not dropped silently.
+multiplicity_plan: >
+  One primary contrast (question 2). Everything else exploratory, uncorrected, interval-only.
+search_budget: 4 lr x 2 seeds x 7 conditions = 56 trainings (validation only)
+
+sensitivity_v1_under_annotation_v2:
+  description: >
+    v1 protocol (configs/experiments/nav_protocol.yaml, unchanged) re-run with sign policy annotation_v2 and
+    unknown-sign 'zero' instead of the v1 top_nt-only/excitatory-fill policy. v1 test layouts 0..200 were already
+    viewed in v1, so this is EXPLORATORY by definition. Seeds 100-104 (paired with v1).
+  seeds: [100, 101, 102, 103, 104]
+
+amendments: []

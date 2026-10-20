@@ -1,0 +1,56 @@
+# Frozen evaluation protocol for the learning benchmark (spec §12). Hash is recorded in prereg.yaml.
+# SYNTHETIC cue-valence task on a real (pilot) circuit; engineered interfaces labelled as such.
+task:
+  n_cue: 16
+  k_active: 5
+  n_ctx: 3
+  T: 8              # neural steps per trial (dt = 1 ms, tau = 5 ms -> alpha = 0.2)
+  cue_steps: 6      # cue channels on for steps 0..5; context channels on for all steps
+  resp_steps: 3     # action = argmax of mean readout over last 3 steps
+  input_noise: 0.05
+  context_corr: 0.7
+  n_train: 200      # cue pool per context
+  n_val: 64         # hyper-parameter selection ONLY
+  n_test: 64        # final evaluation ONLY (class balanced 32/32)
+training:
+  trials_per_phase: 800   # B = 1 trial per update (hardware profile initial_batch_size)
+  reversal_trials: 800
+  perseveration_window: 50
+  acquisition_window: 20
+  acquisition_criterion: 0.8
+  replay_per_task: 0      # replay/storage budget (equal for all conditions); 0 = no replay
+  explore_noise: 0.5      # plastic learners only; sigma in readout z-units (node perturbation)
+  decoder_lr: 0.003       # plastic_plus_dec decoder Adam lr
+  policy_logit_cap: 2.0   # policy logits = cap*tanh(l/cap): p in [0.12,0.88]; argmax eval unaffected
+model:
+  tau: 5.0
+  dt: 1.0
+  prior: log1p
+  init_gain: 0.005
+  nonneg_gain: true
+  unknown_sign_policy: zero   # unknown/neuromodulator presynaptic sign -> silent output
+  encoder_fan_in: 4           # fixed random sparse projection input->KC (engineered)
+plasticity:
+  decay: 0.9
+  gain_lo: 0.0
+  gain_hi: 0.02
+  gamma: 0.9
+  lr_value: 0.05
+search:
+  lr_grid:
+    bptt: [0.0003, 0.001, 0.003, 0.01, 0.03]
+    decoder_only: [0.0003, 0.001, 0.003, 0.01, 0.03]
+    plastic_fixed_dec: [0.00001, 0.00003, 0.0001, 0.0003]
+    plastic_plus_dec: [0.00001, 0.00003, 0.0001, 0.0003]
+    plastic_mod_off: [0.00003]
+  seeds: [1, 2]
+  criterion: mean over tasks of final-phase VALIDATION accuracy (continual protocol)
+seeds:
+  pilot: [1, 2]
+  confirmatory: [101, 102, 103, 104, 105]
+  null_graph_base_seed: 0
+  null_graphs: 5
+negative_forgetting_policy: keep   # primary; 'clip' reported as secondary
+circuit:
+  name: mushroom_body_right_pilot
+  min_contacts: 5

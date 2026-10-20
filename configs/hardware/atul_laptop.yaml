@@ -1,0 +1,21 @@
+# Conservative engineering starting limits for Atul's laptop; NOT measured performance claims.
+profile: atul_laptop
+cpu_threads: 4
+dataloader_workers: 0
+experiment_concurrency: 1
+max_pipeline_ram_gib: 4.5
+max_cuda_allocated_gib: 5.5
+min_host_free_disk_gib: 40
+max_new_project_storage_gib: 30
+initial_batch_size: 1
+initial_tbptt_steps: 32
+initial_training_seeds: 2
+confirmatory_training_seeds: 5
+initial_trial_walltime_minutes: 15
+max_default_job_walltime_minutes: 60
+max_default_sweep_walltime_minutes: 120
+whole_brain_gradient_training: false
+full_synapse_download_default: false
+# Extra headroom keys (project additions; see docs/DECISIONS.md)
+cuda_headroom_gib: 1.0
+host_ram_headroom_gib: 1.0

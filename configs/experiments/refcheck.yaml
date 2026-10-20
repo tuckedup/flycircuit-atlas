@@ -1,0 +1,100 @@
+# Reference-engine validation protocol. Tolerances are PREDECLARED here before any engine
+# comparison was run (written 2026-10-15, before src/flycircuit/eval/refcheck.py was executed).
+# Amend only by appending to `amendments` (never rewrite silently); the refcheck run stores the
+# sha256 of this file, so later edits are visible in the results.
+protocol_version: 1
+goal: >
+  Engineering validation that two independently coded LIF engines (flycircuit.models.lif vs the
+  published Shiu et al. Brian2 model, external/Drosophila_brain_model@91bdd1e) agree under shared,
+  explicit input events. Simulator-vs-simulator agreement is NOT biological validation.
+reference:
+  repo: https://github.com/philshiu/Drosophila_brain_model
+  commit: 91bdd1e7dcf193f3e7ca5a8933497fcef63b7960
+  license: MIT
+  published_release_in_code_defaults: "630"   # original paper; v783 is an option in the repo
+  release_used_here: "783"                    # a v783 adaptation, NOT a v630 reproduction
+  # Equations/constants are taken from model.py default_params (units in ms/mV/Hz).
+engine_params_source: external/Drosophila_brain_model/model.py::default_params
+dt_ms: 0.1                      # Brian2 default clock; the independent engine uses the same grid
+t_run_ms: 1000
+tiers:
+  tier1_microcircuits:
+    kind: numerical           # deterministic, explicit shared events, no RNG inside either engine
+    cases: [chain_exc, chain_inh, convergence, refractory_burst, lesion_chain]
+    tolerances:
+      spike_counts: exact                  # per neuron, identical
+      spike_time_max_abs_steps: 0          # primary criterion: identical spike steps
+      spike_time_acceptable_steps: 1       # secondary: reported separately as "within 1 step"
+      state_trace_max_abs_mV: 1.0e-4       # v and g traces vs Brian StateMonitor
+  tier2_real_pilot:
+    kind: statistical         # same circuit/graph release; shared Poisson event streams per trial
+    circuit: mushroom_body_right_pilot
+    release: flywire:783
+    threshold_contacts: 5
+    stimulus: {population: Kenyon_Cell, n: 40, selection: "seeded rng(0) choice among pilot KCs", rate_hz: 150}
+    lesion: {name: silence_APL, silenced: [APL]}
+    n_trials: 5
+    event_seed_base: 1000
+    responder_rate_hz: 5.0
+    tolerances:
+      rate_pearson_min: 0.99            # over neurons with rate>0 in either engine; "undefined" if constant
+      mean_rate_rel_err_max: 0.05
+      responder_jaccard_min: 0.95
+      psth_bin_ms: 10
+      psth_pearson_min: 0.95
+      psth_norm_l1_max: 0.10
+      lesion_delta_rate_pearson_min: 0.95   # per-neuron (lesion - control) rate difference
+      lesion_population_sign: must_agree
+  tier3_native_poisson:
+    kind: statistical_exploratory   # Brian2 native PoissonInput RNG vs our RNG, independent streams
+    n_trials: 5
+    tolerances:
+      rate_pearson_min: 0.90
+      mean_rate_rel_err_max: 0.15
+boundary_sensitivity:
+  kind: descriptive           # no pass/fail; reports how boundary treatment changes outputs
+  modes: [cut, background_drive]
+  background_drive: {rate_hz: 5.0, weight_basis: "cut incoming contacts, same sign policy", note: "Poisson background is NOT equivalent to missing upstream dynamics"}
+integrity_real_graph:
+  circuit_for_pathways: mushroom_body
+  checks:
+    - ids_exact_and_match_selection
+    - edge_and_contact_counts_match_selection_json
+    - edge_hash_matches_selection_json
+    - no_self_loops_unexpected
+    - orientation_matches_shiu_connectivity_pair_counts
+    - sign_policy_reproduces_shiu_excitatory_column   # measured, reported as agreement fraction
+    - kc_to_mbon_dominates_mbon_to_kc                 # documented pathway; ratio reported
+    - dan_to_kc_dominates_kc_to_dan                   # documented pathway; ratio reported
+  kc_mbon_pair_ratio_min: 5.0
+  sign_agreement_report_only: true
+amendments:
+  - date: 2026-10-15
+    when: before any engine comparison was executed
+    change: >
+      Added DESCRIPTIVE (non-gating) metrics only: rate Pearson restricted to non-stimulated
+      ("downstream") neurons, count of downstream responders, trials with identical spike sets.
+      Rationale: stimulated Kenyon cells fire once per external event in both engines, so an
+      all-neuron correlation is partly trivial. Gating tolerances above are unchanged.
+  - date: 2026-10-15
+    when: after a first tier-1 run (run 20261015T115033-refcheck-9390de6d), before tier 2/3 were run
+    change: >
+      (a) The first tier-1 run FAILED refractory_burst (143 vs 138 spikes): our engine accumulated
+      synaptic input during the refractory period, whereas Brian2 discards writes to
+      "unless refractory" variables (conditional write; brian2/groups/neurongroup.py). The engine
+      was corrected to the published semantics - a finding, not a tolerance change.
+      (b) The first run showed chain_exc/chain_inh only propagated to neuron 1 (weak coverage);
+      chain weights were raised from 150 to 250 contacts so the cascade reaches all neurons.
+      No tolerance was changed.
+  - date: 2026-10-15
+    when: after full run 20261015T115315-refcheck-14f41cc5 (tiers 1-3 all passed)
+    change: >
+      The integrity check `dan_to_kc_dominates_kc_to_dan` FAILED on the real mushroom_body graph
+      (DAN->KC 324 pairs / 1829 contacts vs KC->DAN 2066 pairs / 12745 contacts, ratio 0.16).
+      Orientation itself is verified independently (all 44,024 internal pairs match Shiu's
+      Connectivity_783 as (pre,post,count); KC->MBON : MBON->KC = 549.7). The failing criterion was
+      a mis-specified expectation of mine (KC->DAN feedback is substantial in this graph), not a
+      data error, so it is DEMOTED to a report-only measurement. It is not counted as a pass. The
+      literature basis for the KC->DAN pair count is not yet verified here (marked unverified).
+      Also: poisson_events() was changed to key each target's stream by neuron id (so a target's
+      events do not depend on which other targets exist); tiers 2/3 were re-run after this change.

@@ -1,0 +1,96 @@
+# Artifact-backed target ledger; original thresholds and historical evidence preserved.
+targets:
+- id: associative_learning_accuracy
+  description: Held-out associative-learning accuracy
+  comparator: absolute threshold
+  threshold: 0.82
+  unit: fraction
+  status: evaluated/met
+  measured: 0.846875
+  measured_note: Frozen learning-v2 BPTT connectome, five final seeds 100201-100205. Matched GRU 0.884375;
+    reaching an absolute target does not establish topology advantage.
+  run_ids:
+  - 20261016T060546-learning2-confirm-6e775687
+  historical_v1:
+    status: evaluated/missed
+    measured: 0.797
+    measured_note: 'synthetic task on the right-hemisphere MB pilot subset (1,500 neurons); parameter-matched
+      GRU reached 0.838 under the same protocol. Source: results/learning/flywire_confirm/summary.json'
+    run_ids:
+    - 20261015T130058-learning-flywire_confirm-c4150a0f
+  source: results/learning_v2/confirm/summary.json
+- id: forgetting_improvement
+  description: Average-forgetting improvement over a predeclared matched conventional baseline (baseline
+    forgetting minus connectome forgetting)
+  comparator: predeclared matched conventional baseline (to be named in prereg.yaml)
+  threshold: 0.07
+  unit: absolute fraction (= 7 percentage points)
+  relative_change_note: undefined when baseline forgetting is zero
+  status: evaluated/missed
+  measured: 0.040624999999999994
+  measured_note: 'Frozen learning-v2 paired BPTT comparison: +4.0625 percentage points versus the 7-point
+    goal; relative reduction 39.39%. No Holm-significant primary contrast.'
+  run_ids:
+  - 20261016T060546-learning2-confirm-6e775687
+  historical_v1:
+    status: evaluated/missed
+    measured: -0.0125
+    measured_note: 'predeclared comparator = parameter-matched GRU under identical BPTT learner; paired
+      by seed, 5 seeds, 95% bootstrap CI of the improvement [-0.034, +0.011]. Source: results/learning/flywire_confirm/summary.json'
+    run_ids:
+    - 20261015T130058-learning-flywire_confirm-c4150a0f
+  source: results/learning_v2/confirm/summary.json
+- id: causal_screen_targets
+  description: Distinct valid intervention targets with paired effect estimates and uncertainty
+  threshold: 100
+  unit: count of distinct valid targets (requested screen scale 120)
+  condition: only if enough eligible targets and independent runs exist; no duplication or invention
+  status: exploratory
+  measured: 100
+  measured_note: 100 distinct primary neuron targets, 120 interventions per condition, five acquired learning-v2
+    instances per BPTT/decoder condition. Scale reached; exploratory model-relative screen, zero Holm-significant
+    targets. The separate type screen has only 14 eligible groups.
+  run_ids:
+  - 20261016T071737-screen-v2-trained-6cc560bf
+  historical_untrained:
+    status: exploratory
+    measured: 100
+    measured_note: 'Model-relative screen on an UNTRAINED structural sparse RNN (engineered sensory/readout
+      interface; 1,473 of 1,500 nodes have unknown sign -> ''excitatory'' policy; sensitivity not run).
+      6 independent stimulus/noise runs per target on one fixed model; paired against degree-matched random
+      controls. 1,388 eligible targets. Not a statement about living neurons. A synthetic 400-node screen
+      (labelled synthetic) is separate. Source: results/interventions/*/plan.json'
+    run_ids:
+    - 20261015T114745-screen-mushroom_body_right_pilot-d48c891f
+    - 20261015T114913-screen-mushroom_body_right_pilot-1d3bee50
+  source: results/audit/learning_v2_causal_integrity.json
+- id: navigation_success_25pct_dropout
+  description: Navigation success under the frozen 25 percent sensor-dropout protocol
+  comparator: matched conventional baselines
+  threshold: 0.68
+  unit: fraction of episodes
+  status: evaluated/met
+  measured: 0.797
+  measured_note: 'Met numerically, but NOT evidence for the connectome: degree-preserving null graph 0.797,
+    param-matched GRU 0.859, compute-matched GRU 0.879, random sparse RNN 0.146. Engineered arena and
+    interfaces; conflicting-cue success ~0 for all learned policies. Protocol hash 5107cf8e frozen before
+    the run. Source: results/navigation/20261015T120918-nav-confirmatory-1a3f0537'
+  run_ids:
+  - 20261015T120918-nav-confirmatory-1a3f0537
+  benchmark_scope: Historical v1 engineered 2D arena only; not a physical FlyGym result.
+  followup_studies:
+  - study: nav_tier1_v2
+    measured: 0.327
+    threshold: null
+    status: exploratory
+    source: results/navigation_v2/final/results.json
+    note: Different harder task; no absolute threshold in its frozen protocol.
+  - study: flygym_nav_v1
+    measured: 0.5083333333333334
+    threshold: null
+    status: exploratory
+    source: results/flygym/report.json
+    owner_goal_comparison: Below the requested 0.68 ambition. Frozen FlyGym protocol is threshold-free;
+      this is a descriptive goal comparison, not a retrospectively declared test.
+updated_utc: '2026-10-17T11:41:49.382084+00:00'
+scope_note: Targets are ambitions; missed targets and negative comparisons remain valid completed evaluations.

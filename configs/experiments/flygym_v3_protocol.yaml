@@ -1,0 +1,94 @@
+# FlyGym body-in-the-loop PROSPECTIVE study v3 (protocol flygym_nav_v3). Owner: Atul Pandey.
+# Follow-up to flygym_nav_v1 (configs/experiments/flygym_protocol.yaml, preserved unchanged).
+# Training spec/source are archived in flygym_training.json before training (evaluation excluded from train hash).
+# Validation power.json determines effective N; flygym_evaluation.json freezes it before any test-split episode.
+# Both manifests live in results/provenance/study_v3. This YAML remains immutable with raw N=null.
+protocol_id: flygym_nav_v3
+status_vocabulary: [not run, exploratory, evaluated/met, evaluated/missed, blocked]
+relationship_to_v1: >
+  v1 test episodes (test idx 0-23, test_ood idx 0-11) were SEEN and were mask-confounded: at 25% dropout 9 of 24
+  episodes lost channel 5 (sin bearing), and observed policies did poorly in that stratum. This does not prove an
+  information-theoretic ceiling because other odor and temporal cues remain. v1 CIs bootstrapped only over 5 models
+  on fixed episodes/masks (no episode-sampling uncertainty). v3 uses
+  fresh test targets (test idx 5000+), many more episodes, STRATIFIED independent masks (each channel dropped in
+  exactly 25% of episodes) and a crossed model x episode bootstrap. No v1 test episode or mask is reused.
+body: {package: flygym==2.1.0, controller: official HybridTurningController (unmodified), env: external/flygym_pilot/.venv}
+interface:   # ENGINEERED, unchanged from v1
+  obs_channels: [odorL, odorR, odorMean, odorL_prev, odorR_prev, visSin, visCos, speed, yawrate, efference]
+  action: a in [-1,1]^2 -> descending_signal = 0.8 + 0.4*a
+  no_mask_indicator_given: true
+task:
+  goal: reach a point source within 1.5 mm in <= 180 control ticks
+  splits: {train: idx 0-599, val: idx 0-47 (teacher val), 100-123 (DART val), 3000-3095 (power), test: idx 5000+}
+circuit:
+  graph: mushroom_body_right_pilot (1,500 neurons), 10 sensory Kenyon cells, 2 MBON readouts (v1 body interface)
+  signs: annotation_v2 (graph/signs.py SignPolicy default; unknown and modulatory -> 0)
+  nulls: cached v2 plain degree-preserving nulls (results/nulls_v2), null i used for seed index i
+  random_control: random simple digraph resampled until sensory->readout reachability >= the connectome's
+training:
+  algorithm: offline behavioural cloning of the privileged proportional-steering teacher (a = clip(0.6 -/+ 2.0*bearing))
+  data:
+    teacher_v1: reuse the recorded v1 teacher dataset read-only (results/flygym/bc_data, train idx 0-299, noise 0/0.3/0.6)
+    dart_v3: >
+      NEW matched dataset collected by the NON-LEARNED scripted bilateral-odor controller executing under
+      per-episode channel dropout, labelled at every visited state by the privileged teacher (DART/DAgger-style
+      aggregation without any learned policy in the loop, so the SAME data serve every condition).
+    dart_episodes: 300            # train idx 300-599
+    dart_dropout_levels: [0.1, 0.25, 0.5]
+    dart_action_noise: 0.3
+    dart_val_episodes: 24         # val idx 100-123, dropout 0.25
+  dropout_levels_in_training: [0.0, 0.1, 0.25, 0.5]     # per-sequence masks applied to inputs, identical for all conditions
+  optimizer: adam
+  epochs: 40
+  batch_sequences: 16
+  tbptt_steps: 32
+  grad_clip: 1.0
+  loss: masked MSE between tanh(y) and teacher action
+  stopping_rule: fixed epochs, no checkpoint selection
+  lr_search: {grid: [0.00003, 0.0001, 0.0003, 0.001, 0.003, 0.01, 0.03, 0.1], seed: 5, epochs: 12,
+              criterion: validation BC loss at 25% dropout over teacher-val + DART-val, identical for every condition}
+conditions: [connectome_pilot_mb, null_v2_plain, random_sparse_reachable, gru_param_matched, encdec_param_matched]
+reference_controllers: [teacher (privileged), scripted bilateral-odor (non-learned), straight]
+untrained_controls: [connectome_pilot_mb, gru_param_matched]    # evaluated on the first 48 test episodes only
+seeds: {search: [5], train: [411, 412, 413, 414, 415], power_models: [411]}
+evaluation:
+  dropout: 0.25
+  mask_design: >
+    stratified: each of the 10 channels is dropped in exactly 25% of test episodes (2 or 3 channels per episode,
+    half each), masks independent of target geometry and shared by all policies (matched pairing)
+  test_idx_start: 5000
+  n_test_episodes: null          # effective N comes from validated power.json; never rewrite this YAML
+  n_untrained_episodes: 48
+  power_rule: >
+    N = ceil(1.96^2 * p(1-p) / h^2) with h = 0.08 (half-width of the episode-sampling interval of a condition mean)
+    and p the pooled validation success of the 5 power models on 96 fresh validation episodes (stratified masks);
+    clipped to [96, 144] (compute cap) and rounded up to a multiple of 12. If the cap binds, the achieved
+    half-width is reported rather than hidden.
+  n_power_val_episodes: 96
+  unit_of_replication: >
+    trained model x test episode (crossed). Bootstrap resamples model indices AND episode indices (4000 draws);
+    contrasts pair models by seed index and episodes by index.
+primary_endpoint:
+  id: flygym_v3_success_25pct_stratified_dropout
+  metric: mean success over the N stratified test episodes, averaged over the 5 trained models of a condition
+  comparators: [gru_param_matched, null_v2_plain, random_sparse_reachable, encdec_param_matched, untrained]
+  contrasts: [connectome-gru, connectome-null, connectome-random, connectome-encdec]
+  multiplicity: Holm over the 4 connectome contrasts (bootstrap two-sided p; exploratory-grade at 5 models)
+  owner_ambition: >
+    success >= 0.68 under 25% dropout. This is the OWNER'S AMBITION, not a protocol gate: it is reported with the
+    status vocabulary but does not define study success, and meeting it would say nothing about anatomy.
+  anatomy_question: separate from task success -- judged only by the connectome minus null/GRU/random contrasts
+secondary_reports: [per-channel dropout breakdown (success when channel c dropped vs kept), SPL, nominal-vs-dropout
+  gap for references, trained-minus-untrained]
+exclusions: none pre-specified; episodes with execution status != ok are reported and counted as failures, never dropped
+caveats:
+  - Pilot mushroom-body subset, engineered interface, no ventral nerve cord in the FlyWire brain.
+  - 5 trained models per condition: model-level uncertainty is exploratory-grade.
+  - Reference-controller and DART choices were informed by v1 test observations (seen); the v3 test episodes are new.
+  - No channel-level impossibility was demonstrated. Dropped-minus-kept breakdowns are descriptive associations
+    under correlated masks, not causal interventions or information ceilings.
+  - v3 drops exactly 2 or 3 channels per episode with balanced marginal rates; its joint mask distribution differs
+    from v1 independent Bernoulli dropout, so the two test endpoints are not interchangeable.
+amendments:
+  - pre_confirmation_integrity_and_resume_20261018 (configs/prereg_v3.yaml); source/cache manifests, immutable raw N,
+    exact coverage, preserved failure statuses, within-exposure channel intervals, CPU-only sequential execution.

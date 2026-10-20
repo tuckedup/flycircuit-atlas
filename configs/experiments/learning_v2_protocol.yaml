@@ -1,0 +1,68 @@
+# Learning study v2 (protocol learning-v2.0). Follow-up to v1 (configs/experiments/learning_protocol.yaml,
+# kept unchanged). SYNTHETIC cue-valence task on the real pilot circuit with ENGINEERED interfaces.
+# Task spec is identical to v1 so conditions are comparable; seeds are disjoint from every v1 seed.
+task:
+  n_cue: 16
+  k_active: 5
+  n_ctx: 3
+  T: 8
+  cue_steps: 6
+  resp_steps: 3
+  input_noise: 0.05
+  context_corr: 0.7
+  n_train: 200
+  n_val: 64         # model selection ONLY
+  n_test: 64        # final evaluation ONLY (class balanced 32/32)
+training:
+  trials_per_phase: 800
+  reversal_trials: 800
+  perseveration_window: 50
+  acquisition_window: 20
+  acquisition_criterion: 0.8
+  delay_trials: 400          # delayed-retention interval: un-reinforced trials before re-test
+  replay_budget: 16          # replay mode only: stored (cue,label) pairs per finished task, ALL conditions
+  explore_noise: 0.5         # np_window arm only (comp_feedback needs no injected noise)
+  decoder_lr: 0.003          # fallback; plast_dec / plast_homeo use the lr selected for decoder_only
+  policy_logit_cap: 2.0
+model:
+  tau: 5.0
+  dt: 1.0
+  prior: log1p
+  init_gain: 0.005
+  nonneg_gain: true
+  unknown_sign_policy: zero
+  encoder_fan_in: 4
+plasticity:
+  decay: 0.9                 # used by np_* rules; comp_feedback trace decay is (1 - alpha) by construction
+  gain_lo: 0.0
+  gain_hi: 0.02
+  gamma: 0.9
+  lr_value: 0.05
+  homeostasis: 0.002         # per-trial leak toward init, plast_homeo arm ONLY (declared, not tuned)
+sign_policy:                 # graph/signs.py SignPolicy fields (sign layer v2)
+  name: known_then_predicted
+  min_conf: 0.5
+  glutamate: inhibitory
+  histamine: inhibitory
+  monoamine_mode: separate_channel
+  unknown_fill: zero
+  kc_literature_prior: false
+search:
+  budget_lr_evals: 8         # EQUAL for every (arm, family-kind): 5-point start grid + 3 adaptive evals
+  seeds: [11, 12]            # validation-only search seeds (disjoint from pilot/final/v1)
+  initial_grid:
+    gradient: [0.0003, 0.001, 0.003, 0.01, 0.03]
+    plastic: [0.00001, 0.00003, 0.0001, 0.0003, 0.001]
+  criterion: mean over tasks of final-phase VALIDATION accuracy (continual protocol)
+seeds:
+  pilot: [21, 22]
+  confirmatory: [100201, 100202, 100203, 100204, 100205]
+  confirmatory_min_units: 5
+  null_graphs: 5
+targets:
+  accuracy: 0.82
+  forgetting_improvement_abs: 0.07
+negative_forgetting_policy: keep
+circuit:
+  name: mushroom_body_right_pilot
+  min_contacts: 5

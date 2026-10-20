@@ -1,0 +1,29 @@
+{
+ "stage": "W1_encoder_E8",
+ "written": "2026-10-19 06:55:21",
+ "torch_threads": 2,
+ "seeds": [
+  1101,
+  1102,
+  1103,
+  1104,
+  1105,
+  1106,
+  1107,
+  1108
+ ],
+ "conditions": [
+  "baseline",
+  "E8"
+ ],
+ "sha256": {
+  "scripts_v4/encoder_probe.py": "12a56586621288387fc1e6cabace9aa454c7c867aa109ab83d13f655c99629ad",
+  "results_v4/learning_readout_v4_1/PREREG_WIDTH_PROBE.md": "e163820a02302489941352533d2c68673cee495a0e9d00d281d911473569e57d",
+  "results_v4/learning_readout_v4_1/ENCODER_DIAGNOSTIC_PLAN.md": "ba7911b45dad3dbc8eccf9e1f1d3bb2a7a2bd2408548b4448efcf0ca4f618354",
+  "results_v4/learning_readout_v4_1/seed_registry.json": "9fe6849e78a27034e4fa1557caff9de3f39a448460e7787c8d9ffe7ac41534d7",
+  "scripts_v4/width_probe.py": "2741db6914ab091819e0c689cdf142f9b52372e56ccfe24d71a984c006af74e9",
+  "src/flycircuit/eval/learning.py": "6248dfdda89320140299edf246d893b4713352d954d67012a2a710cbdf131809",
+  "src/flycircuit/eval/learning_v2.py": "27de38408ce5c6b865d399a94c7b7adcccd54fe83f00e3973c7493d9b389710b",
+  "src/flycircuit/models/sparse_rnn.py": "274eb7b042f3f7b5a4df52874eb43873fdfa875ab7de23c79e7acf4380a6db19"
+ }
+}

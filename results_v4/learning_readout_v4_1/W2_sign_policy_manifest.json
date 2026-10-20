@@ -1,0 +1,36 @@
+{
+ "stage": "W2_sign_policy",
+ "written": "2026-10-19 08:01:35",
+ "torch_threads": 2,
+ "seeds": [
+  1301,
+  1302,
+  1303,
+  1304,
+  1305,
+  1306,
+  1307,
+  1308
+ ],
+ "conditions": [
+  "baseline",
+  "policy"
+ ],
+ "policy_values": {
+  "baseline": "zero",
+  "policy": "excitatory"
+ },
+ "expected_rows": 240,
+ "sha256": {
+  "scripts_v4/sign_probe.py": "aaed4fb5a03be98a37fecdbb34b1d6abf6ee73ce67d4b1fe7c16f314ea1d0cca",
+  "results_v4/learning_readout_v4_1/W2_PREREG.md": "d244c95bdcc4a9d62ecf7f710d18a713fcff985d0aabd6c7c390c9031c86dac9",
+  "results_v4/learning_readout_v4_1/seed_registry.json": "480e124c41d3b29de286905794f3bfec1ae0367c1e64c9ded4aeffc96155c53a",
+  "results_v4/learning_readout_v4_1/W0_width_probe_manifest.json": "e3731085f095d9e7975b9c556b1ff29eaa7aaff0bcf190ee80c6546dac6dc7e7",
+  "scripts_v4/width_probe.py": "2741db6914ab091819e0c689cdf142f9b52372e56ccfe24d71a984c006af74e9",
+  "scripts_v4/encoder_probe.py": "12a56586621288387fc1e6cabace9aa454c7c867aa109ab83d13f655c99629ad",
+  "src/flycircuit/eval/learning.py": "6248dfdda89320140299edf246d893b4713352d954d67012a2a710cbdf131809",
+  "src/flycircuit/eval/learning_v2.py": "27de38408ce5c6b865d399a94c7b7adcccd54fe83f00e3973c7493d9b389710b",
+  "src/flycircuit/models/sparse_rnn.py": "274eb7b042f3f7b5a4df52874eb43873fdfa875ab7de23c79e7acf4380a6db19",
+  "configs/experiments/learning_v3_protocol.yaml": "6b492862db6e00154e25a917b0205c78f934d0b82383006b0af30812d033894d"
+ }
+}

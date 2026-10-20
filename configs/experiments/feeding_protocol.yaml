@@ -1,0 +1,65 @@
+# Feeding-assay (sugar GRN -> MN9) reproduction protocol, version 1.
+# PREDECLARED 2026-10-15 BEFORE any whole-brain run of flycircuit.models.lif_stream on the
+# v630 release and before any comparison with the published model outputs was computed.
+# (What had been looked at before writing this: the published-output FILE FORMATS and their sizes,
+# not rates or comparisons.) Amend only by appending to `amendments`; the run stores this file's sha256.
+protocol_version: 1
+goal: >
+  Reproduce, with the independent flycircuit LIF engine, the documented sugar-GRN activation
+  experiment of Shiu et al. on the ORIGINAL release (FlyWire materialization v630, Shiu's own
+  connectivity file, unmodified signs/contacts) and compare to (a) the PUBLISHED raw model outputs
+  (Edmond doi:10.17617/3.CZODIW) and (b) the unmodified published Brian2 code run natively here.
+  This is model-vs-model agreement. It is NOT validation against the fly: the paper's biological
+  readouts (proboscis-extension behaviour, optogenetic/imaging experiments) are not available
+  locally and are not reproduced.
+sources:
+  paper: {title: "A Drosophila computational brain model reveals sensorimotor processing", journal: Nature, volume: 634, pages: "210-219", year: 2024, doi: 10.1038/s41586-024-07763-9, pmcid: PMC11446845}
+  preprint: {doi: 10.1101/2023.05.02.539144}
+  code: {repo: https://github.com/philshiu/Drosophila_brain_model, commit: 91bdd1e7dcf193f3e7ca5a8933497fcef63b7960, license: MIT}
+  published_outputs: {archive: "doi:10.17617/3.CZODIW (Edmond), results.zip datafile 223847", license: MIT, fetched_members: "see data/raw/shiu_published/manifest.json"}
+assay:
+  documented_in: ["example.ipynb", "figures.ipynb cells 4-6 (Fig 1d), Methods of the paper"]
+  stimulated: "21 labellar sugar-sensing GRNs, RIGHT hemisphere (figures.ipynb `neu_sugar`)"
+  stimulation: "Poisson input, N=1, weight w_syn*f_poi on v; targets have refractory period 0"
+  frequencies_hz_published: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200]
+  frequencies_hz_here: [100, 200]       # published raw spike files for exactly these are fetched
+  t_run_ms: 1000
+  n_trials_published: 30
+  readouts: [per-neuron mean firing rate (all neurons), top-200 most active neurons, MN9 (720575940660219265) rate]
+  mn9_note: "paper reports ipsi- vs contralateral MN9; only one MN9 ID is given in the shipped notebooks. Cannot assign ipsi/contra here."
+documented_inconsistencies:
+  - "paper Methods say unilateral LEFT hemisphere activation for all simulations except Extended Data Fig 1d; figures.ipynb Fig 1d-f cells use the RIGHT-hemisphere list `neu_sugar`. Here: right (the files that exist locally)."
+  - "example.ipynb text says default activation is 200 Hz; model.py default r_poi is 150 Hz. Here: explicit 100 and 200 Hz."
+  - "paper states 127,400 proofread neurons (v630) - matches the shipped completeness file (127,400)."
+releases:
+  original: {name: "FlyWire v630 (Shiu materialization 2023_03_23)", neurons: 127400, files: ["2023_03_23_completeness_630_final.csv", "2023_03_23_connectivity_630_final.parquet"]}
+  adaptation: {name: "FlyWire v783 (Shiu Connectivity_783.parquet)", note: "20 of the 21 right sugar GRN ids are present in v783 -> a different stimulus set; reported separately, never as a reproduction"}
+engine: {dt_ms: 0.1, params_source: external/Drosophila_brain_model/model.py::default_params, step_schedule: flycircuit.models.lif}
+comparisons:
+  A_published_outputs:      # ours (independent RNG, 30 trials) vs the 30-trial published raw outputs
+    kind: statistical
+    n_trials_ours: 30
+    tolerances:
+      rate_pearson_min: 0.98            # over neurons with mean rate > 0.5 Hz in either set
+      sugar_grn_mean_rate_rel_err_max: 0.05
+      responder_threshold_hz: 5.0
+      responder_jaccard_min: 0.90
+      top200_jaccard_min: 0.85          # ranking at the 200 cut is noise-sensitive
+      mn9_mean_rate: "|ours-pub| <= 3*sqrt(sd_o^2/30 + sd_p^2/30) + 0.05*pub_mean"
+      n_active_neurons_rel_err_max: 0.10   # neurons that fire at least once in any trial
+  B_native_brian2:          # unmodified published run_trial, run here, few trials (cost ~5 min/trial)
+    kind: statistical_exploratory
+    note: "few trials -> larger sampling noise; reported with the same metrics, tolerances relaxed"
+    n_trials: 3
+    tolerances: {rate_pearson_min: 0.95, sugar_grn_mean_rate_rel_err_max: 0.10, responder_jaccard_min: 0.80}
+  C_shared_events_engine_exact:    # same explicit events into Brian2 (shared mode) and ours
+    kind: numerical
+    n_trials: 1
+    tolerances: {spike_counts: exact_for_neurons_with_all_inputs_exact, note: "whole-brain chaotic divergence possible; report fraction of neurons with identical trains and first-divergence time, no pass/fail beyond top-200 Jaccard>=0.9"}
+whole_brain_benchmark:
+  sizes_neurons: [1000, 5000, 20000, 60000, 127400]
+  sizes_selection: "BFS expansion from the sugar GRNs over the v630 graph (strongest-first), truncated to N nodes; induced subgraph. Descriptive scaling benchmark, not biology."
+  sim_ms: 200
+  backends: [numpy_cpu, torch_cpu, torch_cuda_float64, torch_cuda_float32]
+  budget: {max_peak_rss_gib: 5.0, run_via: scripts/linux/heavyjob.sh}
+amendments: []

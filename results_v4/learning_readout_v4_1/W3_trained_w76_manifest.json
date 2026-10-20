@@ -1,0 +1,61 @@
+{
+ "anchors": {
+  "connectome": 0.0017172483887342423,
+  "encdec": 0.00014588492999247112,
+  "gru": 0.0001509803648477105,
+  "null0": 0.005425948122590496,
+  "null1": 0.005425948122590496,
+  "null2": 0.005425948122590496,
+  "random_reach": 0.001
+ },
+ "check_seeds": [
+  1501,
+  1502,
+  1503,
+  1504
+ ],
+ "expected_rows": 280,
+ "families": [
+  "connectome",
+  "gru",
+  "encdec",
+  "null0",
+  "null1",
+  "null2",
+  "random_reach"
+ ],
+ "max_failures": 14,
+ "ratios": [
+  0.3333333333333333,
+  1.0,
+  3.0
+ ],
+ "search_plan_sha256": "86323162f29a70cf1ea8b7f0239a0925688d3794fcc534bebe53d08f462ce32f",
+ "search_seeds": [
+  1401,
+  1402,
+  1403,
+  1404
+ ],
+ "sha256": {
+  "configs/experiments/learning_v3_protocol.yaml": "6b492862db6e00154e25a917b0205c78f934d0b82383006b0af30812d033894d",
+  "results_v4/learning_readout_v4_1/W0_width_probe_manifest.json": "e3731085f095d9e7975b9c556b1ff29eaa7aaff0bcf190ee80c6546dac6dc7e7",
+  "results_v4/learning_readout_v4_1/W3_PREREG.md": "4dd7fc0b30f1a14fe4f22e26d03faea34bb8b923d48857e437b734051b094947",
+  "results_v4/learning_readout_v4_1/seed_registry.json": "18c91ba3af39bdf9ea4a8fbd7efa18117d1aa574b5e0fd5d537f704ceaacb537",
+  "results_v4/learning_v4/pilot_manifest.json": "6b161b29ec01850661e473e147baf9547e9001b4bb1dbe91b32f8355789e7b19",
+  "scripts_v4/run_guarded.sh": "b86d52a6953e0dadda06ebda15f72c0015896db62b246f11c2928a54a8c26dfd",
+  "scripts_v4/summarize_w3.py": "23efdf0211a3e1b50c79282610b126fef7c6a3b34c02e83dba71e7f612e010c5",
+  "scripts_v4/w3_pilot.py": "251957fd772aa36f11192e10cde20aa043f8f098c95c5dacbaeb74c72f18093e",
+  "scripts_v4/width_probe.py": "2741db6914ab091819e0c689cdf142f9b52372e56ccfe24d71a984c006af74e9",
+  "src/flycircuit/eval/learning.py": "6248dfdda89320140299edf246d893b4713352d954d67012a2a710cbdf131809",
+  "src/flycircuit/eval/learning_v2.py": "27de38408ce5c6b865d399a94c7b7adcccd54fe83f00e3973c7493d9b389710b",
+  "src/flycircuit/eval/learning_v4.py": "849cdc2641fdc44eae48662c65f469e196ce21a2e152d68382814c18a61fbe91",
+  "src/flycircuit/eval/learning_v4_select.py": "e83ed0f84f73c6d65cc6fba33b7e366be9e229b42aef89f16e586a672cf52606"
+ },
+ "stage": "W3_trained_w76",
+ "torch_threads": 2,
+ "v4_pilot_manifest_sha256": "6b161b29ec01850661e473e147baf9547e9001b4bb1dbe91b32f8355789e7b19",
+ "w76_sha256": "5fea6ea33b48f89b33ac3110b25efe37c698769de747ea519041e168b837f1ea",
+ "wall_limit_s": 7200,
+ "written": "2026-10-19 08:11:22"
+}

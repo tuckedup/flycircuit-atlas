@@ -1,0 +1,2183 @@
+{
+ "scope": "OWN re-implementation by the project team; a consistency audit, not an independent review.",
+ "n_rows": 280,
+ "checks": [
+  {
+   "id": "1_coverage",
+   "description": "280 unique keys = 252 search + 28 check; no dups; all ok; metrics finite",
+   "status": "pass",
+   "details": {
+    "unique_keys": 280,
+    "dups": 0,
+    "search_rows": 252,
+    "check_rows": 28,
+    "other_seed_rows": 0,
+    "status_counts": {
+     "ok": 280
+    },
+    "n_not_ok": 0,
+    "nonfinite_metric_rows": 0,
+    "settings_per_family_search": {
+     "connectome": 9,
+     "gru": 9,
+     "encdec": 9,
+     "null0": 9,
+     "null1": 9,
+     "null2": 9,
+     "random_reach": 9
+    },
+    "search_rows_per_cell_min_max": [
+     4,
+     4
+    ],
+    "phase_tag_consistent_with_seed": true,
+    "final_json": {
+     "n_rows": 280,
+     "n_failed": 0,
+     "aborted": null
+    },
+    "elapsed_s": 3822.186011314392
+   }
+  },
+  {
+   "id": "2a_seed_identity_registry",
+   "description": "search rows use only 1401-1404, check 1501-1504, disjoint, unused elsewhere",
+   "status": "pass",
+   "details": {
+    "search_seeds_in_rows": [
+     1401,
+     1402,
+     1403,
+     1404
+    ],
+    "check_seeds_in_rows": [
+     1501,
+     1502,
+     1503,
+     1504
+    ],
+    "search_check_disjoint": true,
+    "overlap_with_other_registry_entries": [],
+    "registry_W3": {
+     "search": [
+      1401,
+      1402,
+      1403,
+      1404
+     ],
+     "check": [
+      1501,
+      1502,
+      1503,
+      1504
+     ]
+    },
+    "registry_reserved_unseen": {
+     "validation_checks": [
+      901,
+      902,
+      903,
+      904,
+      905,
+      906,
+      907,
+      908
+     ],
+     "confirmation": "100601-100620"
+    },
+    "check_seeds_in_search_rows": [],
+    "registry_note": "reconstructed from saved records; may be incomplete for v1",
+    "overlap_with_reserved_validation": []
+   }
+  },
+  {
+   "id": "2b_check_data_differs",
+   "description": "check seeds produce data different from search seeds; both are validation split",
+   "status": "pass",
+   "details": {
+    "code_path": {
+     "seed_to_task": "learning_v2.run_one_v2: task = L.make_task(proto_run, seed) -> ContingencyTask(spec, seed); teachers from SeedSequence([seed,99]); each (split,ctx) set from SeedSequence([seed, split_id, ctx]) so train/val/test all depend on seed",
+     "seed_to_model": "build_model_v2(.., seed): model init seed and fixed encoder SeedSequence([seed,3]); random_reach graph drawn from seed; null0..2 graphs are FIXED cached packs (family name picks the file), NOT seed dependent",
+     "seed_to_agent": "LearningAgent(seed=seed) (explore noise); run_association_v2 / run_continual_v2 receive seed",
+     "splits_evaluated": [
+      [
+       "val"
+      ]
+     ],
+     "search_and_check_both_validation": true,
+     "interpretation": "Check seeds 1501-1504 generate different task instances (new teachers, new cues) than 1401-1404, BUT both are the VALIDATION split of the same task family/protocol and the same fixed graphs and hyper-parameter grid. The check is a fresh-seed re-evaluation on validation; it is NOT held-out/test, so it is exploratory only."
+    },
+    "data": {
+     "task_spec": {
+      "n_cue": 16,
+      "k_active": 5,
+      "n_ctx": 3,
+      "T": 8,
+      "cue_steps": 6,
+      "resp_steps": 3,
+      "input_noise": 0.05,
+      "context_corr": 0.7,
+      "n_train": 200,
+      "n_val": 64,
+      "n_test": 64
+     },
+     "n_val_cues_total_per_seed": 192,
+     "identical_cue_arrays_search_vs_check": [],
+     "teachers_identical_search_vs_check": [],
+     "val_pattern_overlap_search_vs_check[shared,total]": {
+      "1401v1501:val": [
+       4,
+       192
+      ],
+      "1401v1502:val": [
+       3,
+       192
+      ],
+      "1401v1503:val": [
+       8,
+       192
+      ],
+      "1401v1504:val": [
+       10,
+       192
+      ],
+      "1402v1501:val": [
+       6,
+       192
+      ],
+      "1402v1502:val": [
+       12,
+       192
+      ],
+      "1402v1503:val": [
+       4,
+       192
+      ],
+      "1402v1504:val": [
+       6,
+       192
+      ],
+      "1403v1501:val": [
+       10,
+       192
+      ],
+      "1403v1502:val": [
+       8,
+       192
+      ],
+      "1403v1503:val": [
+       8,
+       192
+      ],
+      "1403v1504:val": [
+       14,
+       192
+      ],
+      "1404v1501:val": [
+       12,
+       192
+      ],
+      "1404v1502:val": [
+       12,
+       192
+      ],
+      "1404v1503:val": [
+       9,
+       192
+      ],
+      "1404v1504:val": [
+       10,
+       192
+      ]
+     },
+     "train_pattern_overlap_search_vs_check[shared,total]": {
+      "1401v1501:train": [
+       84,
+       600
+      ],
+      "1401v1502:train": [
+       80,
+       600
+      ],
+      "1401v1503:train": [
+       85,
+       600
+      ],
+      "1401v1504:train": [
+       89,
+       600
+      ],
+      "1402v1501:train": [
+       86,
+       600
+      ],
+      "1402v1502:train": [
+       87,
+       600
+      ],
+      "1402v1503:train": [
+       82,
+       600
+      ],
+      "1402v1504:train": [
+       65,
+       600
+      ],
+      "1403v1501:train": [
+       88,
+       600
+      ],
+      "1403v1502:train": [
+       78,
+       600
+      ],
+      "1403v1503:train": [
+       82,
+       600
+      ],
+      "1403v1504:train": [
+       85,
+       600
+      ],
+      "1404v1501:train": [
+       88,
+       600
+      ],
+      "1404v1502:train": [
+       78,
+       600
+      ],
+      "1404v1503:train": [
+       83,
+       600
+      ],
+      "1404v1504:train": [
+       84,
+       600
+      ]
+     },
+     "val_pattern_overlap_within_search[shared,total]": {
+      "1401v1402:val": [
+       7,
+       192
+      ],
+      "1401v1403:val": [
+       11,
+       192
+      ],
+      "1401v1404:val": [
+       3,
+       192
+      ],
+      "1402v1403:val": [
+       9,
+       192
+      ],
+      "1402v1404:val": [
+       7,
+       192
+      ],
+      "1403v1404:val": [
+       12,
+       192
+      ]
+     },
+     "label_agreement_on_shared_val_patterns_paired_seeds": {
+      "1401v1501": {
+       "shared_val_patterns(ignoring ctx)": 4,
+       "same_label": 2
+      },
+      "1402v1502": {
+       "shared_val_patterns(ignoring ctx)": 12,
+       "same_label": 8
+      },
+      "1403v1503": {
+       "shared_val_patterns(ignoring ctx)": 8,
+       "same_label": 3
+      },
+      "1404v1504": {
+       "shared_val_patterns(ignoring ctx)": 10,
+       "same_label": 6
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "3_selection",
+   "description": "independent recompute of composite/one-SE/two_group_simplicity equals choices.json",
+   "status": "pass",
+   "details": {
+    "connectome": {
+     "n_settings": 9,
+     "n_seeds_each": [
+      4
+     ],
+     "best": [
+      0.00515175,
+      0.00171725
+     ],
+     "best_mean": 0.7936197916666667,
+     "best_se": 0.012139206832419234,
+     "threshold": 0.7814805848342475,
+     "n_within_1se": 3,
+     "chosen": [
+      0.00171725,
+      0.00515175
+     ],
+     "chosen_mean": 0.7845052083333333,
+     "matches_choices_json": true,
+     "best_edge": {
+      "core_on_edge": true,
+      "decoder_on_edge": false,
+      "core_side": "high",
+      "decoder_side": "mid"
+     },
+     "chosen_edge": {
+      "core_on_edge": false,
+      "decoder_on_edge": true,
+      "core_side": "mid",
+      "decoder_side": "high"
+     },
+     "best_on_any_edge": true,
+     "chosen_on_any_edge": true,
+     "grid_core": [
+      0.000572416,
+      0.00171725,
+      0.00515175
+     ],
+     "grid_decoder": [
+      0.000572416,
+      0.00171725,
+      0.00515175
+     ],
+     "cell_means[core|dec]": {
+      "0.000572416|0.000572416": 0.73047,
+      "0.000572416|0.00171725": 0.75586,
+      "0.000572416|0.00515175": 0.77474,
+      "0.00171725|0.000572416": 0.7474,
+      "0.00171725|0.00171725": 0.75977,
+      "0.00171725|0.00515175": 0.78451,
+      "0.00515175|0.000572416": 0.77409,
+      "0.00515175|0.00171725": 0.79362,
+      "0.00515175|0.00515175": 0.79102
+     }
+    },
+    "gru": {
+     "n_settings": 9,
+     "n_seeds_each": [
+      4
+     ],
+     "best": [
+      0.000452941,
+      0.000452941
+     ],
+     "best_mean": 0.8307291666666665,
+     "best_se": 0.012075024082676722,
+     "threshold": 0.8186541425839898,
+     "n_within_1se": 2,
+     "chosen": [
+      0.000452941,
+      5.03268e-05
+     ],
+     "chosen_mean": 0.8203125,
+     "matches_choices_json": true,
+     "best_edge": {
+      "core_on_edge": true,
+      "decoder_on_edge": true,
+      "core_side": "high",
+      "decoder_side": "high"
+     },
+     "chosen_edge": {
+      "core_on_edge": true,
+      "decoder_on_edge": true,
+      "core_side": "high",
+      "decoder_side": "low"
+     },
+     "best_on_any_edge": true,
+     "chosen_on_any_edge": true,
+     "grid_core": [
+      5.03268e-05,
+      0.00015098,
+      0.000452941
+     ],
+     "grid_decoder": [
+      5.03268e-05,
+      0.00015098,
+      0.000452941
+     ],
+     "cell_means[core|dec]": {
+      "5.03268e-05|5.03268e-05": 0.61068,
+      "5.03268e-05|0.00015098": 0.62695,
+      "5.03268e-05|0.000452941": 0.60938,
+      "0.00015098|5.03268e-05": 0.7474,
+      "0.00015098|0.00015098": 0.76693,
+      "0.00015098|0.000452941": 0.79883,
+      "0.000452941|5.03268e-05": 0.82031,
+      "0.000452941|0.00015098": 0.81445,
+      "0.000452941|0.000452941": 0.83073
+     }
+    },
+    "encdec": {
+     "n_settings": 9,
+     "n_seeds_each": [
+      4
+     ],
+     "best": [
+      0.000437655,
+      0.000437655
+     ],
+     "best_mean": 0.8365885416666667,
+     "best_se": 0.009291134821444268,
+     "threshold": 0.8272974068452225,
+     "n_within_1se": 1,
+     "chosen": [
+      0.000437655,
+      0.000437655
+     ],
+     "chosen_mean": 0.8365885416666667,
+     "matches_choices_json": true,
+     "best_edge": {
+      "core_on_edge": true,
+      "decoder_on_edge": true,
+      "core_side": "high",
+      "decoder_side": "high"
+     },
+     "chosen_edge": {
+      "core_on_edge": true,
+      "decoder_on_edge": true,
+      "core_side": "high",
+      "decoder_side": "high"
+     },
+     "best_on_any_edge": true,
+     "chosen_on_any_edge": true,
+     "grid_core": [
+      4.86283e-05,
+      0.000145885,
+      0.000437655
+     ],
+     "grid_decoder": [
+      4.86283e-05,
+      0.000145885,
+      0.000437655
+     ],
+     "cell_means[core|dec]": {
+      "4.86283e-05|4.86283e-05": 0.63086,
+      "4.86283e-05|0.000145885": 0.71419,
+      "4.86283e-05|0.000437655": 0.8125,
+      "0.000145885|4.86283e-05": 0.71484,
+      "0.000145885|0.000145885": 0.78971,
+      "0.000145885|0.000437655": 0.81771,
+      "0.000437655|4.86283e-05": 0.81185,
+      "0.000437655|0.000145885": 0.82487,
+      "0.000437655|0.000437655": 0.83659
+     }
+    },
+    "null0": {
+     "n_settings": 9,
+     "n_seeds_each": [
+      4
+     ],
+     "best": [
+      0.00180865,
+      0.00542595
+     ],
+     "best_mean": 0.82421875,
+     "best_se": 0.005262307141051289,
+     "threshold": 0.8189564428589488,
+     "n_within_1se": 1,
+     "chosen": [
+      0.00180865,
+      0.00542595
+     ],
+     "chosen_mean": 0.82421875,
+     "matches_choices_json": true,
+     "best_edge": {
+      "core_on_edge": true,
+      "decoder_on_edge": false,
+      "core_side": "low",
+      "decoder_side": "mid"
+     },
+     "chosen_edge": {
+      "core_on_edge": true,
+      "decoder_on_edge": false,
+      "core_side": "low",
+      "decoder_side": "mid"
+     },
+     "best_on_any_edge": true,
+     "chosen_on_any_edge": true,
+     "grid_core": [
+      0.00180865,
+      0.00542595,
+      0.0162778
+     ],
+     "grid_decoder": [
+      0.00180865,
+      0.00542595,
+      0.0162778
+     ],
+     "cell_means[core|dec]": {
+      "0.00180865|0.00180865": 0.81641,
+      "0.00180865|0.00542595": 0.82422,
+      "0.00180865|0.0162778": 0.81706,
+      "0.00542595|0.00180865": 0.81576,
+      "0.00542595|0.00542595": 0.80208,
+      "0.00542595|0.0162778": 0.79102,
+      "0.0162778|0.00180865": 0.72461,
+      "0.0162778|0.00542595": 0.73047,
+      "0.0162778|0.0162778": 0.72396
+     }
+    },
+    "null1": {
+     "n_settings": 9,
+     "n_seeds_each": [
+      4
+     ],
+     "best": [
+      0.00180865,
+      0.00542595
+     ],
+     "best_mean": 0.81640625,
+     "best_se": 0.012999113829749926,
+     "threshold": 0.8034071361702501,
+     "n_within_1se": 1,
+     "chosen": [
+      0.00180865,
+      0.00542595
+     ],
+     "chosen_mean": 0.81640625,
+     "matches_choices_json": true,
+     "best_edge": {
+      "core_on_edge": true,
+      "decoder_on_edge": false,
+      "core_side": "low",
+      "decoder_side": "mid"
+     },
+     "chosen_edge": {
+      "core_on_edge": true,
+      "decoder_on_edge": false,
+      "core_side": "low",
+      "decoder_side": "mid"
+     },
+     "best_on_any_edge": true,
+     "chosen_on_any_edge": true,
+     "grid_core": [
+      0.00180865,
+      0.00542595,
+      0.0162778
+     ],
+     "grid_decoder": [
+      0.00180865,
+      0.00542595,
+      0.0162778
+     ],
+     "cell_means[core|dec]": {
+      "0.00180865|0.00180865": 0.80273,
+      "0.00180865|0.00542595": 0.81641,
+      "0.00180865|0.0162778": 0.80273,
+      "0.00542595|0.00180865": 0.79557,
+      "0.00542595|0.00542595": 0.7832,
+      "0.00542595|0.0162778": 0.79232,
+      "0.0162778|0.00180865": 0.72721,
+      "0.0162778|0.00542595": 0.67578,
+      "0.0162778|0.0162778": 0.68815
+     }
+    },
+    "null2": {
+     "n_settings": 9,
+     "n_seeds_each": [
+      4
+     ],
+     "best": [
+      0.00542595,
+      0.00180865
+     ],
+     "best_mean": 0.8092447916666666,
+     "best_se": 0.009168676290919116,
+     "threshold": 0.8000761153757475,
+     "n_within_1se": 2,
+     "chosen": [
+      0.00180865,
+      0.00542595
+     ],
+     "chosen_mean": 0.8014322916666667,
+     "matches_choices_json": true,
+     "best_edge": {
+      "core_on_edge": false,
+      "decoder_on_edge": true,
+      "core_side": "mid",
+      "decoder_side": "low"
+     },
+     "chosen_edge": {
+      "core_on_edge": true,
+      "decoder_on_edge": false,
+      "core_side": "low",
+      "decoder_side": "mid"
+     },
+     "best_on_any_edge": true,
+     "chosen_on_any_edge": true,
+     "grid_core": [
+      0.00180865,
+      0.00542595,
+      0.0162778
+     ],
+     "grid_decoder": [
+      0.00180865,
+      0.00542595,
+      0.0162778
+     ],
+     "cell_means[core|dec]": {
+      "0.00180865|0.00180865": 0.78841,
+      "0.00180865|0.00542595": 0.80143,
+      "0.00180865|0.0162778": 0.78711,
+      "0.00542595|0.00180865": 0.80924,
+      "0.00542595|0.00542595": 0.78385,
+      "0.00542595|0.0162778": 0.78906,
+      "0.0162778|0.00180865": 0.71159,
+      "0.0162778|0.00542595": 0.70117,
+      "0.0162778|0.0162778": 0.66471
+     }
+    },
+    "random_reach": {
+     "n_settings": 9,
+     "n_seeds_each": [
+      4
+     ],
+     "best": [
+      0.001,
+      0.003
+     ],
+     "best_mean": 0.8040364583333334,
+     "best_se": 0.009351762771881603,
+     "threshold": 0.7946846955614517,
+     "n_within_1se": 3,
+     "chosen": [
+      0.001,
+      0.001
+     ],
+     "chosen_mean": 0.798828125,
+     "matches_choices_json": true,
+     "best_edge": {
+      "core_on_edge": false,
+      "decoder_on_edge": true,
+      "core_side": "mid",
+      "decoder_side": "high"
+     },
+     "chosen_edge": {
+      "core_on_edge": false,
+      "decoder_on_edge": false,
+      "core_side": "mid",
+      "decoder_side": "mid"
+     },
+     "best_on_any_edge": true,
+     "chosen_on_any_edge": false,
+     "grid_core": [
+      0.000333333,
+      0.001,
+      0.003
+     ],
+     "grid_decoder": [
+      0.000333333,
+      0.001,
+      0.003
+     ],
+     "cell_means[core|dec]": {
+      "0.000333333|0.000333333": 0.7526,
+      "0.000333333|0.001": 0.79297,
+      "0.000333333|0.003": 0.79818,
+      "0.001|0.000333333": 0.76042,
+      "0.001|0.001": 0.79883,
+      "0.001|0.003": 0.80404,
+      "0.003|0.000333333": 0.7819,
+      "0.003|0.001": 0.79232,
+      "0.003|0.003": 0.78581
+     }
+    }
+   }
+  },
+  {
+   "id": "4_check_arithmetic",
+   "description": "check-row means/SEs/gaps; claimed connectome acq 0.82421875 (SE 0.034572703)",
+   "status": "pass",
+   "details": {
+    "check_setting_equals_selected": {
+     "connectome": true,
+     "gru": true,
+     "encdec": true,
+     "null0": true,
+     "null1": true,
+     "null2": true,
+     "random_reach": true
+    },
+    "per_family": {
+     "connectome": {
+      "acq": [
+       0.875,
+       0.890625,
+       0.78125,
+       0.75
+      ],
+      "acq_mean_se": [
+       0.82421875,
+       0.03457270324831186
+      ],
+      "cont": [
+       0.7395833333333334,
+       0.765625,
+       0.7291666666666666,
+       0.7708333333333334
+      ],
+      "cont_mean_se": [
+       0.7513020833333334,
+       0.01005783873806986
+      ],
+      "forget_keep": [
+       0.140625,
+       0.0703125,
+       0.0859375,
+       0.0390625
+      ],
+      "forget_mean_se": [
+       0.083984375,
+       0.02124631363552177
+      ]
+     },
+     "gru": {
+      "acq": [
+       0.9375,
+       0.859375,
+       0.796875,
+       0.875
+      ],
+      "acq_mean_se": [
+       0.8671875,
+       0.02888160548544119
+      ],
+      "cont": [
+       0.8072916666666666,
+       0.7447916666666666,
+       0.765625,
+       0.8177083333333334
+      ],
+      "cont_mean_se": [
+       0.7838541666666666,
+       0.017208530904165815
+      ],
+      "forget_keep": [
+       0.0390625,
+       0.1015625,
+       0.0625,
+       0.0
+      ],
+      "forget_mean_se": [
+       0.05078125,
+       0.021276216977041917
+      ]
+     },
+     "encdec": {
+      "acq": [
+       0.875,
+       0.84375,
+       0.828125,
+       0.828125
+      ],
+      "acq_mean_se": [
+       0.84375,
+       0.011048543456039806
+      ],
+      "cont": [
+       0.8072916666666666,
+       0.7604166666666666,
+       0.734375,
+       0.8177083333333334
+      ],
+      "cont_mean_se": [
+       0.7799479166666666,
+       0.019646649822493537
+      ],
+      "forget_keep": [
+       0.0859375,
+       0.1015625,
+       0.09375,
+       0.0234375
+      ],
+      "forget_mean_se": [
+       0.076171875,
+       0.017865133768245108
+      ]
+     },
+     "null0": {
+      "acq": [
+       0.921875,
+       0.859375,
+       0.796875,
+       0.875
+      ],
+      "acq_mean_se": [
+       0.86328125,
+       0.02581279635624871
+      ],
+      "cont": [
+       0.796875,
+       0.734375,
+       0.6979166666666666,
+       0.765625
+      ],
+      "cont_mean_se": [
+       0.7486979166666666,
+       0.021196380984504836
+      ],
+      "forget_keep": [
+       0.1171875,
+       0.125,
+       0.1796875,
+       0.1171875
+      ],
+      "forget_mean_se": [
+       0.134765625,
+       0.015086758107104775
+      ]
+     },
+     "null1": {
+      "acq": [
+       0.875,
+       0.84375,
+       0.765625,
+       0.84375
+      ],
+      "acq_mean_se": [
+       0.83203125,
+       0.023328740712459526
+      ],
+      "cont": [
+       0.8072916666666666,
+       0.6979166666666666,
+       0.7083333333333334,
+       0.7395833333333334
+      ],
+      "cont_mean_se": [
+       0.73828125,
+       0.02464803969531368
+      ],
+      "forget_keep": [
+       0.0703125,
+       0.1796875,
+       0.1171875,
+       0.0703125
+      ],
+      "forget_mean_se": [
+       0.109375,
+       0.02591113117465156
+      ]
+     },
+     "null2": {
+      "acq": [
+       0.859375,
+       0.875,
+       0.828125,
+       0.765625
+      ],
+      "acq_mean_se": [
+       0.83203125,
+       0.024185124506519155
+      ],
+      "cont": [
+       0.703125,
+       0.796875,
+       0.7239583333333334,
+       0.7864583333333334
+      ],
+      "cont_mean_se": [
+       0.7526041666666667,
+       0.023048468832207906
+      ],
+      "forget_keep": [
+       0.1796875,
+       0.046875,
+       0.1328125,
+       0.09375
+      ],
+      "forget_mean_se": [
+       0.11328125,
+       0.028258508351836856
+      ]
+     },
+     "random_reach": {
+      "acq": [
+       0.765625,
+       0.875,
+       0.75,
+       0.75
+      ],
+      "acq_mean_se": [
+       0.78515625,
+       0.03017351621420955
+      ],
+      "cont": [
+       0.7708333333333334,
+       0.7552083333333334,
+       0.765625,
+       0.7604166666666666
+      ],
+      "cont_mean_se": [
+       0.7630208333333334,
+       0.003361964710249496
+      ],
+      "forget_keep": [
+       0.0546875,
+       0.1171875,
+       0.0859375,
+       -0.015625
+      ],
+      "forget_mean_se": [
+       0.060546875,
+       0.028415563597389577
+      ]
+     }
+    },
+    "gru_minus_connectome_forgetting_signed": {
+     "per_seed": [
+      -0.1015625,
+      0.03125,
+      -0.0234375,
+      -0.0390625
+     ],
+     "n": 4,
+     "mean": -0.033203125,
+     "sd": 0.054640977235305435,
+     "se": 0.027320488617652718,
+     "t3_95ci": [
+      -0.12014911305980965,
+      0.053742863059809645
+     ],
+     "t_stat_vs0": -1.2153195890700983,
+     "mean_ge_0.07": false,
+     "t3_ci_lower_above_0": false
+    },
+    "connectome_acquisition": {
+     "n": 4,
+     "mean": 0.82421875,
+     "sd": 0.06914540649662372,
+     "se": 0.03457270324831186,
+     "t3_95ci": [
+      0.7141929782837206,
+      0.9342445217162794
+     ],
+     "t_stat_vs0": 23.840159216946553,
+     "scores": [
+      0.875,
+      0.890625,
+      0.78125,
+      0.75
+     ],
+     "distance_above_0.82": 0.004218750000000049,
+     "t_vs_0.82": 0.12202545949906433,
+     "ci_lower_minus_0.82": -0.10580702171627931,
+     "claimed_mean": 0.82421875,
+     "claimed_se": 0.034572703,
+     "matches_claim": true
+    },
+    "connectome_minus_mean_null012_acq_paired": {
+     "null_mean_per_seed": [
+      0.8854166666666666,
+      0.859375,
+      0.796875,
+      0.828125
+     ],
+     "per_seed": [
+      -0.01041666666666663,
+      0.03125,
+      -0.015625,
+      -0.078125
+     ],
+     "n": 4,
+     "mean": -0.018229166666666657,
+     "sd": 0.04510548978043952,
+     "se": 0.02255274489021976,
+     "t3_95ci": [
+      -0.09000206631656507,
+      0.05354373298323176
+     ],
+     "t_stat_vs0": -0.8082903768654756
+    },
+    "connectome_minus_random_reach_acq_paired": {
+     "per_seed": [
+      0.109375,
+      0.015625,
+      0.03125,
+      0.0
+     ],
+     "n": 4,
+     "mean": 0.0390625,
+     "sd": 0.048580099234837575,
+     "se": 0.024290049617418787,
+     "t3_95ci": [
+      -0.038239278660125844,
+      0.11636427866012584
+     ],
+     "t_stat_vs0": 1.6081688022566925
+    },
+    "connectome_minus_each_null_acq_means": {
+     "null0": -0.0390625,
+     "null1": -0.0078125,
+     "null2": -0.0078125
+    },
+    "connectome_minus_gru_acq_paired": {
+     "n": 4,
+     "mean": -0.04296875,
+     "sd": 0.0667500292602932,
+     "se": 0.0333750146301466,
+     "t3_95ci": [
+      -0.14918294199851828,
+      0.06324544199851828
+     ],
+     "t_stat_vs0": -1.2874526191574363
+    },
+    "connectome_minus_gru_cont_paired": {
+     "n": 4,
+     "mean": -0.032552083333333315,
+     "sd": 0.037887418129852767,
+     "se": 0.018943709064926383,
+     "t3_95ci": [
+      -0.09283942025538827,
+      0.02773525358872165
+     ],
+     "t_stat_vs0": -1.7183584915586758
+    }
+   }
+  },
+  {
+   "id": "5_param_counts",
+   "description": "trainable parameter counts per family: models CONSTRUCTED here without training (W76 bundle for sparse, W25 base for gru/encdec) and requires_grad params compared with logged row values",
+   "status": "pass",
+   "details": {
+    "connectome": {
+     "n_params_trainable_values": [
+      7551
+     ],
+     "core_n": [
+      7399
+     ],
+     "decoder_n": [
+      152
+     ],
+     "core_plus_decoder_equals_total": true,
+     "n_edges": [
+      7399
+     ],
+     "n_nodes": [
+      1500
+     ],
+     "distinct_edge_hashes": 1
+    },
+    "gru": {
+     "n_params_trainable_values": [
+      9252
+     ],
+     "core_n": [
+      9176
+     ],
+     "decoder_n": [
+      76
+     ],
+     "core_plus_decoder_equals_total": true,
+     "n_edges": [
+      null
+     ],
+     "n_nodes": [
+      null
+     ],
+     "distinct_edge_hashes": null
+    },
+    "encdec": {
+     "n_params_trainable_values": [
+      8956
+     ],
+     "core_n": [
+      8140
+     ],
+     "decoder_n": [
+      816
+     ],
+     "core_plus_decoder_equals_total": true,
+     "n_edges": [
+      null
+     ],
+     "n_nodes": [
+      null
+     ],
+     "distinct_edge_hashes": null
+    },
+    "null0": {
+     "n_params_trainable_values": [
+      7551
+     ],
+     "core_n": [
+      7399
+     ],
+     "decoder_n": [
+      152
+     ],
+     "core_plus_decoder_equals_total": true,
+     "n_edges": [
+      7399
+     ],
+     "n_nodes": [
+      1500
+     ],
+     "distinct_edge_hashes": 1
+    },
+    "null1": {
+     "n_params_trainable_values": [
+      7551
+     ],
+     "core_n": [
+      7399
+     ],
+     "decoder_n": [
+      152
+     ],
+     "core_plus_decoder_equals_total": true,
+     "n_edges": [
+      7399
+     ],
+     "n_nodes": [
+      1500
+     ],
+     "distinct_edge_hashes": 1
+    },
+    "null2": {
+     "n_params_trainable_values": [
+      7551
+     ],
+     "core_n": [
+      7399
+     ],
+     "decoder_n": [
+      152
+     ],
+     "core_plus_decoder_equals_total": true,
+     "n_edges": [
+      7399
+     ],
+     "n_nodes": [
+      1500
+     ],
+     "distinct_edge_hashes": 1
+    },
+    "random_reach": {
+     "n_params_trainable_values": [
+      7551
+     ],
+     "core_n": [
+      7399
+     ],
+     "decoder_n": [
+      152
+     ],
+     "core_plus_decoder_equals_total": true,
+     "n_edges": [
+      7399
+     ],
+     "n_nodes": [
+      1500
+     ],
+     "distinct_edge_hashes": 8
+    },
+    "_summary": {
+     "connectome_total": 7551,
+     "connectome_core_edge_gains": [
+      7399
+     ],
+     "connectome_decoder": [
+      152
+     ],
+     "totals": {
+      "connectome": [
+       7551
+      ],
+      "gru": [
+       9252
+      ],
+      "encdec": [
+       8956
+      ],
+      "null0": [
+       7551
+      ],
+      "null1": [
+       7551
+      ],
+      "null2": [
+       7551
+      ],
+      "random_reach": [
+       7551
+      ]
+     },
+     "gru_over_connectome": [
+      1.2252681764004767
+     ],
+     "encdec_over_connectome": [
+      1.1860680704542446
+     ],
+     "sparse_families_same_total": true,
+     "gru_within_1pct": false,
+     "encdec_within_1pct": false,
+     "caveat": "Reported as logged; matching is NOT asserted. Prereg says gru/encdec were deliberately built from the W25 base (hidden 37 / 407) to equal the v4 pilot architectures, i.e. matched to the W25 sparse count, not the W76 count.",
+     "sizing_statement": "GRU/encdec were sized from the W25 base per prereg (hidden 37 / 407, verified from the constructed models' info), so they match the W25 sparse count, not the W76 count; matching to W76 is not claimed."
+    },
+    "_constructed_models_no_training": {
+     "connectome": {
+      "core_n": 7399,
+      "decoder_n": 152,
+      "total": 7551,
+      "info": {},
+      "base_used": "W76 bundle",
+      "logged_total": [
+       7551
+      ],
+      "logged_core": [
+       7399
+      ],
+      "logged_decoder": [
+       152
+      ],
+      "match_logged": true
+     },
+     "gru": {
+      "core_n": 9176,
+      "decoder_n": 76,
+      "total": 9252,
+      "info": {
+       "hidden": 37
+      },
+      "base_used": "W25 base",
+      "logged_total": [
+       9252
+      ],
+      "logged_core": [
+       9176
+      ],
+      "logged_decoder": [
+       76
+      ],
+      "match_logged": true
+     },
+     "encdec": {
+      "core_n": 8140,
+      "decoder_n": 816,
+      "total": 8956,
+      "info": {
+       "hidden": 407
+      },
+      "base_used": "W25 base",
+      "logged_total": [
+       8956
+      ],
+      "logged_core": [
+       8140
+      ],
+      "logged_decoder": [
+       816
+      ],
+      "match_logged": true
+     },
+     "null0": {
+      "core_n": 7399,
+      "decoder_n": 152,
+      "total": 7551,
+      "info": {},
+      "base_used": "W76 bundle",
+      "logged_total": [
+       7551
+      ],
+      "logged_core": [
+       7399
+      ],
+      "logged_decoder": [
+       152
+      ],
+      "match_logged": true
+     },
+     "null1": {
+      "core_n": 7399,
+      "decoder_n": 152,
+      "total": 7551,
+      "info": {},
+      "base_used": "W76 bundle",
+      "logged_total": [
+       7551
+      ],
+      "logged_core": [
+       7399
+      ],
+      "logged_decoder": [
+       152
+      ],
+      "match_logged": true
+     },
+     "null2": {
+      "core_n": 7399,
+      "decoder_n": 152,
+      "total": 7551,
+      "info": {},
+      "base_used": "W76 bundle",
+      "logged_total": [
+       7551
+      ],
+      "logged_core": [
+       7399
+      ],
+      "logged_decoder": [
+       152
+      ],
+      "match_logged": true
+     },
+     "random_reach": {
+      "core_n": 7399,
+      "decoder_n": 152,
+      "total": 7551,
+      "info": {
+       "reachable_fraction": 1.0,
+       "connectome_reachable_fraction": 1.0,
+       "tries": 1
+      },
+      "base_used": "W76 bundle",
+      "logged_total": [
+       7551
+      ],
+      "logged_core": [
+       7399
+      ],
+      "logged_decoder": [
+       152
+      ],
+      "match_logged": true
+     },
+     "_gru_encdec_hidden_check": {
+      "gru_hidden": 37,
+      "encdec_hidden": 407,
+      "expected": {
+       "gru": 37,
+       "encdec": 407
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "6_provenance",
+   "description": "current sha256 vs recorded (prelaunch + manifest); manifest/rows linkage",
+   "status": "pass",
+   "details": {
+    "prelaunch_hashes": [
+     {
+      "path": "scripts_v4/w3_pilot.py",
+      "recorded": "251957fd772aa36f11192e10cde20aa043f8f098c95c5dacbaeb74c72f18093e",
+      "current": "251957fd772aa36f11192e10cde20aa043f8f098c95c5dacbaeb74c72f18093e",
+      "match": true,
+      "mtime": "2026-10-19T08:09:31.168175"
+     },
+     {
+      "path": "scripts_v4/summarize_w3.py",
+      "recorded": "23efdf0211a3e1b50c79282610b126fef7c6a3b34c02e83dba71e7f612e010c5",
+      "current": "23efdf0211a3e1b50c79282610b126fef7c6a3b34c02e83dba71e7f612e010c5",
+      "match": true,
+      "mtime": "2026-10-19T08:09:31.418119"
+     },
+     {
+      "path": "scripts_v4/run_guarded.sh",
+      "recorded": "b86d52a6953e0dadda06ebda15f72c0015896db62b246f11c2928a54a8c26dfd",
+      "current": "b86d52a6953e0dadda06ebda15f72c0015896db62b246f11c2928a54a8c26dfd",
+      "match": true,
+      "mtime": "2026-10-19T03:01:18.369035"
+     },
+     {
+      "path": "<PROJECT_ROOT>/results_v4/learning_readout_v4_1/W3_PREREG.md",
+      "recorded": "4dd7fc0b30f1a14fe4f22e26d03faea34bb8b923d48857e437b734051b094947",
+      "current": "4dd7fc0b30f1a14fe4f22e26d03faea34bb8b923d48857e437b734051b094947",
+      "match": true,
+      "mtime": "2026-10-19T08:11:16.113054"
+     },
+     {
+      "path": "<PROJECT_ROOT>/results_v4/learning_readout_v4_1/seed_registry.json",
+      "recorded": "18c91ba3af39bdf9ea4a8fbd7efa18117d1aa574b5e0fd5d537f704ceaacb537",
+      "current": "18c91ba3af39bdf9ea4a8fbd7efa18117d1aa574b5e0fd5d537f704ceaacb537",
+      "match": true,
+      "mtime": "2026-10-19T08:08:22.593211"
+     },
+     {
+      "path": "src/flycircuit/eval/learning_v4.py",
+      "recorded": "849cdc2641fdc44eae48662c65f469e196ce21a2e152d68382814c18a61fbe91",
+      "current": "849cdc2641fdc44eae48662c65f469e196ce21a2e152d68382814c18a61fbe91",
+      "match": true,
+      "mtime": "2026-10-19T04:27:44.375701"
+     },
+     {
+      "path": "src/flycircuit/eval/learning_v4_select.py",
+      "recorded": "e83ed0f84f73c6d65cc6fba33b7e366be9e229b42aef89f16e586a672cf52606",
+      "current": "e83ed0f84f73c6d65cc6fba33b7e366be9e229b42aef89f16e586a672cf52606",
+      "match": true,
+      "mtime": "2026-10-19T04:18:46.619830"
+     },
+     {
+      "path": "configs/experiments/learning_v3_protocol.yaml",
+      "recorded": "6b492862db6e00154e25a917b0205c78f934d0b82383006b0af30812d033894d",
+      "current": "6b492862db6e00154e25a917b0205c78f934d0b82383006b0af30812d033894d",
+      "match": true,
+      "mtime": "2026-10-17T08:11:15"
+     }
+    ],
+    "manifest_sha256": [
+     {
+      "path": "configs/experiments/learning_v3_protocol.yaml",
+      "recorded": "6b492862db6e00154e25a917b0205c78f934d0b82383006b0af30812d033894d",
+      "current": "6b492862db6e00154e25a917b0205c78f934d0b82383006b0af30812d033894d",
+      "match": true,
+      "mtime": "2026-10-17T08:11:15"
+     },
+     {
+      "path": "results_v4/learning_readout_v4_1/W0_width_probe_manifest.json",
+      "recorded": "e3731085f095d9e7975b9c556b1ff29eaa7aaff0bcf190ee80c6546dac6dc7e7",
+      "current": "e3731085f095d9e7975b9c556b1ff29eaa7aaff0bcf190ee80c6546dac6dc7e7",
+      "match": true,
+      "mtime": "2026-10-19T05:56:48.144492"
+     },
+     {
+      "path": "results_v4/learning_readout_v4_1/W3_PREREG.md",
+      "recorded": "4dd7fc0b30f1a14fe4f22e26d03faea34bb8b923d48857e437b734051b094947",
+      "current": "4dd7fc0b30f1a14fe4f22e26d03faea34bb8b923d48857e437b734051b094947",
+      "match": true,
+      "mtime": "2026-10-19T08:11:16.113054"
+     },
+     {
+      "path": "results_v4/learning_readout_v4_1/seed_registry.json",
+      "recorded": "18c91ba3af39bdf9ea4a8fbd7efa18117d1aa574b5e0fd5d537f704ceaacb537",
+      "current": "18c91ba3af39bdf9ea4a8fbd7efa18117d1aa574b5e0fd5d537f704ceaacb537",
+      "match": true,
+      "mtime": "2026-10-19T08:08:22.593211"
+     },
+     {
+      "path": "results_v4/learning_v4/pilot_manifest.json",
+      "recorded": "6b161b29ec01850661e473e147baf9547e9001b4bb1dbe91b32f8355789e7b19",
+      "current": "6b161b29ec01850661e473e147baf9547e9001b4bb1dbe91b32f8355789e7b19",
+      "match": true,
+      "mtime": "2026-10-19T04:29:27.981343"
+     },
+     {
+      "path": "scripts_v4/run_guarded.sh",
+      "recorded": "b86d52a6953e0dadda06ebda15f72c0015896db62b246f11c2928a54a8c26dfd",
+      "current": "b86d52a6953e0dadda06ebda15f72c0015896db62b246f11c2928a54a8c26dfd",
+      "match": true,
+      "mtime": "2026-10-19T03:01:18.369035"
+     },
+     {
+      "path": "scripts_v4/summarize_w3.py",
+      "recorded": "23efdf0211a3e1b50c79282610b126fef7c6a3b34c02e83dba71e7f612e010c5",
+      "current": "23efdf0211a3e1b50c79282610b126fef7c6a3b34c02e83dba71e7f612e010c5",
+      "match": true,
+      "mtime": "2026-10-19T08:09:31.418119"
+     },
+     {
+      "path": "scripts_v4/w3_pilot.py",
+      "recorded": "251957fd772aa36f11192e10cde20aa043f8f098c95c5dacbaeb74c72f18093e",
+      "current": "251957fd772aa36f11192e10cde20aa043f8f098c95c5dacbaeb74c72f18093e",
+      "match": true,
+      "mtime": "2026-10-19T08:09:31.168175"
+     },
+     {
+      "path": "scripts_v4/width_probe.py",
+      "recorded": "2741db6914ab091819e0c689cdf142f9b52372e56ccfe24d71a984c006af74e9",
+      "current": "2741db6914ab091819e0c689cdf142f9b52372e56ccfe24d71a984c006af74e9",
+      "match": true,
+      "mtime": "2026-10-19T05:56:41.574368"
+     },
+     {
+      "path": "src/flycircuit/eval/learning.py",
+      "recorded": "6248dfdda89320140299edf246d893b4713352d954d67012a2a710cbdf131809",
+      "current": "6248dfdda89320140299edf246d893b4713352d954d67012a2a710cbdf131809",
+      "match": true,
+      "mtime": "2026-10-15T18:38:57"
+     },
+     {
+      "path": "src/flycircuit/eval/learning_v2.py",
+      "recorded": "27de38408ce5c6b865d399a94c7b7adcccd54fe83f00e3973c7493d9b389710b",
+      "current": "27de38408ce5c6b865d399a94c7b7adcccd54fe83f00e3973c7493d9b389710b",
+      "match": true,
+      "mtime": "2026-10-16T03:42:08"
+     },
+     {
+      "path": "src/flycircuit/eval/learning_v4.py",
+      "recorded": "849cdc2641fdc44eae48662c65f469e196ce21a2e152d68382814c18a61fbe91",
+      "current": "849cdc2641fdc44eae48662c65f469e196ce21a2e152d68382814c18a61fbe91",
+      "match": true,
+      "mtime": "2026-10-19T04:27:44.375701"
+     },
+     {
+      "path": "src/flycircuit/eval/learning_v4_select.py",
+      "recorded": "e83ed0f84f73c6d65cc6fba33b7e366be9e229b42aef89f16e586a672cf52606",
+      "current": "e83ed0f84f73c6d65cc6fba33b7e366be9e229b42aef89f16e586a672cf52606",
+      "match": true,
+      "mtime": "2026-10-19T04:18:46.619830"
+     }
+    ],
+    "manifest_core_hash_recomputed": "c810720c08db877ad016e718f5cae8acff4e33667c8c46e9887ca384bbcf8781",
+    "row_manifest_core_hashes": [
+     "c810720c08db877ad016e718f5cae8acff4e33667c8c46e9887ca384bbcf8781"
+    ],
+    "rows_all_reference_this_manifest": true,
+    "times": {
+     "prereg_mtime": "2026-10-19T08:11:16.113054",
+     "prelaunch_hashes_mtime": "2026-10-19T08:11:16.136815",
+     "manifest_mtime": "2026-10-19T08:11:22.676730",
+     "manifest_written_field": "2026-10-19 08:11:22",
+     "w3_pilot_py_mtime": "2026-10-19T08:09:31.168175",
+     "seed_registry_mtime": "2026-10-19T08:08:22.593211",
+     "est_process_start (rows_last_mtime - elapsed_s)": "2026-10-19T08:11:20.636304",
+     "rows_last_mtime": "2026-10-19T09:15:02.822315",
+     "choices_mtime": "2026-10-19T09:08:52.377410",
+     "final_mtime": "2026-10-19T09:15:02.833282",
+     "summary_mtime": "2026-10-19T09:15:28.046982"
+    },
+    "manifest_mtime_not_after_first_training_row_estimate": true,
+    "classification": {
+     "prospective (existed before any W3 training row)": [
+      "W3_PREREG.md (mtime 08:11:16 = launch instant; script/author state it was written before any run)",
+      "W3_trained_w76_manifest.json (08:11:22; written by main() before first run_cell; its core hash is stamped in every row)",
+      "w3_pilot.py / summarize_w3.py (mtime 08:09:31)",
+      "seed_registry.json W3 entries (hash is in manifest)"
+     ],
+     "retrospective or launch-time": [
+      "W3_prelaunch_hashes.txt: created by launch_w3.sh AT LAUNCH TIME (08:11:16), seconds before compute; it proves 'unchanged since launch', not 'frozen well before launch'; it is also a strict subset of the manifest sha256 list.",
+      "W3_trained_w76_choices.json, W3_summary.json: derived after the data"
+     ],
+     "caveat": "Rows carry no per-row wall-clock timestamp. No git history in this copy, so prereg-before-run rests on mtimes and the author's statement, not on an external timestamp. Hashes can only show that files are unchanged, not when they were authored."
+    }
+   }
+  },
+  {
+   "id": "7_null_inventory",
+   "description": "null graph files used by W3 (null0..2), hashes, exposure, availability of search-only nulls",
+   "status": "pass",
+   "details": {
+    "dir": "<CANONICAL_ROOT>/results/nulls_v2/mushroom_body_right_pilot",
+    "kind_used_by_W3": "plain: build_model_v2 maps family 'nullI' -> packs['plain'][I]; (group_constrained is used only by 'gnullI', which W3 does not run)",
+    "plain": {
+     "count": 10,
+     "files": [
+      {
+       "path": "<CANONICAL_ROOT>/results/nulls_v2/mushroom_body_right_pilot/plain/null_00.npz",
+       "sha256": "9c378b971ac6ab04756e2ec2ebb0c183a318a20add947f2cd8e63de17682f9f9",
+       "mtime": "2026-10-15T18:15:12.939780"
+      },
+      {
+       "path": "<CANONICAL_ROOT>/results/nulls_v2/mushroom_body_right_pilot/plain/null_01.npz",
+       "sha256": "2e24b113cce8a2df51dc08c2745a282f41f7ce40c9b5edb509c19d5dbc6673ae",
+       "mtime": "2026-10-15T18:15:12.942918"
+      },
+      {
+       "path": "<CANONICAL_ROOT>/results/nulls_v2/mushroom_body_right_pilot/plain/null_02.npz",
+       "sha256": "bd40703e0f3ed75effdf5bf6b274c4feeae29a3e7326a38dc9fe4133af9627a3",
+       "mtime": "2026-10-15T18:15:12.952872"
+      },
+      {
+       "path": "<CANONICAL_ROOT>/results/nulls_v2/mushroom_body_right_pilot/plain/null_03.npz",
+       "sha256": "2a6762432ac6e8a87e592732a8e872497393c077bc701283177732e2e3d2e213",
+       "mtime": "2026-10-15T18:15:12.958919"
+      },
+      {
+       "path": "<CANONICAL_ROOT>/results/nulls_v2/mushroom_body_right_pilot/plain/null_04.npz",
+       "sha256": "63cdd0024f12373ea927d5c4f6a3553e35dc8f42b7ebcc71655cb0075082fed3",
+       "mtime": "2026-10-15T18:15:12.965624"
+      },
+      {
+       "path": "<CANONICAL_ROOT>/results/nulls_v2/mushroom_body_right_pilot/plain/null_05.npz",
+       "sha256": "bf30b29205d5a91d991de82b485ee2fa8387547a5d87c088ece2a051469cdaa4",
+       "mtime": "2026-10-15T18:15:12.972054"
+      },
+      {
+       "path": "<CANONICAL_ROOT>/results/nulls_v2/mushroom_body_right_pilot/plain/null_06.npz",
+       "sha256": "13b024a1f618cfc390eb37042d10c51c9c9df7546c214ab6e73a52bb3a7c66ec",
+       "mtime": "2026-10-15T18:15:12.978919"
+      },
+      {
+       "path": "<CANONICAL_ROOT>/results/nulls_v2/mushroom_body_right_pilot/plain/null_07.npz",
+       "sha256": "955ea857f3540edc5728971546d610a325c6e7795ad1153e8ae20ed93521d3a7",
+       "mtime": "2026-10-15T18:15:12.984668"
+      },
+      {
+       "path": "<CANONICAL_ROOT>/results/nulls_v2/mushroom_body_right_pilot/plain/null_08.npz",
+       "sha256": "314c518096c7d5dd4fdfc95c05799aca7fc7ba7bd31127ac498e8b3ab2e4db5f",
+       "mtime": "2026-10-15T18:15:12.990919"
+      },
+      {
+       "path": "<CANONICAL_ROOT>/results/nulls_v2/mushroom_body_right_pilot/plain/null_09.npz",
+       "sha256": "721b152c993a226d38aa1d8249c45bba10c2ec1916a6e87ae8356a299c548055",
+       "mtime": "2026-10-15T18:15:12.997468"
+      }
+     ],
+     "report_sha256": "9133ec745938acb941c92465e1dc4421b91f272e4e9884967f6b7144213eebcc",
+     "report_meta": {
+      "kind": "plain",
+      "wall_s": 49.7,
+      "circuit": "mushroom_body_right_pilot",
+      "n_classes": null
+     },
+     "verdict": "adequate_with_limitations",
+     "adequate": true,
+     "chain_seeds": [
+      2000,
+      9919,
+      17838,
+      25757,
+      33676,
+      41595,
+      49514,
+      57433,
+      65352,
+      73271
+     ],
+     "generation": "nulls_v2.make_ensemble(base_seed=2000; chain seed = 2000 + 7919*i): degree-preserving edge-swap chains (plain) / edge-class-constrained (group_constrained)"
+    },
+    "group_constrained": {
+     "count": 10,
+     "files": [
+      {
+       "path": "<CANONICAL_ROOT>/results/nulls_v2/mushroom_body_right_pilot/group_constrained/null_00.npz",
+       "sha256": "fb0d120b0a1814bc6d12ae72bd2a10964fe0c2e252db15cf03b228e04b53d001",
+       "mtime": "2026-10-15T18:15:40.005907"
+      },
+      {
+       "path": "<CANONICAL_ROOT>/results/nulls_v2/mushroom_body_right_pilot/group_constrained/null_01.npz",
+       "sha256": "29eb30e10bc0ae8028348519e6bc6ad4bef729626e2f468438600a4e6d646137",
+       "mtime": "2026-10-15T18:15:40.009322"
+      },
+      {
+       "path": "<CANONICAL_ROOT>/results/nulls_v2/mushroom_body_right_pilot/group_constrained/null_02.npz",
+       "sha256": "f20dbed59dd6492940b1522af42f25ee5aa333bebac59e9c668515c37315e0c7",
+       "mtime": "2026-10-15T18:15:40.013322"
+      },
+      {
+       "path": "<CANONICAL_ROOT>/results/nulls_v2/mushroom_body_right_pilot/group_constrained/null_03.npz",
+       "sha256": "4872738005fcd6cc6e50a199152cf6f4c2372494e308ea556401d5f7c052b7ce",
+       "mtime": "2026-10-15T18:15:40.017321"
+      },
+      {
+       "path": "<CANONICAL_ROOT>/results/nulls_v2/mushroom_body_right_pilot/group_constrained/null_04.npz",
+       "sha256": "4762c49ffe1bd5d82f7568ce5b556132dc63b764881d68184cb884a2140ea54e",
+       "mtime": "2026-10-15T18:15:40.023851"
+      },
+      {
+       "path": "<CANONICAL_ROOT>/results/nulls_v2/mushroom_body_right_pilot/group_constrained/null_05.npz",
+       "sha256": "5b7a80c468493831de2d4127d12660508798520ea7354c28088fd9dbf623a993",
+       "mtime": "2026-10-15T18:15:40.027879"
+      },
+      {
+       "path": "<CANONICAL_ROOT>/results/nulls_v2/mushroom_body_right_pilot/group_constrained/null_06.npz",
+       "sha256": "1b8ec25e1599870e758c7034ee75bf0c6cb5bccdce1732757f2922bfca1fe7d6",
+       "mtime": "2026-10-15T18:15:40.031723"
+      },
+      {
+       "path": "<CANONICAL_ROOT>/results/nulls_v2/mushroom_body_right_pilot/group_constrained/null_07.npz",
+       "sha256": "e7eea3901c810ae145732f730e4d47e2cf3a09610b49816181212a39c61f71ac",
+       "mtime": "2026-10-15T18:15:40.037319"
+      },
+      {
+       "path": "<CANONICAL_ROOT>/results/nulls_v2/mushroom_body_right_pilot/group_constrained/null_08.npz",
+       "sha256": "ab0899643bb4700af53ad89c3b82ec522e96530a368064f7c7a482215a49c3d5",
+       "mtime": "2026-10-15T18:15:40.041318"
+      },
+      {
+       "path": "<CANONICAL_ROOT>/results/nulls_v2/mushroom_body_right_pilot/group_constrained/null_09.npz",
+       "sha256": "46b0e04f6f78ea47454b24872bae79d139eb544b14f6385ff8fb204883de1ed6",
+       "mtime": "2026-10-15T18:15:40.045318"
+      }
+     ],
+     "report_sha256": "286540909db7ee1f3949312642d01b1a0c2e0cc601b656cc29d9c053f40c136d",
+     "report_meta": {
+      "kind": "group_constrained",
+      "wall_s": 27.0,
+      "circuit": "mushroom_body_right_pilot",
+      "n_classes": 21
+     },
+     "verdict": "adequate_with_limitations",
+     "adequate": true,
+     "chain_seeds": [
+      3000,
+      10919,
+      18838,
+      26757,
+      34676,
+      42595,
+      50514,
+      58433,
+      66352,
+      74271
+     ],
+     "generation": "nulls_v2.make_ensemble(base_seed=2000; chain seed = 2000 + 7919*i): degree-preserving edge-swap chains (plain) / edge-class-constrained (group_constrained)"
+    },
+    "debug_copy_has_own_nulls_dir": false,
+    "search_only_nulls_null_10_null_11": "UNAVAILABLE: only null_00..null_09 per kind exist on disk",
+    "load_packs_slice": "plain[:5] -> null0..null4 are loaded; W3 uses null0..2",
+    "W3_null_to_file": {
+     "null0": {
+      "file": "plain/null_00.npz",
+      "rebuilt_edge_hash": "e567a861fcb0b3f354dff3be272f39033b1a0dede54e8f2a731710d7a9b0ce6b",
+      "W3_row_edge_hashes": [
+       "e567a861fcb0b3f354dff3be272f39033b1a0dede54e8f2a731710d7a9b0ce6b"
+      ],
+      "match": true
+     },
+     "null1": {
+      "file": "plain/null_01.npz",
+      "rebuilt_edge_hash": "7be2f21021d2ed0fc621584c2f31bd865a722c4b9a9878b77240bf8c2fed027b",
+      "W3_row_edge_hashes": [
+       "7be2f21021d2ed0fc621584c2f31bd865a722c4b9a9878b77240bf8c2fed027b"
+      ],
+      "match": true
+     },
+     "null2": {
+      "file": "plain/null_02.npz",
+      "rebuilt_edge_hash": "28c0e77c624fafca3865cecb7e08903563d4e0ae2a110f11dc860f122d5e6dce",
+      "W3_row_edge_hashes": [
+       "28c0e77c624fafca3865cecb7e08903563d4e0ae2a110f11dc860f122d5e6dce"
+      ],
+      "match": true
+     }
+    },
+    "edge_overlap_fraction_with_connectome_per_plain_null": {
+     "null_00": 0.6465738613326125,
+     "null_01": 0.6448168671442087,
+     "null_02": 0.6457629409379646,
+     "null_03": 0.6492769293147723,
+     "null_04": 0.6467090147317205,
+     "null_05": 0.6457629409379646,
+     "null_06": 0.641708338964725,
+     "null_07": 0.6479253953236924,
+     "null_08": 0.6484660089201243,
+     "null_09": 0.6444114069468847
+    },
+    "fixed_across_seeds": "yes: each null family has exactly one edge_hash across all its rows (see match)",
+    "prior_exposure_records_with_null_families": {
+     "canonical_results": {
+      "learning/flywire_confirm/records.jsonl": {
+       "null0": {
+        "ok": 13
+       },
+       "null1": {
+        "ok": 13
+       },
+       "null2": {
+        "ok": 13
+       },
+       "null3": {
+        "ok": 13
+       },
+       "null4": {
+        "ok": 13
+       }
+      },
+      "learning/flywire_pilot/records.jsonl": {
+       "null0": {
+        "ok": 7
+       },
+       "null1": {
+        "ok": 7
+       },
+       "null2": {
+        "ok": 4
+       },
+       "null3": {
+        "ok": 4
+       },
+       "null4": {
+        "ok": 4
+       }
+      },
+      "learning/flywire_search/records.jsonl": {
+       "null0": {
+        "ok": 38
+       }
+      },
+      "learning_v3/search/records.jsonl": {
+       "null0": {
+        "ok": 48
+       }
+      },
+      "learning_v3/confirm/records.jsonl": {
+       "null0": {
+        "ok": 16
+       },
+       "null1": {
+        "ok": 16
+       },
+       "null2": {
+        "ok": 16
+       },
+       "null3": {
+        "ok": 16
+       },
+       "null4": {
+        "ok": 16
+       }
+      },
+      "learning_v2/search/records.jsonl": {
+       "null0": {
+        "ok": 64
+       }
+      },
+      "learning_v2/confirm/records.jsonl": {
+       "null0": {
+        "ok": 13
+       },
+       "null1": {
+        "ok": 13
+       },
+       "null2": {
+        "ok": 13
+       },
+       "null3": {
+        "ok": 13
+       },
+       "null4": {
+        "ok": 13
+       },
+       "gnull0": {
+        "ok": 2
+       },
+       "gnull1": {
+        "ok": 2
+       },
+       "gnull2": {
+        "ok": 2
+       },
+       "gnull3": {
+        "ok": 2
+       },
+       "gnull4": {
+        "ok": 2
+       }
+      },
+      "learning_v2/reset_probe_postacq/records.jsonl": {
+       "null0": {
+        "?": 13
+       },
+       "null1": {
+        "?": 13
+       },
+       "null2": {
+        "?": 13
+       },
+       "null3": {
+        "?": 13
+       },
+       "null4": {
+        "?": 13
+       },
+       "gnull0": {
+        "?": 2
+       },
+       "gnull1": {
+        "?": 2
+       },
+       "gnull2": {
+        "?": 2
+       },
+       "gnull3": {
+        "?": 2
+       },
+       "gnull4": {
+        "?": 2
+       }
+      }
+     },
+     "debug_copy_results_v4": {
+      "learning_readout_v4_1/W1_encoder_E8_rows.jsonl": {
+       "null0|W76": {
+        "?": 16
+       },
+       "null1|W76": {
+        "?": 16
+       },
+       "null2|W76": {
+        "?": 16
+       },
+       "null3|W76": {
+        "?": 16
+       },
+       "null4|W76": {
+        "?": 16
+       }
+      },
+      "learning_readout_v4_1/W0_width_probe_rows.jsonl": {
+       "null0|W25": {
+        "?": 8
+       },
+       "null1|W25": {
+        "?": 8
+       },
+       "null2|W25": {
+        "?": 8
+       },
+       "null3|W25": {
+        "?": 8
+       },
+       "null4|W25": {
+        "?": 8
+       },
+       "null0|W64": {
+        "?": 8
+       },
+       "null1|W64": {
+        "?": 8
+       },
+       "null2|W64": {
+        "?": 8
+       },
+       "null3|W64": {
+        "?": 8
+       },
+       "null4|W64": {
+        "?": 8
+       },
+       "null0|W76": {
+        "?": 8
+       },
+       "null1|W76": {
+        "?": 8
+       },
+       "null2|W76": {
+        "?": 8
+       },
+       "null3|W76": {
+        "?": 8
+       },
+       "null4|W76": {
+        "?": 8
+       },
+       "null0|W115": {
+        "?": 8
+       },
+       "null1|W115": {
+        "?": 8
+       },
+       "null2|W115": {
+        "?": 8
+       },
+       "null3|W115": {
+        "?": 8
+       },
+       "null4|W115": {
+        "?": 8
+       }
+      },
+      "learning_readout_v4_1/W3_trained_w76_rows.jsonl": {
+       "null0": {
+        "ok": 40
+       },
+       "null1": {
+        "ok": 40
+       },
+       "null2": {
+        "ok": 40
+       }
+      },
+      "learning_readout_v4_1/W2_sign_policy_rows.jsonl": {
+       "null0|W76": {
+        "?": 16
+       },
+       "null1|W76": {
+        "?": 16
+       },
+       "null2|W76": {
+        "?": 16
+       },
+       "null3|W76": {
+        "?": 16
+       },
+       "null4|W76": {
+        "?": 16
+       },
+       "null0|W25": {
+        "?": 16
+       },
+       "null1|W25": {
+        "?": 16
+       },
+       "null2|W25": {
+        "?": 16
+       },
+       "null3|W25": {
+        "?": 16
+       },
+       "null4|W25": {
+        "?": 16
+       }
+      }
+     }
+    },
+    "exposure_computed": {
+     "null_index_to_training_records": {
+      "null0": [
+       "canonical_results:learning/flywire_confirm/records.jsonl",
+       "canonical_results:learning/flywire_pilot/records.jsonl",
+       "canonical_results:learning/flywire_search/records.jsonl",
+       "canonical_results:learning_v2/confirm/records.jsonl",
+       "canonical_results:learning_v2/reset_probe_postacq/records.jsonl",
+       "canonical_results:learning_v2/search/records.jsonl",
+       "canonical_results:learning_v3/confirm/records.jsonl",
+       "canonical_results:learning_v3/search/records.jsonl",
+       "debug_copy_results_v4:learning_readout_v4_1/W3_trained_w76_rows.jsonl"
+      ],
+      "null1": [
+       "canonical_results:learning/flywire_confirm/records.jsonl",
+       "canonical_results:learning/flywire_pilot/records.jsonl",
+       "canonical_results:learning_v2/confirm/records.jsonl",
+       "canonical_results:learning_v2/reset_probe_postacq/records.jsonl",
+       "canonical_results:learning_v3/confirm/records.jsonl",
+       "debug_copy_results_v4:learning_readout_v4_1/W3_trained_w76_rows.jsonl"
+      ],
+      "null2": [
+       "canonical_results:learning/flywire_confirm/records.jsonl",
+       "canonical_results:learning/flywire_pilot/records.jsonl",
+       "canonical_results:learning_v2/confirm/records.jsonl",
+       "canonical_results:learning_v2/reset_probe_postacq/records.jsonl",
+       "canonical_results:learning_v3/confirm/records.jsonl",
+       "debug_copy_results_v4:learning_readout_v4_1/W3_trained_w76_rows.jsonl"
+      ],
+      "null3": [
+       "canonical_results:learning/flywire_confirm/records.jsonl",
+       "canonical_results:learning/flywire_pilot/records.jsonl",
+       "canonical_results:learning_v2/confirm/records.jsonl",
+       "canonical_results:learning_v2/reset_probe_postacq/records.jsonl",
+       "canonical_results:learning_v3/confirm/records.jsonl"
+      ],
+      "null4": [
+       "canonical_results:learning/flywire_confirm/records.jsonl",
+       "canonical_results:learning/flywire_pilot/records.jsonl",
+       "canonical_results:learning_v2/confirm/records.jsonl",
+       "canonical_results:learning_v2/reset_probe_postacq/records.jsonl",
+       "canonical_results:learning_v3/confirm/records.jsonl"
+      ]
+     },
+     "null_indices_with_training_rows": [
+      0,
+      1,
+      2,
+      3,
+      4
+     ],
+     "null_indices_in_W3_rows": [
+      0,
+      1,
+      2
+     ],
+     "null_indices_on_disk_but_in_no_training_record": [
+      5,
+      6,
+      7,
+      8,
+      9
+     ],
+     "null_files_named_in_learning_v4_pilot_manifest.json": {
+      "null_00": true,
+      "null_01": true,
+      "null_02": true,
+      "null_03": true,
+      "null_04": true,
+      "null_05": true,
+      "null_06": true,
+      "null_07": true,
+      "null_08": true,
+      "null_09": true,
+      "null_10": false,
+      "null_11": false
+     },
+     "null_files_on_disk": {
+      "null_00": true,
+      "null_01": true,
+      "null_02": true,
+      "null_03": true,
+      "null_04": true,
+      "null_05": true,
+      "null_06": true,
+      "null_07": true,
+      "null_08": true,
+      "null_09": true,
+      "null_10": false,
+      "null_11": false
+     }
+    },
+    "exposure_reading": "Derived from the scan above: null indices with any training row in the scanned records = [0, 1, 2, 3, 4]; those in W3 rows = [0, 1, 2] (W3 tuned null0..2 over 9 settings x 4 seeds, then checked). null_00..null_09 exist on disk for the plain kind; indices on disk with NO training record in either results tree = [5, 6, 7, 8, 9]. Of these, the files named in results_v4/learning_v4/pilot_manifest.json (as file hashes only) = ['null_05', 'null_06', 'null_07', 'null_08', 'null_09']. null_10/null_11 do not exist on disk. So null0..2 are NOT fresh (same fixed graphs across stages, tuning-exposed); null3 and null4 were trained in earlier (v2/v3-era, flywire) records but not in W3; null_05..09 appear in no training record (only as file hashes in the pilot manifest)."
+   }
+  },
+  {
+   "id": "8_other",
+   "description": "other observations (informational; excluded from pass table/overall)",
+   "status": "informational",
+   "details": {
+    "nulls_anchor_over_connectome_anchor": 3.159675768623012,
+    "families_with_best_or_chosen_on_grid_edge": [
+     "connectome",
+     "gru",
+     "encdec",
+     "null0",
+     "null1",
+     "null2",
+     "random_reach"
+    ],
+    "families_chosen_not_best": [
+     "connectome",
+     "gru",
+     "null2",
+     "random_reach"
+    ],
+    "connectome_best_vs_chosen": {
+     "best[core,dec]": [
+      0.00515175,
+      0.00171725
+     ],
+     "chosen[core,dec]": [
+      0.00171725,
+      0.00515175
+     ]
+    },
+    "search_best_composite_by_family": {
+     "connectome": 0.7936197916666667,
+     "gru": 0.8307291666666665,
+     "encdec": 0.8365885416666667,
+     "null0": 0.82421875,
+     "null1": 0.81640625,
+     "null2": 0.8092447916666666,
+     "random_reach": 0.8040364583333334
+    },
+    "chosen_search_composite_by_family": {
+     "connectome": 0.7845052083333333,
+     "gru": 0.8203125,
+     "encdec": 0.8365885416666667,
+     "null0": 0.82421875,
+     "null1": 0.81640625,
+     "null2": 0.8014322916666667,
+     "random_reach": 0.798828125
+    },
+    "val_resolution": "acquisition val accuracy is a multiple of 1/64 (see scores); n=4 seeds, SE ~0.035 for connectome acq",
+    "null_families_identical_selected_lr": {
+     "null0": [
+      0.00180865,
+      0.00542595
+     ],
+     "null1": [
+      0.00180865,
+      0.00542595
+     ],
+     "null2": [
+      0.00180865,
+      0.00542595
+     ]
+    },
+    "peak_rss_max_mib": 1013.4609375
+   }
+  }
+ ]
+}

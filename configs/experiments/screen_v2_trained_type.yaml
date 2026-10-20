@@ -1,0 +1,42 @@
+# TYPE-LEVEL companion of screen_v2_trained.yaml (same instances, same declarations). Screen v2 on TRAINED instances (model-relative). NAMED PILOT SUBSET mushroom_body_right_pilot.
+# Instances here are trained with the v1 ACQUISITION protocol (configs/experiments/learning_protocol.yaml)
+# under annotation_v2 signs; they are NOT the frozen learning-v2 study. When learning-v2 checkpoints in
+# format flycircuit.instance/1 exist, point `instances_run_dir` at them (docs/interventions_v2.md).
+#
+# DECLARED BEFORE ANY TRAINED-SCREEN RESULT WAS VIEWED:
+#   primary endpoint  : change in held-out accuracy (pp), greedy 2-action decision, clamp_silence of one
+#                       neuron for the whole trial (t_start 0); family = 100 distinct neurons
+#   replication unit  : independently trained instance (noise repetitions are NOT replicates)
+#   inference         : bootstrap CI + t-test across instances; Holm (confirmatory-style) and BH within
+#                       family; exploratory because n instances is small
+#   exclusion         : instance baseline held-out accuracy < min_baseline_acc => did not learn => excluded
+#   controls          : 2 degree-matched random neuron sets per intervention
+protocol_version: "screen-v2.0-trained-type"
+circuit: mushroom_body_right_pilot
+min_contacts: 5
+protocol: configs/experiments/learning_protocol.yaml
+lr_stage: flywire_search          # v1 validation-selected learning rates (results/learning)
+learners: [bptt, decoder_only]    # decoder_only keeps UNTRAINED recurrent gains (fitted-parameter contrast)
+sign_variants: [v2_default]
+instance_seeds: [201, 202, 203, 204, 205, 206, 207, 208]   # disjoint from v1 seeds 1,2,101-105
+min_baseline_acc: 0.60
+seed: 0
+n_interventions: 120
+min_distinct_targets: 100
+level: type                     # group targets (cell types, 2-50 neurons): larger effects than single neurons
+min_degree: 1
+exclude_sensory: false          # KCs are legitimate targets here (v1 excluded sensory sites)
+t_start: 0
+n_controls: 2
+n_rep: 8
+torch_threads: 2
+device: cuda                    # screening pass only; training is CPU. Run via scripts/linux/heavyjob.sh
+instances_run_dir: runs/screen_v2_trained_instances
+sweep:
+  n_targets: 30
+  n_rep: 4
+  doses:
+    clamp_silence: [0.0]
+    clamp_excite: [0.5, 1.0, 2.0]
+    disconnect_both: [0.25, 0.5, 1.0]
+  windows: [[0, null], [0, 4], [4, null], [5, null]]   # full | cue phase | late | response window

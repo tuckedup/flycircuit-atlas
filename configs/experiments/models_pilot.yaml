@@ -1,0 +1,36 @@
+# Model-family pilot configuration (engineering pilot; not a result).
+# Same init policy, interfaces, optimizer, example budget and search budget for ALL conditions.
+experiment: models_pilot
+status: not_run
+hardware_profile: atul_laptop
+model:
+  prior: log1p            # identity | log1p | sqrt
+  gain_mode: pair         # pair | class
+  nonneg_gain: true       # true: sign fixed by transmitter policy; false: free signed weight
+  backend: scatter        # scatter | coo (both verified against dense oracle)
+  dt: 1.0
+  tau: 5.0                # alpha = dt/tau = 0.2, must be in (0, 1]
+  unknown_sign_policy: excitatory   # sensitivity axis: excitatory|inhibitory|zero|random_fixed
+  trainable_encoder: false
+  trainable_decoder: true
+  z_dim: 0                # engineered context variable, not an inferred biological state
+training:
+  batch_size: 1
+  tbptt_steps: 32         # gradient horizon; truncation is an approximation
+  precision: fp32
+  seeds_pilot: [0, 1]
+  seeds_confirmatory: [0, 1, 2, 3, 4]
+conditions:
+  - connectome
+  - degree_preserving_swap   # >=5 independent nulls for confirmatory
+  - region_constrained_swap
+  - weight_sign_permutation  # fixed topology, NOT a rewire
+  - random_sparsity
+  - gru_param_matched
+  - gru_compute_matched
+  - encoder_decoder_only
+null_graphs:
+  k_pilot: 2
+  k_confirmatory: 5
+  swaps_per_edge: 10
+  max_mixing_ratio: 1.5

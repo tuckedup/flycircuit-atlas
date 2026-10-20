@@ -1,0 +1,17 @@
+# Offline CPU CI (synthetic fixtures only). Prepared locally; NOT pushed or activated.
+name: ci
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - name: Install (CPU torch)
+        run: |
+          uv python install 3.11
+          uv venv --python 3.11
+          uv pip install --index-url https://download.pytorch.org/whl/cpu torch
+          uv pip install -e ".[dev]"
+      - run: uv run --no-sync ruff check src tests
+      - run: uv run --no-sync pytest -q -m "not gpu and not real_data"

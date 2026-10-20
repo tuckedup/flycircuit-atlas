@@ -1,0 +1,99 @@
+# Pre-registration for STUDY v3 (learning-v3.0 forgetting endpoint + flygym_nav_v3 body robustness). Owner: Atul Pandey.
+# v1 (configs/prereg.yaml) and v2 (configs/prereg_v2.yaml) are historical and untouched.
+# Learning stage is frozen with `python -m flycircuit.eval.learning_v3 freeze` AFTER the validation-only search and
+# pilot and BEFORE the first test-split evaluation; the freeze tool fills the five fields below.
+# Body: training/evaluation manifests in results/provenance/study_v3 archive source, configuration,
+# effective settings and timestamps BEFORE the corresponding models/test episodes. File mtimes are not freeze proof.
+# The original body YAML retains N=null; power.json supplies the validated, subsequently frozen effective N.
+# After freezing change nothing here except by appending to `amendments`.
+status: frozen
+frozen: true
+frozen_utc: "2026-10-19T00:35:42.186995+00:00"
+protocol_hash: "43e282f650a4d0af"
+selection_sha256: "970e218873857908ced65b9dfe289179c7b14588f57cc2dd70c67402a801f0be"
+protocol_file: configs/experiments/learning_v3_protocol.yaml
+body_protocol_file: configs/experiments/flygym_v3_protocol.yaml
+
+relationship_to_earlier_studies:
+  v1_and_v2_test_data_were_seen: true
+  v1_body_test_sets_were_mask_confounded: >
+    In the v1 FlyGym test at 25% dropout, 9 of 24 episodes dropped channel 5 (sin bearing). Observed policies
+    performed poorly on these episodes. This is an empirical association, not an information-theoretic ceiling:
+    other odor and temporal cues remain, and impossibility was not demonstrated. The v1 intervals ignore
+    episode-sampling uncertainty (bootstrap over 5 models on fixed episodes/masks). v3 does not reuse any v1 test
+    episode or mask; its constrained joint mask distribution differs from v1 despite the same marginal rate.
+  consequence: >
+    v3 is a PROSPECTIVE follow-up, not an untouched replication: its design was informed by v2 outcomes (the
+    plast_dec collapse, grid-edge optima, the unrun rmsprop option, the mask confound). Its final seeds, test
+    targets and masks have never been used for any selection or evaluation.
+  design_changes_informed_by_earlier_results:
+    - "plast_dec borrowed the decoder lr of decoder_only and collapsed to exactly 0.500 (v2). v3 searches the plastic lr AND the decoder lr of plast_dec itself (6 + 6 evaluations); the decoder_only lr is only a starting point."
+    - "rmsprop plastic update (implemented in v2, never run) is a searched option for plastic fixed-decoder arms: 6 evaluations per optimizer option (sgd, rmsprop), 12 total -- the same total budget as every gradient arm (12 lr evaluations, one Adam lr for all trained parameters)."
+    - "Seeds: 8 independent training seeds (v2: 5). Justification from measured v2 variance: connectome accuracy CI half-width ~0.06 and E2 CI half-width ~0.034 at n=5; 8 seeds shrink them by ~sqrt(5/8)*t(7)/t(4) ~ 0.67; cost estimate from v2 timings (~20 s/run) ~2 h, which fits."
+    - "Conditions: only those needed for the forgetting endpoint and its controls (connectome, 5 v2 plain nulls, parameter- and FLOP-matched GRU, encoder/decoder, random reachable, zero-recurrent-edge kc_static decoder, plast_fixed / plast_modoff / plast_shuffled / plast_dec). v2 interface-control results stay as the v2 record."
+    - "Body: matched DART-style training data (scripted controller under dropout, privileged-teacher labels) for ALL conditions; annotation_v2 signs; cached v2 nulls; lr grid extended downward (v1 encdec optimum sat at the lower edge) identically for all conditions; fresh stratified test set."
+
+primary_family_learning:           # Holm-adjusted jointly. Seed contrasts n=8: minimum two-sided p=0.0078125.
+                                  # E3/E4 graph-level contrasts n=5 nulls: minimum p=0.0625, so cannot reject at .05.
+  E1: {contrast: "test accuracy after acquisition (context 0): bptt|connectome - bptt|gru (parameter-matched)", pairing: seed}
+  E2: {contrast: "average forgetting (keep policy, test split): bptt|gru - bptt|connectome; target >= +0.07", pairing: seed}
+  E3: {contrast: "test accuracy after acquisition: bptt|connectome - bptt|v2 plain nulls (5, full factorial with seeds)", pairing: "seed within null; units = nulls (nested bootstrap)"}
+  E4: {contrast: "same as E3 for plast_dec (local plasticity + trainable decoder, own searched decoder lr)", pairing: "seed within null"}
+  E5: {contrast: "plast_fixed|connectome - plast_modoff|connectome", pairing: seed}
+  E6: {contrast: "plast_fixed|connectome - plast_shuffled|connectome", pairing: seed}
+secondary_exploratory_learning: >
+  Everything else in results/learning_v3/confirm/summary.json (reversal, perseveration, delayed retention, replay
+  mode, BWT/FWT, random_reach, GRU FLOP-matched, kc_static, forgetting vs final-accuracy level) is descriptive.
+  Because forgetting is confounded with the learning level (v2), final mean accuracy is reported next to forgetting.
+absolute_targets:
+  accuracy_ge_0_82: "bptt|connectome mean test accuracy after acquisition"
+  forgetting_improvement_ge_0_07: "E2 absolute difference (GRU forgetting - connectome forgetting)"
+  interpretation: >
+    Meeting an absolute threshold is NOT evidence of an anatomical advantage. An anatomical-advantage claim needs
+    E3/E4 (vs mixed nulls) AND the matched-GRU contrast to favour the connectome with intervals excluding zero.
+sample_size_policy_learning: >
+  8 independent training seeds (100401-100408) fixed in advance, identical for every condition; nulls full factorial for
+  bptt and plast_dec. No interim look at test data; no extension. A failed run is reported, never dropped or re-seeded.
+search_budget_learning: >
+  Exactly 12 learning-rate evaluations x 2 validation seeds (13, 14) per (arm, family-kind) on the VALIDATION split of the
+  continual protocol; selection criterion = mean final-phase validation accuracy. Gradient arms: 5-point start grid +
+  7 adaptive; fixed-decoder plastic arms: 6 per optimizer option (sgd, rmsprop); plast_dec: 6 plastic + 6 decoder
+  (optimizer taken from plast_fixed); plast_modoff borrows plast_fixed. Edge optima are flagged, not extended.
+  Test splits are never evaluated during search or pilot (enforced in code: run_one_v3 refuses 'test' outside 'confirm').
+pilot: "seeds 23, 24, validation split only, 6 conditions, engineering sanity (no failures, finite metrics); changes no setting"
+multiplicity: "Holm over E1-E6 (learning) and over the four connectome contrasts (body); CIs and effect sizes unadjusted"
+statistics: >
+  Learning: percentile bootstrap over independent trained models, nested graph->seed for null contrasts, exact sign-flip
+  p-values. Body: CROSSED bootstrap over trained models x test episodes (4000 draws), contrasts paired by seed index and
+  episode index; p-values from the bootstrap (exploratory-grade at 5 models).
+body_endpoint: >
+  Success under 25% sensor dropout on N fresh stratified test episodes (each channel dropped in exactly 25% of
+  episodes; masks independent of target geometry; identical for all policies). N is derived from validation variance
+  (rule in flygym_v3_protocol.yaml, clipped to [96, 144]) and frozen before the first test episode. Per-channel dropout
+  breakdown reported as a descriptive association; it cannot establish a channel-level information ceiling.
+owner_ambition_body: >
+  The 0.68 success level is the OWNER'S AMBITION, not a protocol gate. Task success and anatomical advantage are
+  separate questions; the latter is judged only by connectome minus null / GRU / random / encoder-decoder contrasts.
+exclusions: "None pre-specified. Failures and non-ok episodes are reported and counted, never silently dropped."
+not_claimed: [biological_equivalence, mind_or_consciousness, task_difficulty_beyond_a_synthetic_linear_valence_rule, intact_ventral_nerve_cord]
+checkpoints: "body policies: results/flygym_v3/models/*.npz (git-ignored, persisted for causal replay); learning: none saved (v2 checkpoints unchanged)"
+amendments:
+  - id: pre_confirmation_integrity_and_resume_20261018
+    status: prospective_before_remaining_search_pilot_and_any_v3_test
+    observed_state: >
+      101 validation-only learning-search records were saved; no learning pilot/confirmation or body-v3 output
+      existed at the bounded inspection. These exact rows remain unchanged and eligible under a pinned hash ledger.
+      Their producer/runtime provenance was not captured contemporaneously and cannot be reconstructed as proof.
+    implementation: >
+      Enforce 12 distinct configurations with both search seeds per kind; the cached decoder anchor remains eligible
+      for selection but cannot consume a new-evaluation slot. Reject mixed provenance, duplicates, incomplete
+      coverage and nonfinite or inconsistent endpoints. Preserve failed attempts; never certify them as complete.
+      Archive source, dependency inventory, effective protocol and immutable-input hashes before each stage.
+      Resumes validate cache identities and policy/rollout hashes instead of trusting marker existence.
+    inference_and_reporting: >
+      Per-channel dropped-minus-kept intervals resample episodes within their exposure strata with paired model rows.
+      They are descriptive under correlated masks. The five-graph sign-flip resolution limits E3/E4 inference.
+      Test seeds, scientific endpoints, training/grid budgets and validation-derived N rule are unchanged.
+    execution: >
+      One guarded heavy job, two main-process threads and one physics worker; child CUDA visibility disabled.
+      Retain at least 1.5 GiB Windows free RAM. Respect the user's gaming hold; no automatic heavy launch during it.

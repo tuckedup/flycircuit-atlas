@@ -1,0 +1,226 @@
+# MEASURED adaptive resource profile (`flycircuit resources profile --rederive ...`).
+# Supersedes configs/hardware/atul_laptop.yaml (kept as the historical conservative
+# starting limits). `policy:` and `hardware_profile:` are decisions; `measured:` comes from
+# the raw benchmark JSON(s) in provenance. Phases in provenance.carried_forward_phases come
+# from an earlier run on the same machine; null means NOT measured.
+profile: adaptive_v1
+generated_utc: '2026-10-15T23:13:56Z'
+kind: measured_with_policy_fields
+provenance:
+  suite_elapsed_s: 203.69787168502808
+  skipped_phases:
+  - 'cpu_prep: Windows free RAM 1.20 GiB - up to 1.2 GiB growth < 1.0 GiB floor'
+  - 'device_compare n20k b16: CPU activation estimate 3.80 GiB exceeds benchmark cap
+    2.5 GiB or WSL available 5.11 GiB'
+  - 'precision/mb_5608: Windows free RAM 1.90 GiB - up to 1.2 GiB growth < 1.0 GiB
+    floor'
+  - 'precision/n20k: Windows free RAM 1.97 GiB - up to 1.2 GiB growth < 1.0 GiB floor'
+  - 'gpu_concurrency: Windows free RAM 1.97 GiB - up to 2.3 GiB growth < 1.0 GiB floor'
+  load_avg_1min_by_phase:
+    start: 1.0087890625
+    cpu_threads: 3.14794921875
+    cpu_prep: 2.8955078125
+    device_compare: 3.08154296875
+    batch_sweep: 2.427734375
+    precision: 2.12744140625
+    concurrency: 1.95703125
+  caveat: other project agents may share the CPU; load averages include this benchmark's
+    own threads. Re-run on a quiet machine to refine.
+  raw_results: results/resources/profile_raw_20261015T231721.json
+  carried_forward_phases:
+    precision: results/resources/profile_raw_20261015T220305.json
+    gpu_concurrency: results/resources/profile_raw_20261015T220305.json
+  rederived_without_benchmarking: true
+host_at_measurement:
+  windows:
+    free_gib: 2.288951873779297
+    total_gib: 15.255867004394531
+    commit_free_gib: 18.466934204101562
+    commit_total_gib: 51.10896682739258
+    vmmem_gib: 1.5623512268066406
+  wsl:
+    total_gib: 7.386631011962891
+    available_gib: 6.2444915771484375
+    memfree_gib: 3.062519073486328
+    reclaimable_gib: 3.1819725036621094
+    swap_used_gib: 0.05962371826171875
+    swap_total_gib: 2.0
+  gpu:
+    available: true
+    used_gib: 1.1552734375
+    free_gib: 6.6162109375
+    total_gib: 7.99609375
+    util_pct: 0.0
+    temp_c: 46.0
+    compute_apps: []
+  cpu:
+    logical: 16
+    physical: 8
+    load_1min: 1.0087890625
+    util_pct: 0.4
+measured:
+  cpu:
+    best_threads_model: 8
+    best_threads_by_workload:
+      mb_5608_b1: 1
+      mb_5608_b8: 8
+      n20k_b1: 8
+      n20k_b8: 8
+    best_threads_prep: null
+    tested_16_threads: true
+    relative_throughput_vs_1_thread:
+      '1': 1.0
+      '2': 1.2123703315193268
+      '4': 1.1783453263180428
+      '8': 1.5437197832541467
+      '16': 1.4119069792572052
+    cpu_only_job_concurrency: 1
+    relative_throughput_other_run:
+      '1': 1.0
+      '2': 1.1811853622001154
+      '4': 1.5132291934364377
+      '8': 1.5035779893833832
+    other_run_best_threads_model: 4
+  gpu:
+    device_rule:
+      points_edges_x_batch_vs_cuda_speedup:
+      - - 7399
+        - 0.371756898096912
+      - - 29596
+        - 0.6212227120626285
+      - - 44024
+        - 0.8517478849841186
+      - - 118384
+        - 1.2599990397091814
+      - - 176096
+        - 1.4868143613376954
+      - - 473536
+        - 3.6286323519425165
+      - - 600000
+        - 4.82255612215281
+      - - 704384
+        - 5.367906840328768
+      - - 1500000
+        - 8.511922368884797
+      - - 2817536
+        - 7.2106128863761585
+      smallest_tested_edges_x_batch_where_cuda_wins: 118384
+      largest_tested_edges_x_batch_where_cpu_wins: 44024
+      consistent_threshold: true
+      note: crossover lies between the two values; not resolved more finely than the
+        tested grid
+    plateau_batch_tbptt32:
+      mb_5608: 64
+      n20k: 16
+    precision:
+      mb_5608/fp32:
+        usable: true
+        speedup_vs_fp32: 1.0
+        y_rel_err: 1.886969875469423e-07
+        grad_rel_l2_err: 1.1613732198156868e-07
+        compile_seconds: null
+        peak_cuda_alloc_gib: 0.20253515243530273
+      mb_5608/tf32:
+        usable: true
+        speedup_vs_fp32: 1.013654203238923
+        y_rel_err: 7.992892411233765e-05
+        grad_rel_l2_err: 5.5626129324082285e-05
+        compile_seconds: null
+        peak_cuda_alloc_gib: 0.20253515243530273
+      mb_5608/bf16:
+        usable: false
+        reason: 'RuntimeError: index_add_(): self (Float) and source (BFloat16) must
+          have the same scalar type'
+      mb_5608/compile_fp32:
+        usable: true
+        speedup_vs_fp32: 3.8407326404346764
+        y_rel_err: 1.8869702315350213e-07
+        grad_rel_l2_err: 1.2537552152025455e-07
+        compile_seconds: 30.317071112000008
+        peak_cuda_alloc_gib: 0.16391563415527344
+      n20k/fp32:
+        usable: true
+        speedup_vs_fp32: 1.0
+        y_rel_err: 3.0952627467949717e-07
+        grad_rel_l2_err: 1.750658640276015e-07
+        compile_seconds: null
+        peak_cuda_alloc_gib: 0.6487674713134766
+      n20k/tf32:
+        usable: true
+        speedup_vs_fp32: 1.0314496176129895
+        y_rel_err: 0.00020740915580055587
+        grad_rel_l2_err: 0.0002052930649369955
+        compile_seconds: null
+        peak_cuda_alloc_gib: 0.6491880416870117
+      n20k/bf16:
+        usable: false
+        reason: 'RuntimeError: index_add_(): self (Float) and source (BFloat16) must
+          have the same scalar type'
+      n20k/compile_fp32:
+        usable: true
+        speedup_vs_fp32: 1.9354135003323356
+        y_rel_err: 2.3214470600962286e-07
+        grad_rel_l2_err: 2.937564147487137e-07
+        compile_seconds: 40.56179695600008
+        peak_cuda_alloc_gib: 0.47132015228271484
+    recommended_numeric_format: fp32
+    torch_compile:
+      per_workload:
+        n20k:
+          eager_ms: 86.49028299998918
+          compiled_ms: 44.68827100004091
+          compile_seconds: 40.56179695600008
+          break_even_windows: 970.3312117141702
+          batch: 4
+          tbptt: 32
+        mb_5608:
+          eager_ms: 44.93671400007315
+          compiled_ms: 11.700036999968688
+          compile_seconds: 30.317071112000008
+          break_even_windows: 912.1571061964082
+          batch: 16
+          tbptt: 32
+      caveat: verified on model fwd/bwd only, not inside the plasticity/training harnesses;
+        shape changes recompile
+    gpu_processes: 1
+    concurrency:
+      solo_steps_per_s: 11531.933461001152
+      two_process_aggregate_steps_per_s: 12307.7824169128
+      aggregate_ratio: 1.0672783066721139
+      per_process_slowdown: 1.873925467703181
+      decision_gpu_processes: 1
+      carried_from: results/resources/profile_raw_20261015T220305.json
+    cuda_context_gib: 0.140625
+  calibration:
+    n_points: 36
+    n_points_ratio_fit: 23
+    cuda_ratio_max_theo_ge_0p2gib: 1.2326467132867134
+    cuda_ratio_median_all: 1.0038078143828302
+    cuda_fixed_gib: 0.015248695063490967
+    cuda_process_rss_gib_max: 1.7024955749511719
+policy:
+  cuda_reserve_gib: 1.2
+  windows_free_reserve_gib: 1.0
+  wsl_ram_headroom_gib: 0.75
+  downsize_before_refusing: true
+  note: Live free memory is re-read before each job; these reserves are floors.
+hardware_profile:
+  profile: adaptive_v1
+  cpu_threads: 8
+  dataloader_workers: 0
+  experiment_concurrency: 1
+  max_pipeline_ram_gib: 5.89
+  max_cuda_allocated_gib: 6.8
+  min_host_free_disk_gib: 40
+  max_new_project_storage_gib: 60
+  initial_batch_size: 1
+  initial_tbptt_steps: 32
+  initial_training_seeds: 2
+  confirmatory_training_seeds: 5
+  initial_trial_walltime_minutes: 30
+  max_default_job_walltime_minutes: 480
+  max_default_sweep_walltime_minutes: 1440
+  whole_brain_gradient_training: false
+  full_synapse_download_default: false
+  cuda_headroom_gib: 1.2
+  host_ram_headroom_gib: 0.75

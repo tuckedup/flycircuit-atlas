@@ -1,0 +1,21 @@
+# Screen v2: UNTRAINED structural model on the NAMED PILOT SUBSET mushroom_body_right_pilot, with the
+# versioned annotation_v2 sign layer (docs/SIGN_AUDIT.md) and a sign-policy sensitivity grid.
+# Model-relative only. v1 screens are historical and untouched.
+protocol_version: "screen-v2.0"
+source: circuit
+circuit: mushroom_body_right_pilot
+sign_policy: annotation_v2     # default policy; sensitivity run sweeps graph/signs.policy_grid()
+min_contacts: 5                # model choice
+n_sensory: 64
+graph_seed: 0
+seed: 0
+n_runs: 6
+n_interventions: 120
+min_distinct_targets: 100
+steps: 60
+level: neuron
+t_start: 10
+n_controls: 2                  # degree-matched random controls per intervention (v1 used 1)
+closed_loop: false
+unknown_sign: zero             # unknown-fill is inside the sign layer; residual zeros stay silent
+model: {init_gain: 0.1, tau: 5.0, dt: 1.0, n_out: 2}

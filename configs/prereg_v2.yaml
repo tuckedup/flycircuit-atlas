@@ -1,0 +1,114 @@
+# Pre-registration for the LEARNING STUDY v2 (protocol learning-v2.0). Owner: Atul Pandey.
+# v1 (configs/prereg.yaml, frozen 2026-10-15) stays untouched and is a historical result.
+# Freeze with `flycircuit learning2 freeze` BEFORE `flycircuit learning2 run --stage confirm`.
+# After freezing, change nothing here except by appending to `amendments`.
+status: draft_not_frozen
+frozen: true
+frozen_utc: "2026-10-16T05:56Z"
+protocol_hash: "0eb4cc85b4857523"            # sha256[:16] of configs/experiments/learning_v2_protocol.yaml at freeze
+protocol_file: configs/experiments/learning_v2_protocol.yaml
+
+relationship_to_v1:
+  v1_test_data_were_seen: true
+  consequence: >
+    v1 test-split observations (and v1's confirmatory outcome: connectome 0.797 vs GRU 0.838, forgetting
+    improvement -0.0125) informed the design of v2. v2 is therefore a FOLLOW-UP study, not an untouched
+    replication. Its final evaluation uses seeds (100201-100205) and task instances never used for any v1 or
+    v2 model-selection step; the v2 search used validation splits of seeds 11-12 only.
+  design_changes_informed_by_v1:
+    - >
+      Local plasticity stayed at chance in v1. Diagnosis (docs/learning_v2.md,
+      scripts/linux/learning_v2_diag_plastic.py): the v1 node-perturbation update has cosine 0.02-0.05 with
+      the exact reward gradient (noise floor 0.02-0.03) on both the synthetic and the real pilot circuit;
+      a corrected compartment-feedback eligibility-trace rule (comp_feedback) has cosine 0.95-0.98. This is
+      an implementation/credit-assignment finding, made on seed 7 (a diagnostic seed outside every study seed list).
+    - >
+      v1 learning-rate optima sat at grid edges for several comparators (GRU, encdec, decoder-only), so v2
+      searches extend the grid under an EQUAL budget (8 lr evaluations x 2 seeds per condition kind).
+    - >
+      v1 sign handling ignored known_nt in the navigation/intervention loaders, so v2 uses graph/signs.py (v2).
+    - >
+      v1 nulls were only partly mixed, so v2 uses graph/nulls_v2.py (>=10 accepted swaps/edge, plateau criterion).
+  v1_results_preserved_at: [results/learning/flywire_confirm, docs/learning.md, docs/AUDIT.md]
+
+primary_family:                # Holm-adjusted jointly (exact paired sign-flip p-values)
+  E1: {contrast: "test accuracy after acquisition (context 0): bptt|connectome - bptt|gru (parameter-matched)", pairing: seed}
+  E2: {contrast: "average forgetting (keep policy, test split): bptt|gru - bptt|connectome; target >= +0.07", pairing: seed}
+  E3: {contrast: "test accuracy after acquisition: bptt|connectome - bptt|v2 degree-preserving nulls (5, full factorial with seeds)", pairing: "seed within null; units = nulls (nested bootstrap)"}
+  E4: {contrast: "same as E3 for plast_dec (local plasticity + trainable decoder)", pairing: "seed within null"}
+  E5: {contrast: "plast_fixed|connectome - plast_modoff|connectome (modulation disabled), test accuracy after acquisition", pairing: seed}
+  E6: {contrast: "plast_fixed|connectome - plast_shuffled|connectome (compartment feedback permuted)", pairing: seed}
+secondary_exploratory: >
+  Everything else in summary.json (all arms/families, reversal, perseveration, delayed retention, replay mode,
+  forward/backward transfer, interface controls, GRU-z/encdec-z/connectome_noz, kc_static, random_reach,
+  compute-matched GRU, homeostasis, group-constrained nulls) is descriptive: CIs only, no p-values, no claims.
+comparators_declared_before_seeing_confirmatory_data:
+  matched_conventional_baseline: "GRU, hidden size chosen so trainable params >= the connectome-bptt count (gru)"
+  secondary_baselines: [gru_c (FLOP-matched), encdec, gru_z, encdec_z, connectome_noz, kc_static, random_reach]
+  never_chosen_post_hoc: true
+absolute_targets:              # evaluated for the declared primary condition only
+  accuracy_ge_0_82: "bptt|connectome mean test accuracy after acquisition (context 0)"
+  forgetting_improvement_ge_0_07: "E2 absolute difference (baseline forgetting - connectome forgetting)"
+  interpretation: >
+    Meeting an absolute threshold is NOT evidence of an anatomical advantage. An anatomical-advantage claim
+    requires E3/E4 (vs mixed degree-preserving nulls) AND the matched-GRU contrast to favour the connectome
+    with intervals excluding zero. Otherwise the finding is reported as 'no evidence of an anatomical advantage'.
+seeds:
+  search_validation_only: [11, 12]
+  pilot_exploratory: [21, 22]
+  final_evaluation: [100201, 100202, 100203, 100204, 100205]
+  null_graphs: "first 5 of 10 cached v2 plain nulls (results/nulls_v2/mushroom_body_right_pilot/plain); first 5 group-constrained"
+sample_size_policy: >
+  5 independent training seeds per condition (fixed in advance; same seeds for all conditions; nulls full
+  factorial for bptt and plast_dec). No interim look at test data. Extension to seeds 100206-100210 only through a
+  logged amendment decided on cost and validation-only information, never on test outcomes; if extended, both
+  the 5-seed and 10-seed results are reported.
+evaluation_protocol: >
+  Fresh model per (condition, seed, protocol). Association: 800 acquisition trials, 400-trial un-reinforced
+  delay probe, 800 reversal trials. Continual: 3 contexts x 800 trials, evaluation of all contexts after
+  every phase on held-out val and test cues. Greedy argmax evaluation, no exploration noise, no learning.
+  Forgetting = mean over tasks 1..T-1 of max-over-time minus final (keep policy: negatives kept; clip reported);
+  last task excluded. FWT reference = untrained accuracy on each task. Replay mode: 16 stored pairs per finished
+  task for every condition.
+exclusions: >
+  None pre-specified. A run that fails is reported (status field), is NOT silently dropped or re-seeded, and
+  the contrast is computed on the seeds with both members present with the dropped pairs listed. Censored
+  acquisition (criterion never reached) is reported as censored, not excluded.
+search_budget: >
+  Per (arm, family-kind): exactly 8 learning-rate evaluations x 2 seeds on the VALIDATION split of the
+  continual protocol (5-point start grid + 3 adaptive evaluations: extend toward the better edge or refine
+  around an interior optimum). Optimum-at-edge flags are reported. plast_modoff/plast_homeo borrow the lr of
+  plast_fixed/plast_dec (isolated factors, not separately tuned); plast_dec/plast_homeo use the decoder_only
+  lr as their decoder lr. Test splits are never evaluated during search or pilot-based decisions.
+multiplicity: "Holm over {E1..E6}; confidence intervals and effect sizes are not adjusted."
+statistics: >
+  Percentile bootstrap over independent trained models (n=5: exploratory-grade, potentially unstable);
+  paired by seed for model-vs-model contrasts; nested graph->seed bootstrap for null contrasts; exact sign-flip
+  p-values (smallest attainable two-sided p at n=5 is 0.0625).
+checkpoints: "runs/learning_v2_ckpt/confirm/*.pt (git-ignored); load with eval.learning_v2.load_checkpoint_agent"
+not_claimed: [biological_equivalence, mind_or_consciousness, task_difficulty_beyond_a_synthetic_linear_valence_rule]
+amendments:
+  - date_utc: "2026-10-16T05:57Z"
+    before_any_v2_confirmatory_evaluation: true
+    change: "final evaluation seeds 201-205 -> 100201-100205, applied to ALL conditions"
+    reason: >
+      The separate screen-v2 trained-instance study used v1 acquisition on seeds 201-208.
+      Its task parameters equal v2's and make_task uses the same seed, so test cues for the
+      proposed v2 final seeds had already been evaluated. Fresh deterministic seeds are selected
+      to remove this overlap, without inspecting outcomes on the replacement seeds.
+    original_protocol_hash: "02b568808e6e9ee5"
+    amended_protocol_hash: "0eb4cc85b4857523"
+    search_reuse: >
+      The 368 validation-only search records and 23 selected LR entries are preserved byte-for-byte.
+      Only final seeds changed. Search seeds, task, models, trial budgets, optimizer grids and
+      selection criterion are identical; rerunning the search would repeat the same computation.
+      Pilot seeds 21-22 remain exploratory under the original hash; pilot outcomes do not change
+      any training or evaluation settings.
+
+  - date_utc: "2026-10-16T08:00Z"
+    before_any_v2_confirmatory_evaluation: false
+    change: >
+      Documentation-only clarification, no analysis or protocol change: the header line 'status:
+      draft_not_frozen' was not updated by the freeze tool; 'frozen: true', 'frozen_utc' and 'protocol_hash'
+      govern. The final stage (200 records, hash 0eb4cc85b4857523) had completed before this note. Independent
+      re-derivation: results/audit/learning_v2_claude_verification.json.

@@ -1,0 +1,111 @@
+# Tier-1 navigation evaluation protocol. FROZEN before any training run whose results are
+# reported (see nav_protocol.sha256 and docs/navigation.md). Changes after freezing must be added
+# to `amendments` with a reason and date; the hash file is then re-written and the old hash kept
+# in the amendment entry. The code refuses to produce a target status if the hash does not match.
+protocol_id: nav_tier1_v1
+owner: Atul Pandey
+frozen_date: "2026-10-15"
+status_vocabulary: [not run, exploratory, evaluated/met, evaluated/missed, blocked]
+
+interface:
+  n_obs: 10
+  n_act: 2
+  neural_dt_s: 0.1
+  physics_dt_s: 0.05
+  max_steps: 250
+  circuit_interface_note: >
+    ENGINEERED interface: 10 observation channels drive the 10 Kenyon cells with highest
+    out-degree (fixed ascending-index order); the 2 actions are decoded linearly from the 25 MBONs.
+    This is not a descending/motor pathway of the fly and not a biomechanical body.
+
+primary_endpoint:
+  id: navigation_success_25pct_dropout
+  metric: success_rate            # fraction of held-out episodes reaching the goal radius
+  condition: dropout_channel_episode_25
+  population: connectome_pilot_mb # right-hemisphere mushroom-body pilot subset, NOT the whole circuit
+  target_threshold: 0.68
+  target_rule: mean over trained models (unit of replication = trained model) >= threshold
+  comparator_primary: gru_param_matched      # predeclared; never swapped after seeing results
+  comparators_secondary: [gru_compute_matched, random_sparse, null_double_edge_swap, encdec_param_matched]
+
+dropout_protocol_25:
+  kind: channel          # each of the 10 channels dropped independently
+  per: episode           # one mask per episode, held for the whole episode
+  level: 0.25
+  applies_to: all 10 channels (odor, vision, proprioception)
+  fill_value: 0.0
+  mask_indicator_given_to_controller: false
+  mask_seed: 2000        # shared by every model => paired masks
+  noise_seed: 1000
+  training_exposure: >
+    Training episodes use channel/episode dropout levels {0, 0.1, 0.25, 0.5} with different mask
+    streams and different (train-split) layouts; the 25% level IS seen in training, test layouts
+    and test masks are not.
+
+evaluation_conditions:
+  - {name: nominal, dropout: 0.0}
+  - {name: dropout_channel_episode_10, dropout: 0.1}
+  - {name: dropout_channel_episode_25, dropout: 0.25}     # primary
+  - {name: dropout_channel_episode_50, dropout: 0.5}
+  - {name: dropout_modality_episode_25, dropout: 0.25, kind: modality}   # secondary / exploratory
+  - {name: low_contrast_0.3, contrast: 0.3}
+  - {name: conflict_cue, conflict: true}
+
+episodes_per_condition: 200
+test_layouts: {split: test, indices: [0, 200]}
+val_layouts: {split: val, indices: [0, 100]}     # monitoring only, never used to choose anything
+
+training:
+  algorithm: DAgger-style imitation of a privileged scripted teacher (BC at beta=1)
+  teacher: privileged_potential_field    # sees goal/obstacles; students never do
+  dagger_betas: [1.0, 0.5, 0.25, 0.1, 0.0]
+  episodes_per_round: 40                 # 10 per dropout level
+  dropout_levels: [0.0, 0.1, 0.25, 0.5]
+  epochs_per_round: 6
+  batch_sequences: 8
+  tbptt_steps: 32
+  optimizer: adam
+  lr: 0.003
+  grad_clip: 1.0
+  loss: masked MSE between tanh(y) and teacher action
+  stopping_rule: fixed schedule (no early stopping, no checkpoint selection)
+  hyperparameter_search_budget: 0 configurations (single predeclared setting for all conditions)
+  device: cpu
+  cpu_threads: 4
+  identical_across_conditions: [layouts, noise seeds, teacher labels schedule, optimizer, epochs, rounds]
+
+model_interface:
+  init_gain: 0.3
+  prior: log1p
+  tau: 5.0
+  dt: 1.0
+  trainable_encoder: true
+  trainable_decoder: true
+  unknown_sign_policy: excitatory
+  sign_rule: "top_nt acetylcholine=+1, gaba=-1, glutamate=-1 (context-dependent in vivo; assumption), confidence >= 0.6, else unknown"
+
+conditions:
+  - connectome_pilot_mb
+  - null_double_edge_swap     # exact in/out-degree-preserving simple-digraph swap, one null graph per training seed
+  - random_sparse
+  - gru_param_matched
+  - gru_compute_matched
+  - encdec_param_matched
+
+seeds:
+  pilot_exploratory: [0, 1]
+  confirmatory: [100, 101, 102, 103, 104]
+
+sample_size_policy: >
+  200 held-out episodes per (model, condition). Episodes from one model are NOT independent
+  replicates; intervals are bootstrap over trained models. With 2 seeds results are smoke/pilot
+  only; with 5 seeds intervals are exploratory and potentially unstable.
+exclusions: >
+  A trained model is excluded only if training produced non-finite loss; such models are reported
+  as diverged, not silently dropped.
+multiplicity_plan: >
+  One primary endpoint (connectome mean success at the 25% protocol vs 0.68). All comparator and
+  condition contrasts are exploratory, uncorrected, reported with intervals only.
+search_budget: 0 hyperparameter configurations; one DAgger schedule
+
+amendments: []
