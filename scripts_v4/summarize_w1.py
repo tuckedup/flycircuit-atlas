@@ -1,10 +1,12 @@
 """Summarize stage W1_encoder_E8 from its JSONL (ENCODER_DIAGNOSTIC_PLAN.md + AMENDMENT 1). Stdlib+numpy only."""
+from _paths import CANON as _CANON  # noqa: F401,E402
+from _paths import ROOT as _ROOT  # noqa: F401,E402
 import json
 import sys
 
 import numpy as np
 
-OUT = "<PROJECT_ROOT>/results_v4/learning_readout_v4_1"
+OUT = (_ROOT + "/results_v4/learning_readout_v4_1")
 JL = f"{OUT}/W1_encoder_E8_rows.jsonl"
 T7 = 2.365
 CELLS = [f"{f}|W76" for f in ["connectome", "null0", "null1", "null2", "null3", "null4", "random_reach"]] + \

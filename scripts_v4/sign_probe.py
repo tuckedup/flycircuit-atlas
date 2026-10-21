@@ -6,6 +6,8 @@ Intervention: proto["model"]["unknown_sign_policy"] 'zero' (baseline) vs 'excita
 sparse_rnn.SIGN_POLICIES). Done on a deep copy of the protocol; no existing source is edited.
 feats/probe/stats and W76 set construction are copied from scripts_v4/width_probe.py (not imported).
 """
+from _paths import CANON as _CANON  # noqa: F401,E402
+from _paths import ROOT as _ROOT  # noqa: F401,E402
 import copy
 import hashlib
 import json
@@ -19,7 +21,7 @@ import torch
 from flycircuit.eval import learning as L
 from flycircuit.models.sparse_rnn import SIGN_POLICIES, SparseConnectomeRNN, ModelSpec, resolve_signs
 
-ROOT = "<PROJECT_ROOT>"
+ROOT = _ROOT
 OUT = f"{ROOT}/results_v4/learning_readout_v4_1"
 STAGE = "W2_sign_policy"
 SEEDS = list(range(1301, 1309))

@@ -1,7 +1,9 @@
 """D2 rank-4 micro-profile of body training (CPU threads 2/4/8 and CUDA). NO physics. Writes only to
 diag_out/d2/. Usage (guarded, via heavyjob.sh):
-  FLYCIRCUIT_HOME=<CANONICAL_ROOT> PYTHONPATH=<copy>/src <venv>/python scripts_v4/profile_train.py
+  FLYCIRCUIT_HOME=$FLYCIRCUIT_HOME PYTHONPATH=<copy>/src <venv>/python scripts_v4/profile_train.py
 """
+from _paths import CANON as _CANON  # noqa: F401,E402
+from _paths import ROOT as _ROOT  # noqa: F401,E402
 import glob
 import json
 import os
@@ -12,7 +14,7 @@ from pathlib import Path
 import numpy as np
 import yaml
 
-ORIG = Path("<CANONICAL_ROOT>")
+ORIG = Path(_CANON)
 OUT = Path(__file__).resolve().parents[1] / "diag_out" / "d2"
 OUT.mkdir(parents=True, exist_ok=True)
 

@@ -4,6 +4,8 @@ Run: python encoder_probe.py            (full probe)
      python encoder_probe.py --selftest (tiny CPU unit check, no model construction)
 feats/probe/stats/run_cell logic and W76 set construction are copied from scripts_v4/width_probe.py.
 """
+from _paths import CANON as _CANON  # noqa: F401,E402
+from _paths import ROOT as _ROOT  # noqa: F401,E402
 import hashlib
 import json
 import os
@@ -16,7 +18,7 @@ import torch
 
 from flycircuit.eval import learning as L
 
-ROOT = "<PROJECT_ROOT>"
+ROOT = _ROOT
 OUT = f"{ROOT}/results_v4/learning_readout_v4_1"
 STAGE = "W1_encoder_E8"
 SEEDS = list(range(1101, 1109))

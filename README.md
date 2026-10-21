@@ -1,8 +1,8 @@
 # FlyCircuit Atlas — v0.1.0-preview
 
 **Experimental, work-in-progress research code** (author: Atul Pandey). Connectome-constrained learning
-experiments on a sparse recurrent network built from the FlyWire v783 *Drosophila* connectome, with matched
-control models. Development and evaluation are ongoing; this is a dated snapshot (2026-10-20), not a finished study.
+experiments on a sparse recurrent network built from the FlyWire v783 *Drosophila* connectome, with
+control models (GRU, encoder-decoder, rewired graphs) that are *not* parameter-matched. Development and evaluation are ongoing; this is a dated snapshot (2026-10-20), not a finished study.
 
 ## Best verified result: connectome acquisition on a validation split
 
@@ -20,7 +20,7 @@ The 89.06 % is one run picked as the maximum of four; the 82.42 % mean is the fa
 (95 % CI roughly 71–93 %). These are historical exploratory validation results, **not** confirmed general performance.
 
 ### Read this with it
-- The seven-percentage-point forgetting advantage over a matched GRU has **not** been established (measured, validation: −3.3 pp).
+- The seven-percentage-point forgetting advantage over the GRU control has **not** been established (measured, validation: −3.3 pp). That GRU is larger (9,252 vs 7,551 trainable parameters), so it is not a parameter-matched comparison.
 - The 68 % body-navigation target (FlyGym, 25 % channel dropout) is **unverified** in this release; a 25-model evaluation is pending.
 - Anatomical superiority has **not** been demonstrated: the GRU, the encoder-decoder and all three degree-preserving nulls scored equal or higher on acquisition (only the random-graph control was lower).
 - Frozen-feature probes, synthetic 2D navigation, FlyGym navigation and trained acquisition are different metrics and are not interchangeable.
@@ -54,10 +54,15 @@ environment; one body-protocol test that needs it was removed), and the in-progr
 
 ## Reproducing the reported numbers
 - **Recompute from raw rows:** `scripts_release/verify_w3_headline.py` (above). This checks the arithmetic of the published run records.
-- **Re-running the training** (`scripts_v4/w3_pilot.py`, guarded launcher `scripts_v4/run_guarded.sh`) needs the ingested FlyWire v783 data
-  (`flycircuit data fetch/ingest`, ~1 GB, CC-BY-4.0, not redistributed here) and the cached null/encoder packs of the original workspace,
-  which are **not** included. It is therefore not reproducible from this repository alone. Scripts retain `<PROJECT_ROOT>` / `<CANONICAL_ROOT>`
-  placeholders where the author's machine paths were; edit them to your layout. The original file hashes are in `provenance/`.
+- **Re-running the training** (`scripts_v4/w3_pilot.py`, launcher `scripts_v4/run_guarded.sh`) needs inputs that are **not** shipped: the ingested
+  FlyWire v783 data (~1 GB download, CC-BY-4.0) and the cached degree-preserving null graphs. Follow
+  [docs/PREPARE_TRAINING_DATA.md](docs/PREPARE_TRAINING_DATA.md) to build them. Paths are configurable through `FLYCIRCUIT_COPY` and
+  `FLYCIRCUIT_HOME` (default: this repository). A re-run produces new rows; it is not expected to match the published rows bit for bit,
+  and no re-run has been verified from the published repository yet.
+- Unsupported here: the single-heavy-job lock wrapper `heavyjob.sh` and the Windows memory guard (WSL2 only; skipped with a warning elsewhere),
+  FlyGym body evaluation, and the replay/body-evaluation program (see ROADMAP).
+- The original file hashes from before the 0.1.0 path redaction are in `provenance/`; the patch release changed further script lines
+  (see `CHANGELOG.md`), so launch-time hashes in `results_v4/*/W*_prelaunch_hashes.txt` describe the original unredacted files only.
 
 ## Provenance
 `provenance/SHA256SUMS.txt` lists every published file. `provenance/PATH_REDACTION_ORIGINAL_SHA256.txt` records the hashes of files

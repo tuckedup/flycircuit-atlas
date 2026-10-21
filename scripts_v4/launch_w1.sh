@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Records pre-launch hashes of everything the W1 stage depends on, then launches under the guard.
-cd <PROJECT_ROOT> || exit 2
-OUTD=<PROJECT_ROOT>/results_v4/learning_readout_v4_1
+COPY="${FLYCIRCUIT_COPY:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+cd "$COPY" || exit 2
+OUTD=$COPY/results_v4/learning_readout_v4_1
 if pgrep -af "encoder_probe|heavyjob" | grep -v pgrep; then echo "job already running"; exit 3; fi
 sha256sum scripts_v4/encoder_probe.py scripts_v4/summarize_w1.py scripts_v4/width_probe.py scripts_v4/run_guarded.sh \
   "$OUTD/ENCODER_DIAGNOSTIC_PLAN.md" "$OUTD/PREREG_WIDTH_PROBE.md" "$OUTD/seed_registry.json" \

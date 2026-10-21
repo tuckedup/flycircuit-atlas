@@ -11,7 +11,7 @@ from typing import Any
 import yaml
 from pydantic import BaseModel, ConfigDict
 
-DEFAULT_ROOT = Path("<CANONICAL_ROOT>")
+DEFAULT_ROOT = Path.cwd()
 
 
 def project_root() -> Path:

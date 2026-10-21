@@ -1,4 +1,6 @@
 """Stage W0 readout-width probe. See results_v4/learning_readout_v4_1/PREREG_WIDTH_PROBE.md. Absolute paths only."""
+from _paths import CANON as _CANON  # noqa: F401,E402
+from _paths import ROOT as _ROOT  # noqa: F401,E402
 import hashlib
 import json
 import os
@@ -12,7 +14,7 @@ from flycircuit.eval import learning_v2 as V2
 from flycircuit.eval import learning_v3 as V3
 from flycircuit.tasks.graph_loader import CircuitBundle
 
-OUT = "<PROJECT_ROOT>/results_v4/learning_readout_v4_1"
+OUT = (_ROOT + "/results_v4/learning_readout_v4_1")
 STAGE = "W0_width_probe"
 torch.set_num_threads(2)
 proto = V3.load_protocol()

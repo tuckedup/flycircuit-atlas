@@ -4,6 +4,8 @@ Read-only on all inputs. Writes ABSOLUTE-path outputs atomically to results_v4/a
 Every check status is computed (pass / fail / incomplete / not_logged). NOTE: this is the author's own
 re-implementation of the arithmetic; it is a consistency audit, NOT an independent verification.
 """
+from _paths import CANON as _CANON  # noqa: F401,E402
+from _paths import ROOT as _ROOT  # noqa: F401,E402
 import ast
 import datetime
 import hashlib
@@ -13,8 +15,8 @@ import os
 import re
 import sys
 
-ROOT = "<PROJECT_ROOT>"
-CANON = "<CANONICAL_ROOT>"
+ROOT = _ROOT
+CANON = _CANON
 P = ROOT + "/results_v4/learning_v4"
 W = ROOT + "/results_v4/learning_readout_v4_1"
 OUTD = ROOT + "/results_v4/audit_v4"
@@ -714,7 +716,7 @@ def main():
         "Records carry no per-record checksum, so values produced by in-memory training are taken on trust.",
         "B8 is a source-text regex check, not proof of what executed.",
         "A7 scans key names, plus string values equal to 'test' under keys named split/splits; other values are not scanned.",
-        "Canonical <CANONICAL_ROOT> was only hashed read-only; learning_v3.py has no expected hash supplied.",
+        "Canonical $FLYCIRCUIT_HOME was only hashed read-only; learning_v3.py has no expected hash supplied.",
     ]
     result = {"generated_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(), "overall_status": overall,
               "required_checks": [c["id"] for c in req], "summary": {c["id"]: c["status"] for c in CHECKS},

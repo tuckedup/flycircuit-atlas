@@ -8,6 +8,7 @@
 from __future__ import annotations
 
 import copy
+import os
 from pathlib import Path
 
 import numpy as np
@@ -18,7 +19,7 @@ from flycircuit.eval import learning as L
 from flycircuit.eval import learning_v2 as V2
 from flycircuit.tasks.graph_loader import make_learning_synthetic
 
-ORIG = Path("<CANONICAL_ROOT>")
+ORIG = Path(os.environ.get("FLYCIRCUIT_HOME") or Path(__file__).resolve().parents[2])
 
 
 @pytest.fixture(scope="module")

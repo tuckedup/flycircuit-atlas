@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-cd <PROJECT_ROOT> || exit 2
-OUTD=<PROJECT_ROOT>/results_v4/learning_readout_v4_1
+COPY="${FLYCIRCUIT_COPY:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+cd "$COPY" || exit 2
+OUTD=$COPY/results_v4/learning_readout_v4_1
 if pgrep -af "sign_probe|encoder_probe|heavyjob" | grep -v pgrep; then echo "job already running"; exit 3; fi
 sha256sum scripts_v4/sign_probe.py scripts_v4/summarize_w2.py scripts_v4/width_probe.py scripts_v4/run_guarded.sh \
   "$OUTD/W2_PREREG.md" "$OUTD/seed_registry.json" configs/experiments/learning_v3_protocol.yaml \

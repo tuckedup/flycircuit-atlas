@@ -1,8 +1,10 @@
+from _paths import CANON as _CANON  # noqa: F401,E402
+from _paths import ROOT as _ROOT  # noqa: F401,E402
 import collections
 import json
 import statistics as s
 
-D = "<PROJECT_ROOT>/results_v4/learning_readout_v4_1/"
+D = (_ROOT + "/results_v4/learning_readout_v4_1/")
 g = collections.defaultdict(list)
 for line in open(D + "W0_width_probe_rows.jsonl"):
     r = json.loads(line)

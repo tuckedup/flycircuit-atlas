@@ -1,6 +1,8 @@
 """Validation-only, no-RL diagnostic: how well can a LINEAR readout of each UNTRAINED model's z-scored
 response-window features separate the association task? Separates representation quality from learning.
 Forward passes + L2 logistic regression only; train split fits, val split scores. Seeds 701-708."""
+from _paths import CANON as _CANON  # noqa: F401,E402
+from _paths import ROOT as _ROOT  # noqa: F401,E402
 import json, sys, time
 import numpy as np, torch
 from flycircuit.eval import learning_v2 as V2, learning_v3 as V3, learning as L
@@ -52,5 +54,5 @@ for fam in FAMS:
         r = dict(family=fam, seed=seed, val_acc=float(np.mean(accs)), train_acc=float(np.mean(trn)),
                  n_feat=int(xt.shape[1]), oracle_val=V2.oracle_ceiling(task, ("val",))["val"])
         out.append(r); print(json.dumps(r), flush=True)
-json.dump(out, open("<PROJECT_ROOT>/diag_out/readout_ceiling.json", "w"), indent=1)
+json.dump(out, open((_ROOT + "/diag_out/readout_ceiling.json"), "w"), indent=1)
 print("done", round(time.time() - t0), "s")

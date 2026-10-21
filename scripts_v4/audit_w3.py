@@ -1,8 +1,10 @@
 """Audit of stage W3 (trained W76 pilot). OWN RE-IMPLEMENTATION by the same project team: a consistency audit,
 NOT an independent review of the author's own work. Read-only on all inputs; no training; no graph generation.
 Writes NEW files results_v4/audit_v4/W3_audit.json and W3_audit.md.
-Run: PYTHONPATH=<root>/src FLYCIRCUIT_HOME=<CANONICAL_ROOT> <venv python> scripts_v4/audit_w3.py
+Run: PYTHONPATH=<root>/src FLYCIRCUIT_HOME=$FLYCIRCUIT_HOME <venv python> scripts_v4/audit_w3.py
 """
+from _paths import CANON as _CANON  # noqa: F401,E402
+from _paths import ROOT as _ROOT  # noqa: F401,E402
 import datetime
 import glob
 import hashlib
@@ -14,8 +16,8 @@ from collections import Counter, defaultdict
 
 import numpy as np
 
-ROOT = "<PROJECT_ROOT>"
-CANON = "<CANONICAL_ROOT>"
+ROOT = _ROOT
+CANON = _CANON
 W = ROOT + "/results_v4/learning_readout_v4_1"
 OUTD = ROOT + "/results_v4/audit_v4"
 STAGE = "W3_trained_w76"

@@ -1,9 +1,11 @@
 """Summarize stage W2_sign_policy from its JSONL (W2_PREREG.md). Stdlib+numpy only."""
+from _paths import CANON as _CANON  # noqa: F401,E402
+from _paths import ROOT as _ROOT  # noqa: F401,E402
 import json
 
 import numpy as np
 
-OUT = "<PROJECT_ROOT>/results_v4/learning_readout_v4_1"
+OUT = (_ROOT + "/results_v4/learning_readout_v4_1")
 JL = f"{OUT}/W2_sign_policy_rows.jsonl"
 T7 = 2.365
 FAMS = ["connectome", "null0", "null1", "null2", "null3", "null4", "random_reach"]

@@ -36,7 +36,7 @@ from flycircuit.eval import learning_v4_select as S
 
 COPY = Path(__file__).resolve().parents[3]
 OUT = COPY / "results_v4" / "learning_v4"
-ORIG = Path("<CANONICAL_ROOT>")
+ORIG = Path(os.environ.get("FLYCIRCUIT_HOME") or COPY)
 MANIFEST = OUT / "pilot_manifest.json"
 LEGACY = OUT / "legacy_unmanifested"
 _MANIFEST_CACHE: dict = {}
@@ -103,7 +103,7 @@ def _assert_runtime() -> None:
     if COPY not in Path(__file__).resolve().parents:
         raise RuntimeError(f"v4 pilot must import from isolated copy, got {__file__}")
     if project_root().resolve() != ORIG.resolve():
-        raise RuntimeError("set FLYCIRCUIT_HOME=<CANONICAL_ROOT> for canonical inputs")
+        raise RuntimeError("set FLYCIRCUIT_HOME to the directory holding the prepared inputs (docs/PREPARE_TRAINING_DATA.md)")
     if Path(V3.__file__).resolve() != COPY / "src/flycircuit/eval/learning_v3.py":
         raise RuntimeError("learning_v3 was not imported from the isolated copy")
 

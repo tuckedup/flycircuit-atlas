@@ -1,4 +1,4 @@
-# Offline CPU CI (synthetic fixtures only). Prepared locally; NOT pushed or activated.
+# Offline CPU CI (synthetic fixtures only; no real data, no GPU, no training).
 name: ci
 on: [push, pull_request]
 jobs:
@@ -13,5 +13,9 @@ jobs:
           uv venv --python 3.11
           uv pip install --index-url https://download.pytorch.org/whl/cpu torch
           uv pip install -e ".[dev]"
-      - run: uv run --no-sync ruff check src tests
+      - run: uv run --no-sync ruff check src tests scripts_release
+      - name: Verify published headline numbers against raw rows and documents
+        run: uv run --no-sync python scripts_release/verify_w3_headline.py
+      - name: Cheap synthetic example
+        run: uv run --no-sync flycircuit synthetic run
       - run: uv run --no-sync pytest -q -m "not gpu and not real_data"

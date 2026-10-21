@@ -1,10 +1,12 @@
 """Summarize stage W3_trained_w76 (W3_PREREG.md). Stdlib + numpy only; absolute paths; read-only except W3_summary.json."""
+from _paths import CANON as _CANON  # noqa: F401,E402
+from _paths import ROOT as _ROOT  # noqa: F401,E402
 import json
 import os
 
 import numpy as np
 
-OUT = "<PROJECT_ROOT>/results_v4/learning_readout_v4_1"
+OUT = (_ROOT + "/results_v4/learning_readout_v4_1")
 ROWS = f"{OUT}/W3_trained_w76_rows.jsonl"
 CHOICES = f"{OUT}/W3_trained_w76_choices.json"
 FAMS = ["connectome", "null0", "null1", "null2", "random_reach", "gru", "encdec"]

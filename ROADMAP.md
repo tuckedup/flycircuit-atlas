@@ -8,7 +8,7 @@ Status: experimental and in progress. Nothing below is guaranteed to reach its t
 | Connectome acquisition ≥ 82 % | Point estimate 82.4 % on 4 validation seeds; no held-out or statistical support yet |
 | GRU-minus-connectome forgetting ≥ +7 pp | Measured −3.3 pp (validation, 4 seeds); not established |
 | Body navigation ≥ 68 % at 25 % channel dropout | Not verified; an earlier, different pipeline fell below this and is not part of this release |
-| Anatomical advantage over matched nulls | Not demonstrated |
+| Anatomical advantage over degree-preserving nulls | Not demonstrated |
 
 ## Planned, in this order
 1. **Replay pilot** — connectome W76 vs GRU (hidden 33; 7,551 vs 7,460 trainable parameters), standard training vs episodic replay vs an extra-trial control,
@@ -20,4 +20,5 @@ Status: experimental and in progress. Nothing below is guaranteed to reach its t
 ## Known gaps
 - No licence file yet (owner decision). Several upstream citations are marked UNVERIFIED in `CITATIONS.md`.
 - Training re-runs depend on data and caches that are not redistributed (see README).
-- Parameter counts across families are only approximately matched.
+- Parameter counts across families are not matched in the published W3 run (GRU +22 %, encoder-decoder +19 % over the connectome).
+  The planned replay pilot uses a closer GRU (hidden 33; 7,460 vs 7,551, about 1.2 % apart) and reports the residual mismatch.

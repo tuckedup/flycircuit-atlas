@@ -1,11 +1,13 @@
 """Stage W3 trained validation-only exploratory pilot of the W76 widened readout.
 Spec: results_v4/learning_readout_v4_1/W3_PREREG.md (written before any run). Absolute paths only.
 Run (guarded, NOT launched by the author):
-    scripts_v4/run_guarded.sh W3 <PROJECT_ROOT>/scripts_v4/w3_pilot.py
+    scripts_v4/run_guarded.sh W3 $FLYCIRCUIT_COPY/scripts_v4/w3_pilot.py
 Selftest (no training, builds models only):  w3_pilot.py --selftest
 Reuses the reviewed v4 learner (flycircuit.eval.learning_v4: run_setting, make_agent_v4 param groups). Single change:
 readout set W25 -> W76 for sparse families; gru/encdec use the ORIGINAL base (same architecture as the v4 pilot).
 """
+from _paths import CANON as _CANON  # noqa: F401,E402
+from _paths import ROOT as _ROOT  # noqa: F401,E402
 import hashlib
 import json
 import os
@@ -15,7 +17,7 @@ import time
 import numpy as np
 import torch
 
-ROOT = "<PROJECT_ROOT>"
+ROOT = _ROOT
 OUT = f"{ROOT}/results_v4/learning_readout_v4_1"
 STAGE = "W3_trained_w76"
 ROWS = f"{OUT}/{STAGE}_rows.jsonl"
