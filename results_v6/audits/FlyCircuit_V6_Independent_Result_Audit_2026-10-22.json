@@ -1,0 +1,212 @@
+{
+  "audit_date": "2026-10-22",
+  "auditor": "independent Codex result audit",
+  "scope": "Frozen FlyCircuit v6 native validation r3 artifacts; standard-library-only recomputation; no Torch, NumPy, model execution, heavy tests, source mutation, worker restart, settings change, or Claude messaging.",
+  "publication_disposition": "conditional_pass_after_mandatory_edits",
+  "ship_scope": "Exploratory validation-only negative result on the native 3-task cue task.",
+  "hashes": {
+    "plan_file_sha256": "29d859643e32b508058cdabcba279010fb6af7e43aac3ea7fd82921d48498f5b",
+    "plan_canonical_sha256": "5fb39e28b30ea8e90203a20f205f9477ee6607b0076e2d538e3dc2c41edfb23f",
+    "acceptance_file_sha256": "edae245a147379ec95df3c5f862b29a98472fe438d8634ef786b8b75c226d4f1",
+    "acceptance_canonical_sha256": "341d614f6136aebdbe986724b16607472a9627d00c1b59468081cfa719182aec",
+    "rows_sha256": "54ad0724ca375a81be4004bf55de535e6843e5888da7253b97bec86b47b1a71b",
+    "analysis_sha256": "1a69544596f324dfd245b99b989ce83d6094ba32f8fcf676d4e9b68a5d273fae",
+    "smoke_receipt_sha256": "622238fb26a47bf5d738adfdb024fa4e0d8f967be06669f5302917f405614acc",
+    "exposure_check_sha256": "a10a1ed7ec0e13e7a5a2c6c153c822a97fa0a244e48f161168ef9ad705b4efad",
+    "independent_review_sha256": "4f20d0ccb29721c3ed780efac8bf663c9bf479afb058e3e738c151b91389a90e"
+  },
+  "integrity": {
+    "planned_rows": 64,
+    "saved_rows": 64,
+    "ok_rows": 64,
+    "failed_rows": 0,
+    "unique_coordinates": 64,
+    "families": 2,
+    "methods": 4,
+    "model_seeds": 8,
+    "coordinate_grid_complete": true,
+    "coordinate_keys_recomputed": true,
+    "row_plan_bindings_match_canonical_plan": true,
+    "row_acceptance_bindings_match_canonical_acceptance": true,
+    "acceptance_binds_plan_file_hash": true,
+    "ledger_binds_plan_and_acceptance": true,
+    "source_hashes_recomputed": 117,
+    "input_hashes_recomputed": 5,
+    "source_or_input_hash_mismatches": 0,
+    "saved_metrics_reconstruct_from_R_val": true,
+    "saved_metric_mismatches": 0,
+    "paired_current_schedule_identity": true,
+    "candidate_data_identity_matches_exposure_receipt": true,
+    "bundle_audit_result": {
+      "planned": 64,
+      "saved": 64,
+      "failed": 0,
+      "complete": true,
+      "sota_established": false
+    },
+    "ledger": {
+      "charged_wall_s": 933.7212014629997,
+      "attempts": 1,
+      "inflight": null,
+      "child_rc": 0,
+      "reason": null
+    },
+    "peak_rss_mib": 1028.89453125,
+    "peak_rss_gib": 1.0047798156738281,
+    "graph_hashes_constant_across_all_rows": true,
+    "graph_hashes_independently_recomputed_from_raw_graph": false
+  },
+  "metric_definitions": {
+    "final_average_accuracy": "Mean of the final row of each saved 3x3 R_val matrix.",
+    "forgetting_keep": "Mean over prior tasks of max post-acquisition accuracy before the final phase minus final accuracy; higher means more forgetting.",
+    "acquisition": "Saved learned_task_accuracy: mean diagonal of R_val.",
+    "summary_sd": "Sample standard deviation over 8 paired model seeds.",
+    "paired_interval": "Two-sided 95% Student-t interval for the paired mean difference, df=7, t*=2.364624251; descriptive, unadjusted for multiplicity."
+  },
+  "summaries": {
+    "connectome": {
+      "standard": {"final_average_accuracy": [0.74609375, 0.05032369798], "forgetting_keep": [0.1103515625, 0.08853004016], "acquisition": [0.8170572917, 0.03459721421]},
+      "extra_current": {"final_average_accuracy": [0.74609375, 0.04060687172], "forgetting_keep": [0.1591796875, 0.09110264176], "acquisition": [0.8515625, 0.03137376286]},
+      "uniform_replay": {"final_average_accuracy": [0.7434895833, 0.03096972528], "forgetting_keep": [0.091796875, 0.06246511303], "acquisition": [0.8014322917, 0.02465622705]},
+      "balanced_replay": {"final_average_accuracy": [0.7584635417, 0.03305049976], "forgetting_keep": [0.0712890625, 0.05155869507], "acquisition": [0.8059895833, 0.02709906823]}
+    },
+    "gru33": {
+      "standard": {"final_average_accuracy": [0.7740885417, 0.0408150982], "forgetting_keep": [0.072265625, 0.0516115162], "acquisition": [0.8196614583, 0.02226089262]},
+      "extra_current": {"final_average_accuracy": [0.7890625, 0.04203704432], "forgetting_keep": [0.12109375, 0.05215768502], "acquisition": [0.8684895833, 0.03219672102]},
+      "uniform_replay": {"final_average_accuracy": [0.77734375, 0.03059203157], "forgetting_keep": [0.056640625, 0.02698262813], "acquisition": [0.8118489583, 0.03770585652]},
+      "balanced_replay": {"final_average_accuracy": [0.7779947917, 0.03564543369], "forgetting_keep": [0.076171875, 0.0486548264], "acquisition": [0.8255208333, 0.0362985444]}
+    }
+  },
+  "summary_value_format": ["mean", "sample_sd"],
+  "paired_contrasts": {
+    "value_format": ["mean_difference", "ci95_low", "ci95_high"],
+    "connectome": {
+      "uniform_replay-standard": {
+        "final_average_accuracy": [-0.0026041667, -0.0349382497, 0.0297299164],
+        "forgetting_keep": [-0.0185546875, -0.065903413, 0.028794038],
+        "acquisition": [-0.015625, -0.03453336, 0.00328336]
+      },
+      "balanced_replay-standard": {
+        "final_average_accuracy": [0.0123697917, -0.0233805652, 0.0481201486],
+        "forgetting_keep": [-0.0390625, -0.0892919389, 0.0111669389],
+        "acquisition": [-0.0110677083, -0.0386495614, 0.0165141447]
+      },
+      "uniform_replay-extra_current": {
+        "final_average_accuracy": [-0.0026041667, -0.030630475, 0.0254221417],
+        "forgetting_keep": [-0.0673828125, -0.1190402943, -0.0157253307],
+        "acquisition": [-0.0501302083, -0.0622100304, -0.0380503862]
+      },
+      "balanced_replay-extra_current": {
+        "final_average_accuracy": [0.0123697917, -0.018414088, 0.0431536713],
+        "forgetting_keep": [-0.087890625, -0.1353438111, -0.0404374389],
+        "acquisition": [-0.0455729167, -0.0690502683, -0.0220955651]
+      },
+      "balanced_replay-uniform_replay": {
+        "final_average_accuracy": [0.0149739583, -0.0015555019, 0.0315034185],
+        "forgetting_keep": [-0.0205078125, -0.0411435059, 0.0001278809],
+        "acquisition": [0.0045572917, -0.0139803689, 0.0230949522]
+      },
+      "extra_current-standard": {
+        "final_average_accuracy": [0.0, -0.01678354, 0.01678354],
+        "forgetting_keep": [0.048828125, 0.0276639265, 0.0699923235],
+        "acquisition": [0.0345052083, 0.0160407472, 0.0529696695]
+      }
+    },
+    "gru33": {
+      "uniform_replay-standard": {
+        "final_average_accuracy": [0.0032552083, -0.0131921174, 0.0197025341],
+        "forgetting_keep": [-0.015625, -0.0564883001, 0.0252383001],
+        "acquisition": [-0.0078125, -0.0350547001, 0.0194297001]
+      },
+      "balanced_replay-standard": {
+        "final_average_accuracy": [0.00390625, -0.0399309793, 0.0477434793],
+        "forgetting_keep": [0.00390625, -0.0483450576, 0.0561575576],
+        "acquisition": [0.005859375, -0.0253179248, 0.0370366748]
+      },
+      "uniform_replay-extra_current": {
+        "final_average_accuracy": [-0.01171875, -0.034374138, 0.010936638],
+        "forgetting_keep": [-0.064453125, -0.1052791241, -0.0236271259],
+        "acquisition": [-0.056640625, -0.0797326587, -0.0335485913]
+      },
+      "balanced_replay-extra_current": {
+        "final_average_accuracy": [-0.0110677083, -0.0397093964, 0.0175739797],
+        "forgetting_keep": [-0.044921875, -0.0759030893, -0.0139406607],
+        "acquisition": [-0.04296875, -0.0572688928, -0.0286686072]
+      },
+      "balanced_replay-uniform_replay": {
+        "final_average_accuracy": [0.0006510417, -0.0358861608, 0.0371882442],
+        "forgetting_keep": [0.01953125, -0.0254495524, 0.0645120524],
+        "acquisition": [0.013671875, -0.0101703758, 0.0375141258]
+      },
+      "extra_current-standard": {
+        "final_average_accuracy": [0.0149739583, -0.015232603, 0.0451805196],
+        "forgetting_keep": [0.048828125, 0.0207354535, 0.0769207965],
+        "acquisition": [0.048828125, 0.0227089516, 0.0749472984]
+      }
+    },
+    "connectome_minus_gru33": {
+      "standard": {
+        "final_average_accuracy": [-0.0279947917, -0.0602397494, 0.0042501661],
+        "forgetting_keep": [0.0380859375, -0.015822958, 0.091994833],
+        "acquisition": [-0.0026041667, -0.0390346503, 0.033826317]
+      },
+      "extra_current": {
+        "final_average_accuracy": [-0.04296875, -0.0817577808, -0.0041797192],
+        "forgetting_keep": [0.0380859375, -0.0336694288, 0.1098413038],
+        "acquisition": [-0.0169270833, -0.057088385, 0.0232342183]
+      },
+      "uniform_replay": {
+        "final_average_accuracy": [-0.0338541667, -0.0598759407, -0.0078323926],
+        "forgetting_keep": [0.03515625, -0.0155561754, 0.0858686754],
+        "acquisition": [-0.0104166667, -0.0571400645, 0.0363067311]
+      },
+      "balanced_replay": {
+        "final_average_accuracy": [-0.01953125, -0.0616672442, 0.0226047442],
+        "forgetting_keep": [-0.0048828125, -0.0655469017, 0.0557812767],
+        "acquisition": [-0.01953125, -0.0542681254, 0.0152056254]
+      }
+    }
+  },
+  "exposure": {
+    "n_hashed": 278,
+    "historical_or_reserved_count": 270,
+    "candidate_count": 8,
+    "candidate_hashes_distinct": 8,
+    "candidate_collisions_with_historical_or_reserved": 0,
+    "reserved_v5_seeds_100601_through_100620_included": true,
+    "exact_caveat": "The exposure operation generated and hashed deterministic data identities for the reserved v5 seeds. It did not run models or produce v5 outcome metrics, but 'reserved seeds untouched' is false under a strict no-processing/no-exposure meaning."
+  },
+  "smoke_scope": {
+    "seed": 99001,
+    "method": "balanced_replay",
+    "families": ["connectome", "gru33"],
+    "passed": true,
+    "other_methods_smoked_before_measurement": false
+  },
+  "report_claim_review": {
+    "accepted": [
+      "The result is exploratory, validation-only, native-task evidence with 8 model seeds and no tuning in this run.",
+      "The 64-coordinate grid is complete, all rows are valid, and all rows bind to the accepted plan and receipt.",
+      "No replay variant has a final-accuracy paired t interval excluding zero versus standard or the step-matched extra-current control.",
+      "Replay has lower forgetting than extra_current, together with lower acquisition accuracy; this is a descriptive tradeoff and not a final-accuracy gain.",
+      "No SOTA, test-set, held-out, body-robustness, or external-benchmark result is established."
+    ],
+    "caveated": [
+      "The Claude table double-rounded connectome uniform_replay and balanced_replay final accuracy. Direct three-decimal values are 0.743 and 0.758, not 0.744 and 0.759.",
+      "Peak RSS is 1028.895 MiB = 1.005 GiB; the report's approximately 1.03 GiB mixes decimal and binary units.",
+      "All intervals are descriptive because n=8 and many contrasts were inspected without multiplicity correction. Intervals including zero do not establish equivalence or absence of effect.",
+      "Graph hashes are internally constant across all 64 rows, but this audit and the prior Claude review did not recompute their semantics from the raw graph.",
+      "Family-level connectome-versus-GRU33 contrasts are confounded architecture comparisons and must not be described as anatomical effects."
+    ],
+    "blocked": [
+      "The sentence 'v5 ... reserved seeds 100601-100620 remains paused and untouched' must not ship as written. Paused status is outside this audit; untouched is contradicted by reserved_included=true and the documented generation/hash operation.",
+      "Any claim of equivalence, causal replay mechanism, SOTA, held-out/test generalization, body robustness, anatomical advantage, or independently recomputed graph identity is unsupported."
+    ]
+  },
+  "mandatory_publication_edits": [
+    "Change connectome uniform_replay final accuracy to 0.743 at three decimals and balanced_replay to 0.758 at three decimals, or report four decimals consistently.",
+    "Delete or replace the claim that reserved v5 seeds were untouched. If mentioned, say they were included in a data-identity collision scan, with no model outcomes computed.",
+    "Use approximately 1.00 GiB for peak RSS, or report 1028.9 MiB.",
+    "Keep intervals explicitly descriptive and omit anatomy/body/held-out/SOTA language except clear statements that those outcomes were not measured or established."
+  ]
+}

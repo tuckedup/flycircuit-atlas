@@ -1,4 +1,4 @@
-# Roadmap and outstanding work (2026-10-20)
+# Roadmap and outstanding work (2026-10-22)
 
 Status: experimental and in progress. Nothing below is guaranteed to reach its target.
 
@@ -10,7 +10,17 @@ Status: experimental and in progress. Nothing below is guaranteed to reach its t
 | Body navigation ≥ 68 % at 25 % channel dropout | Not verified; an earlier, different pipeline fell below this and is not part of this release |
 | Anatomical advantage over degree-preserving nulls | Not demonstrated |
 
-## Planned, in this order
+## Current measured and interrupted follow-up
+- **v6 complete:** 64/64 validation-only rows, no clear final-accuracy replay gain;
+  see [the full report](docs/V6_VALIDATION.md). It does not pass the historical
+  acquisition/forgetting/body targets by substituting a different metric.
+- **v5 incomplete:** 295/616 rows, including an orphaned continuation whose
+  accounting and protocol acceptance remain unresolved. See
+  [the incident note](docs/V5_INTERRUPTION.md). Do not resume it automatically.
+- Reserved-seed data were generated for hash-only exposure checks; no performance
+  evaluation was reported. Future held-out work requires exposure-policy review.
+
+## Prior plan (superseded; retained for context)
 1. **Replay pilot** — connectome W76 vs GRU (hidden 33; 7,551 vs 7,460 trainable parameters), standard training vs episodic replay vs an extra-trial control,
    one shared learning-rate pair per family chosen on validation-search data only. A 150-minute budget has been set; the run has not completed.
 2. **Complete the body model matrix** — train the 11 missing models to reach 5 families × 5 seeds.

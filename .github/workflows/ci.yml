@@ -16,6 +16,12 @@ jobs:
       - run: uv run --no-sync ruff check src tests scripts_release
       - name: Verify published headline numbers against raw rows and documents
         run: uv run --no-sync python scripts_release/verify_w3_headline.py
+      - name: Verify complete v6 validation evidence (no models or data)
+        run: uv run --no-sync python scripts_release/verify_v6_results.py
+      - name: Candidate contract tests (stdlib mocks only)
+        run: PYTHONPATH=experiments/v6_candidate uv run --no-sync python -m unittest discover -s experiments/v6_candidate/tests -q
+      - name: V6 release corruption checks
+        run: uv run --no-sync python -m unittest discover -s scripts_release/tests -q
       - name: Cheap synthetic example
         run: uv run --no-sync flycircuit synthetic run
       - run: uv run --no-sync pytest -q -m "not gpu and not real_data"

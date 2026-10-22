@@ -1,0 +1,19 @@
+{
+ "verdict": "ship",
+ "reviewer": "independent Claude general-purpose subagent review (artifact runs/smoke_r3/independent_review.md, sha256 4f20d0ccb29721c3ed780efac8bf663c9bf479afb058e3e738c151b91389a90e); evidence run by orchestrating session",
+ "plan_sha256": "29d859643e32b508058cdabcba279010fb6af7e43aac3ea7fd82921d48498f5b",
+ "seed_exposure_review": "passed",
+ "native_smoke_test": "passed",
+ "input_sha256": {
+  "/home/atulp/projects/flycircuit/configs/experiments/learning_v3_protocol.yaml": "6b492862db6e00154e25a917b0205c78f934d0b82383006b0af30812d033894d",
+  "/home/atulp/projects/flycircuit/data/processed/flywire/783/neurons.parquet": "836eacd95c2c74cd5908578141ab6f21db512caef712fb01e381a8ede3a29edf",
+  "/home/atulp/projects/flycircuit/data/processed/flywire/783/edges_pairs.parquet": "1fd24463041811eaa517c113908ccdd27f84d26bec5f9196a9ed90b4df96595d",
+  "/home/atulp/projects/flycircuit/data/processed/flywire/783/circuits/mushroom_body_right_pilot/internal_ids.parquet": "5826d00a60870062499258f950cc333ef2f5f11887331792ee4a33638fac3d52",
+  "/home/atulp/projects/flycircuit/data/processed/flywire/783/circuits/mushroom_body_right_pilot/selection.json": "3d6c7f7b9d7b4926e7d9a839345fd844caf03424c7dfc9a8cabb55fa7bba62e5"
+ },
+ "evidence": {
+  "smoke_receipt_sha256": "622238fb26a47bf5d738adfdb024fa4e0d8f967be06669f5302917f405614acc",
+  "exposure_check_sha256": "a10a1ed7ec0e13e7a5a2c6c153c822a97fa0a244e48f161168ef9ad705b4efad",
+  "smoke_scope": "balanced_replay only, seed 99001, connectome+gru33; standard/extra_current/uniform_replay not run on real models"
+ }
+}

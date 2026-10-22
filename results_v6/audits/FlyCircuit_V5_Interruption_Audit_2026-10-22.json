@@ -1,0 +1,144 @@
+{
+  "audit_date": "2026-10-22",
+  "subject": "/home/atulp/projects/flycircuit_debug_copy/results_v5",
+  "verdict": {
+    "release_status": "INTERRUPTED_INCOMPLETE_SCIENTIFICALLY_QUARANTINED",
+    "claim_complete": false,
+    "claim_616_rows": false,
+    "use_new_240_for_scientific_reporting": false,
+    "preserve_as_raw_evidence": true,
+    "resume_or_reconcile_in_place": false
+  },
+  "method": {
+    "read_only": true,
+    "standard_library_only": true,
+    "numpy_imported": false,
+    "torch_imported": false,
+    "flycircuit_module_imported": false,
+    "training_or_benchmark_run": false,
+    "process_killed": false,
+    "ledger_mutated": false,
+    "source_mutated": false
+  },
+  "observed_final": {
+    "complete": false,
+    "aborted": "row interrupted (sigterm); not recorded",
+    "n_rows": 295,
+    "n_ok": 295,
+    "n_failed": 0,
+    "expected_rows": 616,
+    "elapsed_s": 2408.9230415821075,
+    "pid": 673
+  },
+  "rows": {
+    "path": "/home/atulp/projects/flycircuit_debug_copy/results_v5/learning/pilot/rows.jsonl",
+    "sha256": "0514e1ee3690f3998fa230197d373360b636649e8c924a6cc5785081cfec5531",
+    "newline_terminated": true,
+    "count": 295,
+    "historical_count": 55,
+    "new_pid_673_count": 240,
+    "all_status_ok": true,
+    "duplicate_key_count": 0,
+    "nonfinite_row_count": 0,
+    "family_counts": {
+      "connectome": 176,
+      "gru33": 119
+    },
+    "phase_counts": {
+      "search": 263,
+      "check": 32
+    },
+    "kind_counts": {
+      "cont": 221,
+      "assoc": 74
+    },
+    "exact_planned_execution_prefix": true,
+    "next_expected_key": "[\"cont\",\"gru33\",\"C\",0.00015098,0.00015098,1604]",
+    "last_interrupted_key_matches_next_expected": true,
+    "row55_finished_utc": "2026-10-21T01:27:13Z",
+    "row56_finished_utc": "2026-10-22T10:25:24Z",
+    "row295_finished_utc": "2026-10-22T11:05:09Z"
+  },
+  "provenance": {
+    "pilot_manifest_core_sha256": "657f2162b8d856cdbfaaf65faeccb9c1e02f3530c92d86dffbc8e21af8b1b1db",
+    "all_295_rows_match_manifest_core": true,
+    "all_5_manifest_cores_equal": true,
+    "search_coordinate_sha256_expected": "857f6a6c3310901bf11cbb3ed64fdbff1b2b70c59925a63b6ba66ae11e324d09",
+    "search_coordinate_sha256_recomputed": "857f6a6c3310901bf11cbb3ed64fdbff1b2b70c59925a63b6ba66ae11e324d09",
+    "connectome_check_coordinate_sha256_expected": "7dd2fffc2fb946e9a8024ed1b45b836217c4362457da8bc06a659f9b4b267f68",
+    "connectome_check_coordinate_sha256_recomputed": "7dd2fffc2fb946e9a8024ed1b45b836217c4362457da8bc06a659f9b4b267f68",
+    "connectome_selection_sha256_expected": "f35eeb5b413a00a1874fbf2a242a86601d4781501f74b094ea0a29c449a9d137",
+    "connectome_selection_sha256_recomputed": "f35eeb5b413a00a1874fbf2a242a86601d4781501f74b094ea0a29c449a9d137",
+    "current_train_source_hash_mismatches": [],
+    "row_key_mismatches": [],
+    "row_static_provenance_mismatches": [],
+    "row_parameter_count_mismatches": [],
+    "row_trial_count_mismatches": [],
+    "coordinate_manifest_present": false,
+    "manifest_attempt_stdout": "DRY (no timing_summary.json yet, nothing written)",
+    "interpretation": "Rows are reconstructible and internally coherent, but the intended explicit coordinate-manifest artifact is absent."
+  },
+  "interruption": {
+    "supervisor_pid": 670,
+    "child_pid": 673,
+    "supervisor_attempt_label": "p1_pilot_r5",
+    "supervisor_result_present": false,
+    "supervisor_end_log_present": false,
+    "attempt_record_present": false,
+    "stale_inflight_present": true,
+    "child_sigterm_event_utc": "2026-10-22T11:05:15Z",
+    "supervisor_and_child_absent_at_audit": true,
+    "flycircuit_python_job_running_at_audit": false,
+    "cause": "Abrupt supervisor death is supported; the reported memory-reaper actor is not independently identifiable from v5 artifacts."
+  },
+  "frozen_ledger": {
+    "p1_attempts": 6,
+    "p1_exec_s": 1067.366,
+    "p1_wait_s": 992.378,
+    "inflight_pid": 670,
+    "inflight_wait_start_wall": 1792664700.7883008,
+    "inflight_exec_start_wall": 1792664701.4136927,
+    "inflight_heartbeat_wall": 1792667057.6293573
+  },
+  "accounting_audit": {
+    "required_attempt_count": 7,
+    "attempt7_wait_observed_s": 0.625391960144043,
+    "attempt7_exec_to_heartbeat_s": 2356.215664625168,
+    "attempt7_heartbeat_to_child_final_write_s": 57.90921115875244,
+    "attempt7_exec_to_child_final_write_min_s": 2414.1248757839203,
+    "minimum_corrected_p1_exec_s": 3481.490875720978,
+    "minimum_corrected_p1_wait_s": 993.0033919811249,
+    "full_grant_conservative_charge_s": 7900.0,
+    "full_grant_corrected_p1_exec_s": 8967.366,
+    "full_grant_p1_remaining_exec_s": 32.634000000000015,
+    "p1_budget_s": 9000.0,
+    "overall_budget_s": 79200.0,
+    "minimum_bound_exceeds_budget": false,
+    "full_grant_charge_exceeds_budget": false,
+    "ledger_changed_by_audit": false
+  },
+  "recovery_defects": [
+    {
+      "id": "ORPHAN_TAIL_UNCHARGED",
+      "fact": "recover_inflight charges only through heartbeat_mono_wall, so child runtime after supervisor death is omitted."
+    },
+    {
+      "id": "RECOVERED_ATTEMPT_NOT_COUNTED",
+      "fact": "recover_inflight appends an orphaned_supervisor_died record but does not increment phases[phase].attempts."
+    },
+    {
+      "id": "GUARD_COVERAGE_LOST",
+      "fact": "An inherited-lock child can continue without the supervisor RAM monitor, supervisor wall deadline, process-group cleanup, or outer post-run drift hash."
+    },
+    {
+      "id": "ORPHAN_RECOVERY_TEST_GAP",
+      "fact": "The v5 supervisor tests do not exercise supervisor death followed by continued child runtime and recovery accounting."
+    }
+  ],
+  "safe_next_decision": [
+    "Freeze v5 exactly as found and ship an interruption warning.",
+    "Preserve the 240 rows as raw evidence but quarantine them and their derived selection/check outputs from release claims and gates.",
+    "Do not run v5 recovery merely to rewrite or accept the ledger, and do not resume the 616-row pilot.",
+    "Use a separately accepted future execution path with child-lifetime accounting and supervisor-death guard handling."
+  ]
+}

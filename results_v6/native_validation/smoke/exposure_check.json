@@ -1,0 +1,26 @@
+{
+ "n_hashed": 278,
+ "n_hist": 270,
+ "candidate_hashes": {
+  "26001": "9dd028c29c24c675b1feb8a4f32b9c24a6a8a92ff87c3f24e87396b25a88bda1",
+  "26002": "732e67b7ee0ddf87fad2d83f9728b69bab1bbb87d9e46feb040e0f654c8a088f",
+  "26003": "f7f5593b40b47ab5a72b70a91d4ff804afcc4d90e22471ad94098615cb3d44b0",
+  "26004": "f297d0631b9ab569a4c25e97c1e6d5b49b0bc4b2ae4524e912d41e6d6fe9c081",
+  "26005": "adf974dee92745f7ff0094f594041fd3ff46fa3d9b2a8ebda2fb07793ba88064",
+  "26006": "cbb0c8b2b3c05ca0b3bfbfa52863dd493c85af114c0b2328617659873f0e1d97",
+  "26007": "4a7a1ea4413159c218c3a651f401d536c5773b27a4e85145009f4cc2527ac22d",
+  "26008": "ce5da5c091228bbb0eb5f24f35d0723b46ff14912717b0cb0d45abfbd36cbbfc"
+ },
+ "collisions_with_historical_or_reserved": {
+  "26001": [],
+  "26002": [],
+  "26003": [],
+  "26004": [],
+  "26005": [],
+  "26006": [],
+  "26007": [],
+  "26008": []
+ },
+ "distinct_candidate_hashes": 8,
+ "reserved_included": true
+}

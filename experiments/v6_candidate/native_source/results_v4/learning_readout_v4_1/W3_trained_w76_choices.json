@@ -1,0 +1,107 @@
+{
+ "connectome": {
+  "best": [
+   0.00515175,
+   0.00171725
+  ],
+  "best_mean": 0.7936197916666667,
+  "best_se": 0.012139206832419234,
+  "chosen_equals_best": false,
+  "core_lr": 0.00171725,
+  "decoder_lr": 0.00515175,
+  "n_eligible_settings": 9,
+  "n_indistinguishable": 3,
+  "optimum_at_grid_edge": true,
+  "threshold": 0.7814805848342475
+ },
+ "encdec": {
+  "best": [
+   0.000437655,
+   0.000437655
+  ],
+  "best_mean": 0.8365885416666667,
+  "best_se": 0.009291134821444268,
+  "chosen_equals_best": true,
+  "core_lr": 0.000437655,
+  "decoder_lr": 0.000437655,
+  "n_eligible_settings": 9,
+  "n_indistinguishable": 1,
+  "optimum_at_grid_edge": true,
+  "threshold": 0.8272974068452225
+ },
+ "gru": {
+  "best": [
+   0.000452941,
+   0.000452941
+  ],
+  "best_mean": 0.8307291666666665,
+  "best_se": 0.012075024082676722,
+  "chosen_equals_best": false,
+  "core_lr": 0.000452941,
+  "decoder_lr": 5.03268e-05,
+  "n_eligible_settings": 9,
+  "n_indistinguishable": 2,
+  "optimum_at_grid_edge": true,
+  "threshold": 0.8186541425839898
+ },
+ "null0": {
+  "best": [
+   0.00180865,
+   0.00542595
+  ],
+  "best_mean": 0.82421875,
+  "best_se": 0.005262307141051289,
+  "chosen_equals_best": true,
+  "core_lr": 0.00180865,
+  "decoder_lr": 0.00542595,
+  "n_eligible_settings": 9,
+  "n_indistinguishable": 1,
+  "optimum_at_grid_edge": true,
+  "threshold": 0.8189564428589488
+ },
+ "null1": {
+  "best": [
+   0.00180865,
+   0.00542595
+  ],
+  "best_mean": 0.81640625,
+  "best_se": 0.012999113829749926,
+  "chosen_equals_best": true,
+  "core_lr": 0.00180865,
+  "decoder_lr": 0.00542595,
+  "n_eligible_settings": 9,
+  "n_indistinguishable": 1,
+  "optimum_at_grid_edge": true,
+  "threshold": 0.8034071361702501
+ },
+ "null2": {
+  "best": [
+   0.00542595,
+   0.00180865
+  ],
+  "best_mean": 0.8092447916666666,
+  "best_se": 0.009168676290919116,
+  "chosen_equals_best": false,
+  "core_lr": 0.00180865,
+  "decoder_lr": 0.00542595,
+  "n_eligible_settings": 9,
+  "n_indistinguishable": 2,
+  "optimum_at_grid_edge": true,
+  "threshold": 0.8000761153757475
+ },
+ "random_reach": {
+  "best": [
+   0.001,
+   0.003
+  ],
+  "best_mean": 0.8040364583333334,
+  "best_se": 0.009351762771881603,
+  "chosen_equals_best": false,
+  "core_lr": 0.001,
+  "decoder_lr": 0.001,
+  "n_eligible_settings": 9,
+  "n_indistinguishable": 3,
+  "optimum_at_grid_edge": true,
+  "threshold": 0.7946846955614517
+ }
+}

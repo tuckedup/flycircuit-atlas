@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.2.0-preview (measured validation snapshot, 2026-10-22)
+Repository snapshot identifier only: Python distribution metadata remains 0.1.0;
+no new wheel or PyPI package is released by this update.
+- Add all 64 v6 validation rows, original acceptance/source/evidence records and
+  raw-matrix summaries; no clear replay benefit or anatomical advantage established.
+- Archive the unchanged measured candidate and all 117 bound source/configuration files.
+- Add portable stdlib artifact verification and direct-rounding documentation.
+- Disclose the incomplete v5 run, orphaned worker and unresolved resource accounting.
+- No study source, historical result, tag, ledger or raw input was overwritten.
+
 ## v0.1.1-preview (maintenance, 2026-10-20)
 The `v0.1.0-preview` tag is unchanged. No result, row or number changed.
 - Wording: the GRU control is **not** parameter-matched (9,252 vs 7,551 trainable parameters); "matched GRU / matched controls" removed.

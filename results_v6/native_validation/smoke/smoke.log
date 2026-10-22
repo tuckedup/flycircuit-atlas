@@ -1,0 +1,17 @@
+status {'available_windows_gib': 2.483356475830078, 'pdelab_python_pids': [], 'starts_training': False, 'minimum_runtime_available_gib': 1.5, 'minimum_launch_available_gib': 2.6}
+status {'available_windows_gib': 2.4909400939941406, 'pdelab_python_pids': [], 'starts_training': False, 'minimum_runtime_available_gib': 1.5, 'minimum_launch_available_gib': 2.6}
+status {'available_windows_gib': 2.494953155517578, 'pdelab_python_pids': [], 'starts_training': False, 'minimum_runtime_available_gib': 1.5, 'minimum_launch_available_gib': 2.6}
+status {'available_windows_gib': 2.507648468017578, 'pdelab_python_pids': [], 'starts_training': False, 'minimum_runtime_available_gib': 1.5, 'minimum_launch_available_gib': 2.6}
+status {'available_windows_gib': 2.5186920166015625, 'pdelab_python_pids': [], 'starts_training': False, 'minimum_runtime_available_gib': 1.5, 'minimum_launch_available_gib': 2.6}
+status {'available_windows_gib': 2.4597549438476562, 'pdelab_python_pids': [], 'starts_training': False, 'minimum_runtime_available_gib': 1.5, 'minimum_launch_available_gib': 2.6}
+status {'available_windows_gib': 2.423351287841797, 'pdelab_python_pids': [], 'starts_training': False, 'minimum_runtime_available_gib': 1.5, 'minimum_launch_available_gib': 2.6}
+status {'available_windows_gib': 2.442035675048828, 'pdelab_python_pids': [], 'starts_training': False, 'minimum_runtime_available_gib': 1.5, 'minimum_launch_available_gib': 2.6}
+status {'available_windows_gib': 2.4368019104003906, 'pdelab_python_pids': [], 'starts_training': False, 'minimum_runtime_available_gib': 1.5, 'minimum_launch_available_gib': 2.6}
+status {'available_windows_gib': 2.4378013610839844, 'pdelab_python_pids': [], 'starts_training': False, 'minimum_runtime_available_gib': 1.5, 'minimum_launch_available_gib': 2.6}
+status {'available_windows_gib': 3.24560546875, 'pdelab_python_pids': [], 'starts_training': False, 'minimum_runtime_available_gib': 1.5, 'minimum_launch_available_gib': 2.6}
+status {'available_windows_gib': 3.629291534423828, 'pdelab_python_pids': [], 'starts_training': False, 'minimum_runtime_available_gib': 1.5, 'minimum_launch_available_gib': 2.6}
+status {'available_windows_gib': 3.6862144470214844, 'pdelab_python_pids': [], 'starts_training': False, 'minimum_runtime_available_gib': 1.5, 'minimum_launch_available_gib': 2.6}
+connectome done 17.82698770600001
+gru33 done 10.93692280099998
+{"wall_s": 36.40043108500001, "passed": true}
+rc=0

@@ -1,0 +1,538 @@
+{
+  "scope": "exploratory validation-only native cue task",
+  "n_rows": 64,
+  "failures": 0,
+  "n_seeds": 8,
+  "plan_sha256": "29d859643e32b508058cdabcba279010fb6af7e43aac3ea7fd82921d48498f5b",
+  "families": {
+    "connectome": {
+      "standard": {
+        "final_accuracy": {
+          "mean": 0.74609375,
+          "sd": 0.05032369797990818
+        },
+        "learned_accuracy": {
+          "mean": 0.8170572916666666,
+          "sd": 0.03459721420725631
+        },
+        "forgetting": {
+          "mean": 0.1103515625,
+          "sd": 0.08853004015927407
+        }
+      },
+      "extra_current": {
+        "final_accuracy": {
+          "mean": 0.74609375,
+          "sd": 0.04060687171839231
+        },
+        "learned_accuracy": {
+          "mean": 0.8515625,
+          "sd": 0.03137376286057739
+        },
+        "forgetting": {
+          "mean": 0.1591796875,
+          "sd": 0.09110264176463564
+        }
+      },
+      "uniform_replay": {
+        "final_accuracy": {
+          "mean": 0.7434895833333334,
+          "sd": 0.030969725280159822
+        },
+        "learned_accuracy": {
+          "mean": 0.8014322916666666,
+          "sd": 0.02465622705302007
+        },
+        "forgetting": {
+          "mean": 0.091796875,
+          "sd": 0.06246511303105232
+        }
+      },
+      "balanced_replay": {
+        "final_accuracy": {
+          "mean": 0.7584635416666667,
+          "sd": 0.03305049976133804
+        },
+        "learned_accuracy": {
+          "mean": 0.8059895833333334,
+          "sd": 0.027099068231360584
+        },
+        "forgetting": {
+          "mean": 0.0712890625,
+          "sd": 0.0515586950706512
+        }
+      }
+    },
+    "gru33": {
+      "standard": {
+        "final_accuracy": {
+          "mean": 0.7740885416666666,
+          "sd": 0.04081509819691007
+        },
+        "learned_accuracy": {
+          "mean": 0.8196614583333334,
+          "sd": 0.022260892615296474
+        },
+        "forgetting": {
+          "mean": 0.072265625,
+          "sd": 0.05161151620433868
+        }
+      },
+      "extra_current": {
+        "final_accuracy": {
+          "mean": 0.7890625,
+          "sd": 0.042037044320909316
+        },
+        "learned_accuracy": {
+          "mean": 0.8684895833333334,
+          "sd": 0.03219672101699225
+        },
+        "forgetting": {
+          "mean": 0.12109375,
+          "sd": 0.05215768502476751
+        }
+      },
+      "uniform_replay": {
+        "final_accuracy": {
+          "mean": 0.77734375,
+          "sd": 0.03059203157414251
+        },
+        "learned_accuracy": {
+          "mean": 0.8118489583333334,
+          "sd": 0.0377058565188939
+        },
+        "forgetting": {
+          "mean": 0.056640625,
+          "sd": 0.026982628133340587
+        }
+      },
+      "balanced_replay": {
+        "final_accuracy": {
+          "mean": 0.7779947916666667,
+          "sd": 0.03564543369359342
+        },
+        "learned_accuracy": {
+          "mean": 0.8255208333333333,
+          "sd": 0.03629854439776926
+        },
+        "forgetting": {
+          "mean": 0.076171875,
+          "sd": 0.04865482639673508
+        }
+      }
+    }
+  },
+  "paired": {
+    "connectome:extra_current-standard": {
+      "final_accuracy": {
+        "mean": -2.7755575615628914e-17,
+        "ci95": [
+          -0.01678353995275359,
+          0.016783539952753536
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      },
+      "learned_accuracy": {
+        "mean": 0.03450520833333333,
+        "ci95": [
+          0.016040747151655644,
+          0.05296966951501102
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      },
+      "forgetting": {
+        "mean": 0.048828125,
+        "ci95": [
+          0.027663926522781726,
+          0.06999232347721827
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      }
+    },
+    "connectome:uniform_replay-standard": {
+      "final_accuracy": {
+        "mean": -0.002604166666666685,
+        "ci95": [
+          -0.03493824971313743,
+          0.02972991637980406
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      },
+      "learned_accuracy": {
+        "mean": -0.015625000000000014,
+        "ci95": [
+          -0.03453336001553825,
+          0.0032833600155382225
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      },
+      "forgetting": {
+        "mean": -0.0185546875,
+        "ci95": [
+          -0.065903413025195,
+          0.028794038025195014
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      }
+    },
+    "connectome:uniform_replay-extra_current": {
+      "final_accuracy": {
+        "mean": -0.0026041666666666574,
+        "ci95": [
+          -0.030630475026684895,
+          0.02542214169335158
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      },
+      "learned_accuracy": {
+        "mean": -0.05013020833333334,
+        "ci95": [
+          -0.06221003043904967,
+          -0.038050386227617014
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      },
+      "forgetting": {
+        "mean": -0.0673828125,
+        "ci95": [
+          -0.11904029429329979,
+          -0.015725330706700208
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      }
+    },
+    "connectome:balanced_replay-standard": {
+      "final_accuracy": {
+        "mean": 0.012369791666666671,
+        "ci95": [
+          -0.02338056521663681,
+          0.048120148549970154
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      },
+      "learned_accuracy": {
+        "mean": -0.011067708333333329,
+        "ci95": [
+          -0.03864956135031973,
+          0.016514144683653077
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      },
+      "forgetting": {
+        "mean": -0.0390625,
+        "ci95": [
+          -0.08929193888868449,
+          0.011166938888684488
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      }
+    },
+    "connectome:balanced_replay-extra_current": {
+      "final_accuracy": {
+        "mean": 0.012369791666666699,
+        "ci95": [
+          -0.01841408800731052,
+          0.04315367134064392
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      },
+      "learned_accuracy": {
+        "mean": -0.04557291666666666,
+        "ci95": [
+          -0.0690502682560678,
+          -0.022095565077265508
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      },
+      "forgetting": {
+        "mean": -0.087890625,
+        "ci95": [
+          -0.13534381114123226,
+          -0.040437438858767744
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      }
+    },
+    "gru33:extra_current-standard": {
+      "final_accuracy": {
+        "mean": 0.014973958333333329,
+        "ci95": [
+          -0.015232602975655436,
+          0.045180519642322094
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      },
+      "learned_accuracy": {
+        "mean": 0.048828125,
+        "ci95": [
+          0.022708951586173157,
+          0.07494729841382684
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      },
+      "forgetting": {
+        "mean": 0.048828125,
+        "ci95": [
+          0.020735453530825603,
+          0.0769207964691744
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      }
+    },
+    "gru33:uniform_replay-standard": {
+      "final_accuracy": {
+        "mean": 0.0032552083333333287,
+        "ci95": [
+          -0.013192117388292752,
+          0.01970253405495941
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      },
+      "learned_accuracy": {
+        "mean": -0.007812499999999986,
+        "ci95": [
+          -0.035054700093420404,
+          0.019429700093420432
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      },
+      "forgetting": {
+        "mean": -0.015625,
+        "ci95": [
+          -0.0564883001401306,
+          0.0252383001401306
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      }
+    },
+    "gru33:uniform_replay-extra_current": {
+      "final_accuracy": {
+        "mean": -0.01171875,
+        "ci95": [
+          -0.03437413799240904,
+          0.010936637992409046
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      },
+      "learned_accuracy": {
+        "mean": -0.056640624999999986,
+        "ci95": [
+          -0.07973265870117185,
+          -0.03354859129882811
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      },
+      "forgetting": {
+        "mean": -0.064453125,
+        "ci95": [
+          -0.10527912408247989,
+          -0.023627125917520114
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      }
+    },
+    "gru33:balanced_replay-standard": {
+      "final_accuracy": {
+        "mean": 0.003906250000000014,
+        "ci95": [
+          -0.039930979289896626,
+          0.047743479289896654
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      },
+      "learned_accuracy": {
+        "mean": 0.005859374999999986,
+        "ci95": [
+          -0.02531792484876658,
+          0.03703667484876655
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      },
+      "forgetting": {
+        "mean": 0.00390625,
+        "ci95": [
+          -0.04834505758875814,
+          0.05615755758875814
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      }
+    },
+    "gru33:balanced_replay-extra_current": {
+      "final_accuracy": {
+        "mean": -0.011067708333333315,
+        "ci95": [
+          -0.039709396405038205,
+          0.01757397973837158
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      },
+      "learned_accuracy": {
+        "mean": -0.042968750000000014,
+        "ci95": [
+          -0.057268892753321414,
+          -0.028668607246678614
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      },
+      "forgetting": {
+        "mean": -0.044921875,
+        "ci95": [
+          -0.07590308925672182,
+          -0.013940660743278176
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      }
+    },
+    "connectome-gru33:standard": {
+      "final_accuracy": {
+        "mean": -0.027994791666666657,
+        "ci95": [
+          -0.060239749385645976,
+          0.004250166052312661
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      },
+      "learned_accuracy": {
+        "mean": -0.0026041666666666574,
+        "ci95": [
+          -0.039034650328042104,
+          0.03382631699470879
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      },
+      "forgetting": {
+        "mean": 0.0380859375,
+        "ci95": [
+          -0.01582295797640086,
+          0.09199483297640086
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      }
+    },
+    "connectome-gru33:extra_current": {
+      "final_accuracy": {
+        "mean": -0.042968750000000014,
+        "ci95": [
+          -0.08175778084109692,
+          -0.004179719158903104
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      },
+      "learned_accuracy": {
+        "mean": -0.01692708333333333,
+        "ci95": [
+          -0.0570883849742631,
+          0.023234218307596442
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      },
+      "forgetting": {
+        "mean": 0.0380859375,
+        "ci95": [
+          -0.033669428812636876,
+          0.10984130381263688
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      }
+    },
+    "connectome-gru33:uniform_replay": {
+      "final_accuracy": {
+        "mean": -0.03385416666666667,
+        "ci95": [
+          -0.059875940710506254,
+          -0.007832392622827093
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      },
+      "learned_accuracy": {
+        "mean": -0.010416666666666685,
+        "ci95": [
+          -0.057140064482204364,
+          0.036306731148870994
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      },
+      "forgetting": {
+        "mean": 0.03515625,
+        "ci95": [
+          -0.015556175373157531,
+          0.08586867537315754
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      }
+    },
+    "connectome-gru33:balanced_replay": {
+      "final_accuracy": {
+        "mean": -0.01953125,
+        "ci95": [
+          -0.06166724415401311,
+          0.02260474415401311
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      },
+      "learned_accuracy": {
+        "mean": -0.019531249999999972,
+        "ci95": [
+          -0.05426812543318428,
+          0.015205625433184336
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      },
+      "forgetting": {
+        "mean": -0.0048828125,
+        "ci95": [
+          -0.06554690167524217,
+          0.05578127667524217
+        ],
+        "n": 8,
+        "interval": "paired t, df=7, descriptive, no multiplicity correction"
+      }
+    }
+  },
+  "peak_row_rss_mib": 1028.89453125,
+  "charged_wall_s": 933.7212014629997,
+  "sota_established": false,
+  "body_robustness_established": false,
+  "heldout_evaluation": false
+}

@@ -1,10 +1,44 @@
-# FlyCircuit Atlas — v0.1.0-preview
+# FlyCircuit Atlas — v0.2.0-preview
+
+`v0.2.0-preview` identifies this repository research snapshot, not a new Python
+distribution. The installed core package deliberately remains version `0.1.0`;
+this update archives measured evidence and experiment sources without releasing
+a new wheel or PyPI package or advertising portable v6 training support.
+Consequently, `flycircuit --version` still reports `0.1.0`. The pre-existing
+HTTP API schema separately reports `0.2.0`; neither value identifies this
+research snapshot. Use the Git tag and commit to identify the archived study.
 
 **Experimental, work-in-progress research code** (author: Atul Pandey). Connectome-constrained learning
 experiments on a sparse recurrent network built from the FlyWire v783 *Drosophila* connectome, with
-control models (GRU, encoder-decoder, rewired graphs) that are *not* parameter-matched. Development and evaluation are ongoing; this is a dated snapshot (2026-10-20), not a finished study.
+control models (GRU, encoder-decoder, rewired graphs) that are *not* parameter-matched. Development and evaluation are ongoing; this is a dated snapshot (2026-10-22), not a finished study.
 
-## Best verified result: connectome acquisition on a validation split
+## Latest measured study: v6 replay validation (2026-10-22)
+
+64/64 runs completed, zero failed rows, eight paired model seeds, validation only,
+with no tuning in this pilot. These are **final three-task average accuracies**,
+not the historical association-acquisition metric below.
+
+| Family | Standard | Extra current steps | Uniform replay | Balanced replay |
+|---|---:|---:|---:|---:|
+| Connectome W76 | 74.6% | 74.6% | 74.3% | 75.8% |
+| GRU33 | 77.4% | 78.9% | 77.7% | 77.8% |
+
+No clear final-accuracy improvement from replay was established. The connectome
+scored below GRU33 in each method's mean; this does not establish anatomical
+superiority, SOTA, held-out generalization or body robustness. Reduced measured
+forgetting versus extra current-task steps coincided with lower learned-task
+accuracy. All conditions and raw rows are included, including weaker outcomes.
+
+Connectome: 7,551 optimizer-owned parameters; GRU33: 7,460 (approximately, not
+exactly, capacity matched). One guarded attempt used 933.7 of 1,800 seconds.
+Intervals are descriptive with n=8 and multiple uncorrected comparisons.
+
+Verify without data, model imports or training:
+`python scripts_release/verify_v6_results.py`.
+See [the measured v6 report](docs/V6_VALIDATION.md) and
+[the separate interrupted v5 status](docs/V5_INTERRUPTION.md).
+
+## Historical W3 result: connectome acquisition on a validation split
 
 | | |
 |---|---|
@@ -48,7 +82,7 @@ flycircuit synthetic run                         # tiny synthetic-graph demo
 ```
 Checked on a fresh CPU-only install at release time: `ruff` clean, 326 tests passed / 7 skipped (GPU and real-data tests are deselected).
 Not included, so not supported from this repository: the FlyGym body-navigation rollout environment (`external/flygym_pilot`, needs its own Python 3.12
-environment; one body-protocol test that needs it was removed), and the in-progress replay/body-evaluation modules.
+environment; one body-protocol test that needs it was removed). The v6 replay source is supplied as a separate archival snapshot, not as an installed, supported training feature.
 
 (`pyproject.toml` points `torch` at a CUDA 12.8 index for GPU installs; the CPU line above avoids that.)
 
@@ -60,7 +94,7 @@ environment; one body-protocol test that needs it was removed), and the in-progr
   `FLYCIRCUIT_HOME` (default: this repository). A re-run produces new rows; it is not expected to match the published rows bit for bit,
   and no re-run has been verified from the published repository yet.
 - Unsupported here: the single-heavy-job lock wrapper `heavyjob.sh` and the Windows memory guard (WSL2 only; skipped with a warning elsewhere),
-  FlyGym body evaluation, and the replay/body-evaluation program (see ROADMAP).
+  FlyGym body evaluation, and training/resume of the archived v6 or interrupted v5 program (see ROADMAP).
 - The original file hashes from before the 0.1.0 path redaction are in `provenance/`; the patch release changed further script lines
   (see `CHANGELOG.md`), so launch-time hashes in `results_v4/*/W*_prelaunch_hashes.txt` describe the original unredacted files only.
 

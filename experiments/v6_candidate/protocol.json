@@ -1,0 +1,22 @@
+{
+  "benchmark_id": "flycircuit-native-v6",
+  "split": "val",
+  "families": ["connectome", "gru33"],
+  "methods": ["standard", "extra_current", "uniform_replay", "balanced_replay"],
+  "model_seeds": [26001, 26002, 26003, 26004, 26005, 26006, 26007, 26008],
+  "capacity_events": 32,
+  "native_n_contexts": 3,
+  "native_trials_per_phase": 800,
+  "wall_limit_s": 1800,
+  "hyperparameter_selection": "none: fixed family-specific W3 anchors, approximate capacity match disclosed",
+  "primary_learning_endpoint": "final_average_accuracy",
+  "secondary_learning_endpoints": ["mean_seen_task_accuracy", "learned_task_accuracy", "forgetting_keep", "forgetting_clip", "backward_transfer"],
+  "learning_goal": "estimate paired gains against standard and step-matched controls; no promised positive effect",
+  "body_future_primary_endpoint": "paired_model_seed_robustness_auc",
+  "body_future_dropout_grid": [0.0, 0.1, 0.25, 0.5, 1.0],
+  "body_status": "metrics only; current 25-percent v5 episodes cannot supply a complete curve",
+  "body_goal": "improve robustness AUC and finite declared-mask worst-group success at a fixed model/data/compute budget",
+  "sota_claim_allowed": false,
+  "public_leaderboard": false,
+  "preregistration_note": "local prospective candidate; independent code/input/exposure review required before measurement"
+}

@@ -1,0 +1,11 @@
+{
+  "charged_wall_s": 933.7212014629997,
+  "attempts": 1,
+  "inflight": null,
+  "plan_sha256": "29d859643e32b508058cdabcba279010fb6af7e43aac3ea7fd82921d48498f5b",
+  "acceptance_sha256": "341d614f6136aebdbe986724b16607472a9627d00c1b59468081cfa719182aec",
+  "last_result": {
+    "reason": null,
+    "child_rc": 0
+  }
+}

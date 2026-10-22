@@ -1,0 +1,248 @@
+{
+ "smoke_seed": 99001,
+ "cap_s": 900.0,
+ "start_unix": 1792661019.893163,
+ "runs": [
+  {
+   "coord": {
+    "family": "connectome",
+    "method": "balanced_replay",
+    "seed": 99001,
+    "core_lr": 0.00171725,
+    "decoder_lr": 0.00515175,
+    "capacity": 32
+   },
+   "ok": true,
+   "R_val": [
+    [
+     0.890625,
+     0.78125,
+     0.640625
+    ],
+    [
+     0.859375,
+     0.828125,
+     0.75
+    ],
+    [
+     0.78125,
+     0.703125,
+     0.84375
+    ]
+   ],
+   "metrics": {
+    "final_average_accuracy": 0.7760416666666666,
+    "mean_seen_task_accuracy": 0.8368055555555555,
+    "learned_task_accuracy": 0.8541666666666666,
+    "forgetting_keep": 0.1171875,
+    "forgetting_clip": 0.1171875,
+    "backward_transfer": -0.1171875,
+    "forward_transfer": null,
+    "forward_transfer_note": "requires separate reference models; not inferred from R"
+   },
+   "trial_counts": {
+    "current": 2400,
+    "replay": 1600,
+    "extra_current": 0,
+    "replay_old_context": 955,
+    "replay_current_context": 645
+   },
+   "elapsed_s": 17.82698770600001,
+   "peak_rss_mib": 986.3828125,
+   "actual_adam_steps": {
+    "min": 4000,
+    "max": 4000,
+    "n_tensors": 2
+   },
+   "params": {
+    "optimizer": "Adam",
+    "groups": [
+     {
+      "group": 0,
+      "lr": 0.00171725,
+      "n_tensors": 1,
+      "numel": 7399,
+      "names": [
+       "raw_gain"
+      ],
+      "weight_decay": 0.0,
+      "betas": [
+       0.9,
+       0.999
+      ]
+     },
+     {
+      "group": 1,
+      "lr": 0.00515175,
+      "n_tensors": 1,
+      "numel": 152,
+      "names": [
+       "decoder"
+      ],
+      "weight_decay": 0.0,
+      "betas": [
+       0.9,
+       0.999
+      ]
+     }
+    ],
+    "owned_total": 7551,
+    "core_owned": 7399,
+    "decoder_owned": 152,
+    "bias_owned_within_core_or_decoder": 0,
+    "frozen_params": {
+     "encoder": 26315,
+     "bias": 1500
+    },
+    "frozen_total": 27815,
+    "frozen_bias_nodes": 1500,
+    "model_buffers_numel": 47355,
+    "critic_params_not_optimizer_owned": 20,
+    "critic_note": "linear TD critic updated by a numpy rule (lr_value), not by the optimizer; not counted in owned_total",
+    "clip_max_norm": 1.0,
+    "requires_grad_total": 7551
+   },
+   "buffer": {
+    "capacity_events": 32,
+    "observed_events": 2400,
+    "stored_events": 32,
+    "peak_stored_events": 32,
+    "peak_serialized_bytes": 3570,
+    "memory_note": "JSON payload bytes exclude Python objects and task dataset storage",
+    "contexts": {
+     "0": 11,
+     "1": 11,
+     "2": 10
+    }
+   },
+   "graph": [
+    "634d0acc8632c35f985e974a049105f35b2ee32d09dc02a81d8da7603a14cedc",
+    "1ac1457b2ad40346e90717011e3823a1d2e3077dd034a462d3f12f7197cefdf5",
+    "d5f4ad95bd1fd03da28af834a0862ceb89efb9b50f32177d2a88e4ce131d1dcc"
+   ]
+  },
+  {
+   "coord": {
+    "family": "gru33",
+    "method": "balanced_replay",
+    "seed": 99001,
+    "core_lr": 0.000452941,
+    "decoder_lr": 5.03268e-05,
+    "capacity": 32
+   },
+   "ok": true,
+   "R_val": [
+    [
+     0.953125,
+     0.75,
+     0.625
+    ],
+    [
+     0.828125,
+     0.828125,
+     0.625
+    ],
+    [
+     0.8125,
+     0.859375,
+     0.75
+    ]
+   ],
+   "metrics": {
+    "final_average_accuracy": 0.8072916666666666,
+    "mean_seen_task_accuracy": 0.8628472222222222,
+    "learned_task_accuracy": 0.84375,
+    "forgetting_keep": 0.0546875,
+    "forgetting_clip": 0.0703125,
+    "backward_transfer": -0.0546875,
+    "forward_transfer": null,
+    "forward_transfer_note": "requires separate reference models; not inferred from R"
+   },
+   "trial_counts": {
+    "current": 2400,
+    "replay": 1600,
+    "extra_current": 0,
+    "replay_old_context": 955,
+    "replay_current_context": 645
+   },
+   "elapsed_s": 10.93692280099998,
+   "peak_rss_mib": 986.3828125,
+   "actual_adam_steps": {
+    "min": 4000,
+    "max": 4000,
+    "n_tensors": 8
+   },
+   "params": {
+    "optimizer": "Adam",
+    "groups": [
+     {
+      "group": 0,
+      "lr": 0.000452941,
+      "n_tensors": 6,
+      "numel": 7392,
+      "names": [
+       "cell.bias_hh_l0",
+       "cell.bias_ih_l0",
+       "cell.weight_hh_l0",
+       "cell.weight_ih_l0",
+       "enc.bias",
+       "enc.weight"
+      ],
+      "weight_decay": 0.0,
+      "betas": [
+       0.9,
+       0.999
+      ]
+     },
+     {
+      "group": 1,
+      "lr": 5.03268e-05,
+      "n_tensors": 2,
+      "numel": 68,
+      "names": [
+       "dec.bias",
+       "dec.weight"
+      ],
+      "weight_decay": 0.0,
+      "betas": [
+       0.9,
+       0.999
+      ]
+     }
+    ],
+    "owned_total": 7460,
+    "core_owned": 7392,
+    "decoder_owned": 68,
+    "bias_owned_within_core_or_decoder": 233,
+    "frozen_params": {},
+    "frozen_total": 0,
+    "frozen_bias_nodes": 0,
+    "model_buffers_numel": 0,
+    "critic_params_not_optimizer_owned": 20,
+    "critic_note": "linear TD critic updated by a numpy rule (lr_value), not by the optimizer; not counted in owned_total",
+    "clip_max_norm": 1.0,
+    "requires_grad_total": 7460
+   },
+   "buffer": {
+    "capacity_events": 32,
+    "observed_events": 2400,
+    "stored_events": 32,
+    "peak_stored_events": 32,
+    "peak_serialized_bytes": 3570,
+    "memory_note": "JSON payload bytes exclude Python objects and task dataset storage",
+    "contexts": {
+     "0": 11,
+     "1": 11,
+     "2": 10
+    }
+   },
+   "graph": [
+    "634d0acc8632c35f985e974a049105f35b2ee32d09dc02a81d8da7603a14cedc",
+    "1ac1457b2ad40346e90717011e3823a1d2e3077dd034a462d3f12f7197cefdf5",
+    "d5f4ad95bd1fd03da28af834a0862ceb89efb9b50f32177d2a88e4ce131d1dcc"
+   ]
+  }
+ ],
+ "wall_s": 36.40043108500001,
+ "passed": true
+}
